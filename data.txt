@@ -1,0 +1,10 @@
+void main() {
+    int b = 12;
+
+    int a = 0;
+    a = b + 13;
+    int i;
+    if ( !a ) {
+        i = 1;
+    } 
+}
