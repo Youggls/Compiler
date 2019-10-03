@@ -114,7 +114,6 @@ char* installID(int type, char *id)
 char* lookup_id(char *id)
 {
 	struct Identifer *identifer = id_list;
-  printf("here");
 	/* search down the list looking for the word */
 	for(; identifer; identifer = identifer->next) {
 		if(strcmp(identifer->id_name, id) == 0)
