@@ -30,8 +30,14 @@
 
 int yylval;
 int installNum ();
-char* lookup_id(char*);
-char* installID(int, char*);
+char* lookup(int, char*);
+struct Identifer {
+	char *id_name;
+	int id_type;
+};
+#define NHASH 9997
+struct Identifer idtab[NHASH];
+
 %}
 
 
@@ -57,7 +63,7 @@ main            {return (MAIN);}
 "{"             {return (LBRACE);}
 "}"             {return (RBRACE);}
 !               {return (LNOT);}
-{ID}            {yytext = installID (1, yytext); return ID;}
+{ID}            {yytext = lookup (1, yytext); return ID;}
 {number}        {yylval = installNum (); return NUMBER;}
 {ws}            {;}
 
@@ -78,54 +84,45 @@ main            {return (MAIN);}
 .								{yylval = ERRORCHAR; return ERRORCHAR;}
 %%
  
-struct Identifer {
-	char *id_name;
-	int id_type;
-	struct Identifer *next;
-};
-struct Identifer *id_list= NULL;
+
 extern void *malloc();
 
-char* installID(int type, char *id)
+unsigned idhash(char *id)
 {
-  char* x = lookup_id(id);
-  if (x != NULL) {
-    printf("not null\n");
-    return x;
+  unsigned int hash = 0;
+  unsigned c;
+
+  while(c = *id++) hash = hash*9 ^ c;
+
+  return hash;
+}
+
+char *lookup(int type, char* id)
+{
+  struct Identifer *sp = &idtab[idhash(id)%NHASH];
+  int scount = NHASH;
+
+  while(--scount >= 0) {
+    if(sp->id_name && !strcmp(sp->id_name, id) && sp->id_type == type) { return sp->id_name; }
+    if(sp->id_name && !strcmp(sp->id_name, id) && sp->id_type != type) {
+      sp->id_type = type;
+      return sp->id_name;
+    }
+    if(!sp->id_name) {
+      sp->id_name = strdup(id);
+      sp->id_type = type;
+      return sp->id_name;
+    }
+
+    if(++sp >= idtab+NHASH) sp = idtab;
   }
-	struct Identifer *identifer;	
-	
-	/* word not there, allocate a new entry and link it on the list */
+  fputs("id table overflow\n", stderr);
+  abort();
 
-	identifer = (struct Identifer *) malloc(sizeof(struct Identifer));
-
-	identifer->next = id_list;
-
-	/* have to copy the word itself as well */
-	
-	identifer->id_name = (char *) malloc(strlen(id)+1);
-	strcpy(identifer->id_name, id);
-	identifer->id_type = type;
-	id_list = identifer;
-  
-	return identifer->id_name;	/* it worked */
 }
 
-char* lookup_id(char *id)
-{
-	struct Identifer *identifer = id_list;
-	/* search down the list looking for the word */
-	for(; identifer; identifer = identifer->next) {
-		if(strcmp(identifer->id_name, id) == 0)
-			return identifer->id_name;
-	}
-
-	return NULL;	/* not found */
-}
- 
 
 int installNum () {
-	/* 类似上面的过程，但词法单元不是标识符而是数 */
   int num = atoi(yytext);
   return num;
 }
