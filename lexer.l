@@ -1,3 +1,4 @@
+%x COMMENT
 %{
 #include "stdio.h"
 #include <stdlib.h>
@@ -50,6 +51,13 @@ number {digit}+(\.{digit}+)?(E[+-]?{digit}+)?
  
 
 %%
+"/*"           { BEGIN(COMMENT) ; }
+<COMMENT>"*/"  { BEGIN(INITIAL); }
+<COMMENT>([^*]|\en)+|.
+<COMMENT><<EOF>>    {printf("Unterminated comment\n"); return 0;}
+ /* C++ comment, a common extension */
+"//".*\n
+
 while           {return (WHILE);}
 do              {return (DO); }
 double          {return (DOUBLE);}
