@@ -1,7 +1,12 @@
 %x COMMENT
 %{
 #include "stdio.h"
+#include "symbol.h"
 #include <stdlib.h>
+#include <string>
+#include <unordered_map>
+using std::unordered_map;
+using std::string;
 #define LT					1
 #define	LE					2
 #define GT					3
@@ -31,6 +36,7 @@
 
 int yylval;
 int installNum ();
+unordered_map<string, symbol> symbolTable;
 char* lookup(int, char*);
 struct Identifer {
 	char *id_name;
