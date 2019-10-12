@@ -33,6 +33,9 @@ using std::string;
 #define ELSE        31
 #define ASSIGN      32
 #define LNOT        33
+#define FOR         34
+#define OR          35
+#define ERRID       36
 
 int yylval;
 int installNum ();
@@ -53,17 +56,20 @@ ws    {delim}+
 letter [a-zA-Z_]
 digit [0-9]
 ID    {letter}({letter}|{digit})*
+ERRID {digit}+{ID}
 number {digit}+(\.{digit}+)?(E[+-]?{digit}+)?
- 
+
 
 %%
 "/*"           { BEGIN(COMMENT) ; }
 <COMMENT>"*/"  { BEGIN(INITIAL); }
+<COMMENT>{ws}   {;}
 <COMMENT>([^*]|\en)+|.
 <COMMENT><<EOF>>    {printf("Unterminated comment\n"); return 0;}
  /* C++ comment, a common extension */
 "//".*\n
-
+{ws}            {;}
+for             {return (FOR);}
 while           {return (WHILE);}
 do              {return (DO); }
 double          {return (DOUBLE);}
@@ -76,10 +82,12 @@ main            {return (MAIN);}
 ")"             {return (RP);}
 "{"             {return (LBRACE);}
 "}"             {return (RBRACE);}
+"\|\|"          {return OR;}
 !               {return (LNOT);}
+{ERRID}         {return (ERRID);}
 {ID}            {yytext = lookup (1, yytext); return ID;}
+
 {number}        {yylval = installNum (); return NUMBER;}
-{ws}            {;}
 
 ;               {yylval = SEMICOLON; return (SEMICOLON);}
 "+"             {return (RELOP);}
@@ -142,11 +150,11 @@ int installNum () {
 }
 void writeout(int c){
   switch(c){
-  	case ERRORCHAR: fprintf(yyout, "(ERRORCHAR, \"%s\") ", yytext);break;
   	case RELOP: fprintf(yyout, "RELOP           %s\n", yytext); break;  	  
     case DO: fprintf(yyout, "(DO, \"%s\") ", yytext);break;
     //case NUMBER: fprintf(yyout, "(NUM, \"%s\") ", yytext);break;
     case INT: fprintf(yyout, "INT             int\n");break;
+    case FOR: fprintf(yyout, "FOR             for\n");break;
     case WHILE: fprintf(yyout, "WHILE           while\n");break;
     case MAIN: fprintf(yyout, "MAIN            main\n");break;
     case VOID: fprintf(yyout, "VOID            void\n");break;
@@ -161,6 +169,9 @@ void writeout(int c){
     case SEMICOLON: fprintf(yyout, "SEMICOLON       ;\n");break;
     case LNOT: fprintf(yyout, "LNOT            !\n");break;
     case ID: fprintf(yyout, "ID              %-16s%-16p\n", yytext, yytext);break;
+    case OR: fprintf(yyout, "OR              ||\n");break;
+    case ERRID: fprintf(yyout, "ERRORID         %s\n", yytext);break;
+    case ERRORCHAR: fprintf(yyout, "error token     %s\n", yytext);break;
     default:break;
   }
   return;
