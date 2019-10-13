@@ -3,8 +3,11 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
-#Mac
+# Mac
 *.DS_Store
+
+# Visual studio code config file
+.vscode/
 
 # User-specific files
 *.rsuser

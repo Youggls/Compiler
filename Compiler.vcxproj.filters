@@ -21,15 +21,12 @@
     <ClCompile Include="win\lexer.flex.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="win\symbol.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="common\symbol.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="win\symbol.h">
+    <ClInclude Include="common\symbol.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

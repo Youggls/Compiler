@@ -22,12 +22,11 @@
     <Flex Include="lexer.l" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="common\symbol.cpp" />
     <ClCompile Include="win\lexer.flex.cpp" />
-    <ClCompile Include="win\symbol.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="win\symbol.h" />
+    <ClInclude Include="common\symbol.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

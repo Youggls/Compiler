@@ -1,7 +1,7 @@
 %x COMMENT
 %{
 #include "stdio.h"
-#include "symbol.h"
+#include "../common/symbol.h"
 #include <stdlib.h>
 #include <string>
 #include <unordered_map>
