@@ -3,10 +3,10 @@
 
 symbol::symbol() {
 	this->idName = "";
-	this->idType = 0;
+	this->idType = symbolType::integer;
 }
 
-symbol::symbol(std::string idName, int idType) {
+symbol::symbol(std::string idName, symbolType idType) {
 	this->idName = idName;
 	this->idType = idType;
 }
@@ -15,7 +15,6 @@ const std::string symbol::getIdName() {
 	return this->idName;
 }
 
-const int symbol::getIdType() {
+symbolType& symbol::getIdType() {
 	return this->idType;
 }
-
