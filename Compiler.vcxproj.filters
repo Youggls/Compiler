@@ -24,9 +24,15 @@
     <ClCompile Include="common\symbol.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="ASTNode.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common\symbol.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ASTNode.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

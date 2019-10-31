@@ -22,10 +22,12 @@
     <Flex Include="lexer.l" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ASTNode.cpp" />
     <ClCompile Include="common\symbol.cpp" />
     <ClCompile Include="win\lexer.flex.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ASTNode.h" />
     <ClInclude Include="common\symbol.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
