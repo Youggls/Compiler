@@ -30,6 +30,9 @@
     <ClInclude Include="common\ASTNode.h" />
     <ClInclude Include="common\symbol.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Bison Include="grammar.y" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <ProjectGuid>{41865CC7-3E38-474C-A024-2DD10B4EC27C}</ProjectGuid>
