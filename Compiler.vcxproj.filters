@@ -27,12 +27,27 @@
     <ClCompile Include="common\ASTNode.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="common\CallFunASTNode.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="common\DefFunASTNode.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common\symbol.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="common\ASTNode.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="common\trees.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="common\CallFunASTNode.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="common\DefFunASTNode.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

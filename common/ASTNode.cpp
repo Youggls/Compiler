@@ -7,11 +7,12 @@ AbstractASTNode::AbstractASTNode() {
 	this->content = "Initial stat";
 }
 
-AbstractASTNode::AbstractASTNode(char* content) {
+AbstractASTNode::AbstractASTNode(char* content, ASTNodeType nodeType) {
 	this->child = NULL;
 	this->parent = NULL;
 	this->peer = NULL;
 	this->content = content;
+	this->nodeType = nodeType;
 }
 
 void AbstractASTNode::addChildNode(AbstractASTNode* node) {

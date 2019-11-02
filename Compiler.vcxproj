@@ -23,12 +23,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="common\ASTNode.cpp" />
+    <ClCompile Include="common\CallFunASTNode.cpp" />
+    <ClCompile Include="common\DefFunASTNode.cpp" />
     <ClCompile Include="common\symbol.cpp" />
     <ClCompile Include="win\lexer.flex.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common\ASTNode.h" />
+    <ClInclude Include="common\CallFunASTNode.h" />
+    <ClInclude Include="common\DefFunASTNode.h" />
     <ClInclude Include="common\symbol.h" />
+    <ClInclude Include="common\trees.h" />
   </ItemGroup>
   <ItemGroup>
     <Bison Include="grammar.y" />
