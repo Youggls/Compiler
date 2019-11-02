@@ -49,3 +49,19 @@
     3. 支持指针运算一维指针+1 多重指针+1.5
 
     4. 支持结构体+1
+
+## 文件目录说明
+
+1. `common`目录
+
+    包含了主要类文件，目录下的trees.h文件包含了与语法树相关的类，外部使用时只需要包含该头文件即可包含所有相关头文件
+
+2. `win`目录
+
+    包含windows操作系统相关的文件
+
+3. `Linux`/`MacOS`
+
+4. `win_build.bat`，在windows操作系统下，由yacc文件和lex文件生成c++代码的脚本，请参考[该博客](./https://blog.csdn.net/tankloverainbow/article/details/86653044)进行配置
+
+5. `Makefile`，Linux系统的构建文件
