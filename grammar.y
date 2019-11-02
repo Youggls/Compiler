@@ -1,17 +1,18 @@
 %{
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include "../common/trees.h"
 extern char *yytext;
 extern int yylex();
 extern int column;
 extern FILE * yyin;
-struct tree* root;
+AbstractASTNode* root;
 void yyerror(const char *str);
 %}
 
 %union {
-	struct tree* ast;
+	AbstractASTNode* ast;
     char* str;
 }
 %locations
@@ -19,44 +20,42 @@ void yyerror(const char *str);
 
 %right ASSIGNOP
 
-%left OR
-%left AND
-%left RELOP
-%left MINUS PLUS
-%left STAR DIV
-%right NOT
+%left <ast> OR
+%left <ast> AND
+%left <ast> RELOP
+%left <ast> MINUS PLUS
+%left <ast> STAR DIV
+%right <ast> NOT
 %left LP RP LB RB
 %nonassoc LOWER_THAN_ELSE
 
 %token LC RC
-%token INT
-%token FLOAT
-%token TYPE
-%token ID
+%token <ast> INT
+%token <ast> TYPE
+%token <ast> ID
 %nonassoc SEMI COMMA
-%nonassoc STRUCT RETURN IF ELSE WHILE
-
+%nonassoc RETURN IF ELSE WHILE
+%type <ast> ExtDefList ExtDef
 %%
 
 Program: ExtDefList {
-    printf("Root\n");
     }
     ;
 ExtDefList:
     ExtDef {
     }
-    | ExtDef ExtDefList {  }
+    | ExtDefList ExtDef {
+    }
     ;
 ExtDef: Specifier ExtDecList SEMI {
     }
     | Specifier SEMI {
     }
     | Specifier FunDec CompSt {
-        printf("Function!\n");
     }
     | Specifier FunDec SEMI {
     }
-    | error SEMI { yyerrok; }
+    | error SEMI { yyerrok; $$ = NULL;}
     ;
 ExtDecList: VarDec {
     }
@@ -96,9 +95,12 @@ CompSt: LC DefList StmtList RC {
     }
     | error RC { yyerrok; }
     ;
-StmtList: Stmt StmtList {
+StmtList: 
+	Stmt {
+	}
+	|
+	Stmt StmtList {
     }
-    | /* empty */ {  }
     ;
 Stmt: Exp SEMI {
     }
@@ -116,9 +118,12 @@ Stmt: Exp SEMI {
     ;
 
 /* Local Definitions */
-DefList: Def DefList {
+DefList:
+	Def {
+	}
+	|
+	Def DefList {
     }
-    | /* empty */ {  }
     ;
 Def: Specifier DecList SEMI {
     }
@@ -167,8 +172,6 @@ Exp: Exp ASSIGNOP Exp {
     | ID {
     }
     | INT {
-    }
-    | FLOAT {
     }
     | error RP { yyerrok; }
     ;
