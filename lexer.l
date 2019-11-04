@@ -1,12 +1,11 @@
 OMMENT
 %{
-#include "compiler.tab.h"
+#include "grammar.tab.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "ASTNode.cpp"
-#include "ASTNode.h"
+#include "../common/trees.h"
 
 extern char *yytext;
 extern int column;
