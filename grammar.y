@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <cstring>
 #include "../common/trees.h"
+class AbstractASTNode;
 extern char *yytext;
 extern int yylex();
 extern int column;
@@ -33,6 +34,7 @@ void yyerror(const char *str);
 %token <ast> INT
 %token <ast> TYPE
 %token <ast> ID
+%token FOR
 %nonassoc SEMI COMMA
 %nonassoc RETURN IF ELSE WHILE
 %type <ast> ExtDefList ExtDef
@@ -96,12 +98,29 @@ CompSt: LC DefList StmtList RC {
     | error RC { yyerrok; }
     ;
 StmtList: 
-	Stmt {
-	}
-	|
-	Stmt StmtList {
-    }
+	StmtList Stmt {}
+    | {}
     ;
+
+FORLIST:
+    SEMI SEMI {
+    }
+    | Exp SEMI SEMI {
+    }
+    | SEMI Exp SEMI {
+    }
+    | SEMI SEMI Exp {
+    }
+    | Exp SEMI Exp SEMI Exp {
+    }
+    | Exp SEMI Exp SEMI {
+    }
+    | Exp SEMI SEMI Exp {
+    }
+    | SEMI Exp SEMI Exp {
+    }
+;
+
 Stmt: Exp SEMI {
     }
     | CompSt {
@@ -114,8 +133,13 @@ Stmt: Exp SEMI {
     }
     | WHILE LP Exp RP Stmt {
     }
+    | FOR LP FORLIST RP Stmt {
+    }
+    | FOR LP FORLIST RP LC StmtList RC {
+    }
     | error SEMI { yyerrok; }
     ;
+
 
 /* Local Definitions */
 DefList:

@@ -1,0 +1,8 @@
+int main()
+{
+    int a, b;
+    for (a=b;a<b;) {
+        int c;
+        a = b;
+    }
+}
