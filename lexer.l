@@ -1,4 +1,4 @@
-OMMENT
+%x COMMENT
 %{
 #include "grammar.tab.h"
 #include <stdio.h>
