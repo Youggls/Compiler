@@ -3,4 +3,8 @@
 #include "ASTNode.h"
 #include "symbol.h"
 #include "DefFunASTNode.h"
+#include "StmtASTNode.h"
+#include "LiteralASTNode.h"
+#include "ExpASTNode.h"
+#include "OperatorASTNode.h"
 #endif // !TREES_H
