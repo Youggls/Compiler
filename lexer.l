@@ -1,4 +1,4 @@
-OMMENT
+%x COMMENT
 %{
 #include "compiler.tab.h"
 #include <stdio.h>
