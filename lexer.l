@@ -17,7 +17,8 @@ void yyerror(const char *str);
 D   [0-9]
 L   [a-zA-Z_]
 E   [Ee][+-]?{D}+
-
+delim [ \t\n]
+ws    {delim}+
 
 %%
 "/*"           { BEGIN(COMMENT) ; }

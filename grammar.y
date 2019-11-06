@@ -29,7 +29,7 @@ void yyerror(const char *str);
 %right <ast> NOT
 %left LP RP LB RB
 %nonassoc LOWER_THAN_ELSE
-
+%token ERRID
 %token LC RC
 %token <ast> INT
 %token <ast> TYPE
