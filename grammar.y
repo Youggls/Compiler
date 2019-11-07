@@ -31,13 +31,16 @@ void yyerror(const char *str);
 %nonassoc LOWER_THAN_ELSE
 %token ERRID
 %token LC RC
-%token <ast> INT
-%token <ast> TYPE
-%token <ast> ID
+%token <str> INT
+%token <str> TYPE
+%token <str> ID
 %token FOR
 %nonassoc SEMI COMMA
 %nonassoc RETURN IF ELSE WHILE
+%type <str> VarDec Specifier
 %type <ast> ExtDefList ExtDef
+%type <ast> Exp CompSt
+%type <ast> StmtList Stmt Dec DecList Def
 %%
 
 Program: ExtDefList {
@@ -54,6 +57,7 @@ ExtDef: Specifier ExtDecList SEMI {
     | Specifier SEMI {
     }
     | Specifier FunDec CompSt {
+        $3->printTree();
     }
     | Specifier FunDec SEMI {
     }
@@ -67,13 +71,16 @@ ExtDecList: VarDec {
 
 /* Specifiers */
 Specifier: TYPE {
+        $$ = strdup($1);
     }
 ;
 
 /* Declarators */
 VarDec: ID {
+        $$ = strdup($1);
     }
     | VarDec LB INT RB {
+        $$ = NULL;
     }
     ;
 FunDec: ID LP VarList RP {
@@ -93,13 +100,24 @@ ParamDec: Specifier VarDec {
     ;
 
 /* Statements */
-CompSt: LC DefList StmtList RC {
+CompSt:
+    LC StmtList RC {
+        AbstractASTNode* compStmt = new StmtASTNode(StmtType::compStmt);
+        compStmt->addChildNode($2);
+        $$ = compStmt;
     }
     | error RC { yyerrok; }
     ;
 StmtList: 
-	StmtList Stmt {}
-    | {}
+	StmtList Stmt {
+        if ($1 == NULL) $$ = $2;
+        else {
+            $1->getLastPeerNode()->addPeerNode($2);
+        }
+    }
+    | {
+        $$ = NULL;
+    }
     ;
 
 FORLIST:
@@ -122,80 +140,119 @@ FORLIST:
 ;
 
 Stmt: Exp SEMI {
+        AbstractASTNode* temp = new StmtASTNode(StmtType::expStmt);
+        temp->addChildNode($1);
+        $$ = temp;
+    }
+    | Def {
+        AbstractASTNode* temp = new StmtASTNode(StmtType::defStmt);
+        temp->addChildNode($1);
+        $$ = temp;
     }
     | CompSt {
+        AbstractASTNode* temp = new StmtASTNode(StmtType::compStmt);
+        temp->addChildNode($1);
+        $$ = temp;
     }
     | RETURN Exp SEMI {
+        $$ = NULL;
     }
     | IF LP Exp RP Stmt {
+        $$ = NULL;
     }
     | IF LP Exp RP Stmt ELSE Stmt %prec LOWER_THAN_ELSE {
+        $$ = NULL;
     }
     | WHILE LP Exp RP Stmt {
+        $$ = NULL;
     }
     | FOR LP FORLIST RP Stmt {
-    }
-    | FOR LP FORLIST RP LC StmtList RC {
+        $$ = NULL;
     }
     | error SEMI { yyerrok; }
     ;
 
 
 /* Local Definitions */
-DefList:
-	Def {
-	}
-	|
-	Def DefList {
-    }
-    ;
 Def: Specifier DecList SEMI {
+        DefVarASTNode* temp = (DefVarASTNode*)$2;
+        temp->setAllType($1);
+        $$ = temp;
     }
     | error SEMI { yyerrok; }
     ;
 DecList: Dec {
+        $$ = $1;
     }
     | Dec COMMA DecList {
+        $1->getLastPeerNode()->addPeerNode($3);
+        $$ = $1;
     }
     ;
 Dec: VarDec {
+        AbstractASTNode* temp = new DefVarASTNode($1);
+        $$ = temp;
     }
     | VarDec ASSIGNOP Exp {
+        AbstractASTNode* temp = new DefVarASTNode($1, $3);
+        $$ = temp;
     }
-    ;
+;
 
 /* Expressions */
-Exp: Exp ASSIGNOP Exp {
+Exp:
+    Exp ASSIGNOP Exp {
+        AbstractASTNode* temp = new OperatorASTNode((char*)"=", opType::Assignop);
+        temp->addChildNode($1);
+        $1->addPeerNode($3);
+        $$ = temp;
     }
     | Exp AND Exp {
+        $$ = NULL;
     }
     | Exp OR Exp {
+        $$ = NULL;
     }
     | Exp RELOP Exp {
+        $$ = NULL;
     }
     | Exp PLUS Exp {
+        $$ = NULL;
     }
     | Exp MINUS Exp {
+        $$ = NULL;
     }
     | Exp STAR Exp {
+        $$ = NULL;
     }
     | Exp DIV Exp {
+        $$ = NULL;
     }
     | LP Exp RP {
+        $$ = NULL;
     }
     | MINUS Exp {
+        $$ = NULL;
     }
     | NOT Exp {
+        $$ = NULL;
     }
     | ID LP Args RP {
+        $$ = NULL;
     }
     | ID LP RP {
+        $$ = NULL;
     }
     | Exp LB Exp RB {
+        $$ = NULL;
     }
     | ID {
+        AbstractASTNode* temp = new VarASTNode($1);
+        $$ = temp;
     }
     | INT {
+        AbstractASTNode* temp = new LiteralASTNode($1);
+        $$ = temp;
     }
     | error RP { yyerrok; }
     ;

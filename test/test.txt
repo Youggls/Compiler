@@ -1,8 +1,11 @@
 int main()
 {
-    int a, b;
-    for (a=b;a<b;) {
-        int c;
-        a = b;
+    {
+    int a;
+    int b;
+    }
+    {
+    a = 1;
+    a=3;
     }
 }

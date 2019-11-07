@@ -1,9 +1,15 @@
 #include "StmtASTNode.h"
 
-StmtAstNode::StmtAstNode() : AbstractASTNode(ASTNodeType::stmt) {
-
+StmtASTNode::StmtASTNode(StmtType type) : AbstractASTNode(ASTNodeType::stmt) {
+    this->type = type;
 }
 
-void StmtAstNode::printInfo() {
-    std::cout<<"Stmt, "<<std::endl;
+void StmtASTNode::printInfo() {
+    if (this->type == StmtType::compStmt) {
+        std::cout << "Comp Stmt" << std::endl;
+    } else if (this->type == StmtType::defStmt) {
+        std::cout << "Def Stmt" << std::endl;
+    } else if (this->type == StmtType::expStmt) {
+        std::cout << "Exp Stmt" << std::endl;
+    }
 }

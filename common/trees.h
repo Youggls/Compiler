@@ -7,4 +7,6 @@
 #include "LiteralASTNode.h"
 #include "ExpASTNode.h"
 #include "OperatorASTNode.h"
+#include "VarASTNode.h"
+#include "DefVarASTNode.h"
 #endif // !TREES_H

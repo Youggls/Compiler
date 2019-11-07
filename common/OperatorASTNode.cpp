@@ -6,5 +6,5 @@ OperatorASTNode::OperatorASTNode(char* content, opType type)
 }
 
 void OperatorASTNode::printInfo() {
-    std::cout<<"Operator: \""<<this->content<<"\""<<std::endl;
+    std::cout <<"Operator: \"" << this->content << "\"" << std::endl;
 }

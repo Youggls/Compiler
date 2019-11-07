@@ -820,12 +820,12 @@ YY_RULE_SETUP
 case 6:
 YY_RULE_SETUP
 #line 31 "lexer.l"
-{ return(TYPE); }
+{yylval.str=strdup(yytext); return(TYPE); }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
 #line 32 "lexer.l"
-{ return(ID);}
+{yylval.str=strdup(yytext); return(ID);}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
@@ -935,7 +935,7 @@ YY_RULE_SETUP
 case 29:
 YY_RULE_SETUP
 #line 55 "lexer.l"
-{ return(ID); }
+{ yylval.str=strdup(yytext); return(ID); }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
@@ -951,7 +951,7 @@ YY_RULE_SETUP
 case 32:
 YY_RULE_SETUP
 #line 58 "lexer.l"
-{ return(INT);}
+{ yylval.str=strdup(yytext); return(INT);}
 	YY_BREAK
 case 33:
 YY_RULE_SETUP

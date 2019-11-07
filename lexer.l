@@ -28,8 +28,8 @@ ws    {delim}+
 <COMMENT><<EOF>>    {printf("Unterminated comment\n"); return 0;}
  /* C++ comment, a common extension */
 "//".*\n
-"int"                             { return(TYPE); }
-"main"                            { return(ID);}
+"int"                             {yylval.str=strdup(yytext); return(TYPE); }
+"main"                            {yylval.str=strdup(yytext); return(ID);}
 "return"                          { return(RETURN); }
 "for"                             { return(FOR);}
 "while"                           { return(WHILE);}
@@ -52,10 +52,10 @@ ws    {delim}+
 "]"                               { return(RB); }
 "{"                               { return(LC); }
 "}"                               { return(RC); }
-{L}({D}|{L})*                     { return(ID); }
+{L}({D}|{L})*                     { yylval.str=strdup(yytext); return(ID); }
 {D}{L}({D}|{L})*                  { return (ERRID); }
 [ \t\v\f\r\n]                     { }
-([1-9]{D}*)|0                     { return(INT);}
+([1-9]{D}*)|0                     { yylval.str=strdup(yytext); return(INT);}
 %%
 int yywrap()
 {return 1;}
