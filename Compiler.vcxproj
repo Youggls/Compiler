@@ -25,15 +25,25 @@
     <ClCompile Include="common\ASTNode.cpp" />
     <ClCompile Include="common\CallFunASTNode.cpp" />
     <ClCompile Include="common\DefFunASTNode.cpp" />
+    <ClCompile Include="common\ExpASTNode.cpp" />
+    <ClCompile Include="common\LiteralASTNode.cpp" />
+    <ClCompile Include="common\OperatorASTNode.cpp" />
+    <ClCompile Include="common\StmtASTNode.cpp" />
     <ClCompile Include="common\symbol.cpp" />
+    <ClCompile Include="common\LoopASTNode.cpp" />
     <ClCompile Include="win\lexer.flex.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common\ASTNode.h" />
     <ClInclude Include="common\CallFunASTNode.h" />
     <ClInclude Include="common\DefFunASTNode.h" />
+    <ClInclude Include="common\ExpASTNode.h" />
+    <ClInclude Include="common\LiteralASTNode.h" />
+    <ClInclude Include="common\OperatorASTNode.h" />
+    <ClInclude Include="common\StmtASTNode.h" />
     <ClInclude Include="common\symbol.h" />
     <ClInclude Include="common\trees.h" />
+    <ClInclude Include="common\LoopASTNode.h" />
   </ItemGroup>
   <ItemGroup>
     <Bison Include="grammar.y" />

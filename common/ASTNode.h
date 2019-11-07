@@ -8,7 +8,8 @@ enum class ASTNodeType {
     literal = 3,
     op = 4,           //包含 assignop ， relop， +， -， *， /， %
     exp = 5,
-    stmt = 6
+    stmt = 6,
+	loop
 };
 
 class AbstractASTNode

@@ -33,6 +33,21 @@
     <ClCompile Include="common\DefFunASTNode.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="common\ExpASTNode.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="common\LiteralASTNode.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="common\OperatorASTNode.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="common\StmtASTNode.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="common\LoopASTNode.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common\symbol.h">
@@ -48,6 +63,21 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="common\DefFunASTNode.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="common\ExpASTNode.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="common\LiteralASTNode.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="common\OperatorASTNode.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="common\StmtASTNode.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="common\LoopASTNode.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
