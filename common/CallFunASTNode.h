@@ -4,11 +4,11 @@
 class CallFunASTNode :public AbstractASTNode
 {
 private:
-	// 记录参数列表
-	AbstractASTNode* varList;
+    // 记录参数列表
+    AbstractASTNode* varList;
 public:
-	CallFunASTNode(char* content, AbstractASTNode* varList);
-	// ͨ通过 AbstractASTNode 继承
-	void printInfo();
+    CallFunASTNode(char* content, AbstractASTNode* varList);
+    // 通过 AbstractASTNode 继承
+    void printInfo();
 };
 #endif // !CALLFUNASTNODE_H

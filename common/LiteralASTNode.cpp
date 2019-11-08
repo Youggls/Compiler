@@ -1,11 +1,11 @@
 #include "LiteralASTNode.h"
 
-LiteralASTNode::LiteralASTNode(char* content):AbstractASTNode(content,  ASTNodeType::literal) {
-    
+LiteralASTNode::LiteralASTNode(char* content) :AbstractASTNode(content, ASTNodeType::literal) {
+
 }
 
 void LiteralASTNode::printInfo() {
-    std::cout << "Literal: "<< this->getValue() << std::endl;
+    std::cout << "Literal: " << this->getValue() << std::endl;
 }
 
 int LiteralASTNode::getValue() {

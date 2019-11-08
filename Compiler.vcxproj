@@ -25,18 +25,45 @@
     <ClCompile Include="common\ASTNode.cpp" />
     <ClCompile Include="common\CallFunASTNode.cpp" />
     <ClCompile Include="common\DefFunASTNode.cpp" />
+    <ClCompile Include="common\ExpASTNode.cpp" />
+    <ClCompile Include="common\LiteralASTNode.cpp" />
+    <ClCompile Include="common\OperatorASTNode.cpp" />
+    <ClCompile Include="common\SelectASTNode.cpp" />
+    <ClCompile Include="common\StmtASTNode.cpp" />
     <ClCompile Include="common\symbol.cpp" />
+    <ClCompile Include="common\LoopASTNode.cpp" />
+    <ClCompile Include="Linux\grammar.tab.cpp" />
+    <ClCompile Include="Linux\lexer.flex.cpp" />
     <ClCompile Include="win\lexer.flex.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common\ASTNode.h" />
     <ClInclude Include="common\CallFunASTNode.h" />
     <ClInclude Include="common\DefFunASTNode.h" />
+    <ClInclude Include="common\ExpASTNode.h" />
+    <ClInclude Include="common\LiteralASTNode.h" />
+    <ClInclude Include="common\OperatorASTNode.h" />
+    <ClInclude Include="common\StmtASTNode.h" />
     <ClInclude Include="common\symbol.h" />
     <ClInclude Include="common\trees.h" />
+    <ClInclude Include="common\LoopASTNode.h" />
+    <ClInclude Include="common\SelectASTNode.h" />
+    <ClInclude Include="Linux\grammar.tab.h" />
   </ItemGroup>
   <ItemGroup>
     <Bison Include="grammar.y" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".gitignore" />
+    <None Include="LICENSE" />
+    <None Include="Makefile" />
+    <None Include="README.md" />
+    <None Include="win_build.bat" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="test\grammar.txt" />
+    <Text Include="test\lexical.txt" />
+    <Text Include="test\test.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
