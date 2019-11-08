@@ -2,9 +2,17 @@
 #define STMTASTNODE_H
 #include "ASTNode.h"
 
-class StmtAstNode : public AbstractASTNode {
+enum class StmtType {
+    compStmt = 1,
+    expStmt = 2,
+    defStmt = 3,
+};
+
+class StmtASTNode : public AbstractASTNode {
+private:
+    StmtType type;
 public:
-    StmtAstNode();
+    StmtASTNode(StmtType type);
     void printInfo();
 };
 

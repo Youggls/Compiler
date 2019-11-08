@@ -5,7 +5,7 @@ LiteralASTNode::LiteralASTNode(char* content) :AbstractASTNode(content, ASTNodeT
 }
 
 void LiteralASTNode::printInfo() {
-    std::cout << "Encounter a literal: " << this->getValue() << std::endl;
+    std::cout << "Literal: " << this->getValue() << std::endl;
 }
 
 int LiteralASTNode::getValue() {

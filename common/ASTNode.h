@@ -9,6 +9,9 @@ enum class ASTNodeType {
     op = 4,         //包含 assignop ， relop， +， -， *， /， %
     exp = 5,
     stmt = 6,
+    defVar,
+    assignVar,
+    identifier,
     loop,
     select
 };
@@ -20,8 +23,12 @@ private:
     AbstractASTNode* parent;
     AbstractASTNode* peer;
     AbstractASTNode* child;
+    static void __printTree(AbstractASTNode* node, int depth);
 protected:
     std::string content;
+    inline AbstractASTNode* getChild() { return this->child; }
+    inline AbstractASTNode* getPeer() { return this->peer; }
+
 public:
     AbstractASTNode();
     AbstractASTNode(ASTNodeType nodetype);
@@ -29,6 +36,7 @@ public:
     void addChildNode(AbstractASTNode* node);
     void addPeerNode(AbstractASTNode* node);
     AbstractASTNode* getLastPeerNode();
+    void printTree();
     virtual void printInfo() = 0;
 };
 #endif

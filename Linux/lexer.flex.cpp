@@ -815,280 +815,280 @@ case 3:
                     YY_RULE_SETUP
                     #line 30 "lexer.l"
 
-                        YY_BREAK
-                    case 6:
-                    YY_RULE_SETUP
-                    #line 31 "lexer.l"
-                    { return(TYPE); }
-                        YY_BREAK
-                    case 7:
-                    YY_RULE_SETUP
-                    #line 32 "lexer.l"
-                    { return(ID); }
-                        YY_BREAK
-                    case 8:
-                    YY_RULE_SETUP
-                    #line 33 "lexer.l"
-                    { return(RETURN); }
-                        YY_BREAK
-                    case 9:
-                    YY_RULE_SETUP
-                    #line 34 "lexer.l"
-                    { return(FOR); }
-                        YY_BREAK
-                    case 10:
-                    YY_RULE_SETUP
-                    #line 35 "lexer.l"
-                    { return(WHILE); }
-                        YY_BREAK
-                    case 11:
-                    YY_RULE_SETUP
-                    #line 37 "lexer.l"
-                    { return(IF); }
-                        YY_BREAK
-                    case 12:
-                    YY_RULE_SETUP
-                    #line 38 "lexer.l"
-                    { return(SEMI); }
-                        YY_BREAK
-                    case 13:
-                    YY_RULE_SETUP
-                    #line 39 "lexer.l"
-                    { return(COMMA); }
-                        YY_BREAK
-                    case 14:
-                    YY_RULE_SETUP
-                    #line 40 "lexer.l"
-                    { return(ASSIGNOP); }
-                        YY_BREAK
-                    case 15:
-                    YY_RULE_SETUP
-                    #line 41 "lexer.l"
-                    { return(RELOP); }
-                        YY_BREAK
-                    case 16:
-                    YY_RULE_SETUP
-                    #line 42 "lexer.l"
-                    { return(PLUS); }
-                        YY_BREAK
-                    case 17:
-                    YY_RULE_SETUP
-                    #line 43 "lexer.l"
-                    { return(MINUS); }
-                        YY_BREAK
-                    case 18:
-                    YY_RULE_SETUP
-                    #line 44 "lexer.l"
-                    { return(STAR); }
-                        YY_BREAK
-                    case 19:
-                    YY_RULE_SETUP
-                    #line 45 "lexer.l"
-                    { return(DIV); }
-                        YY_BREAK
-                    case 20:
-                    YY_RULE_SETUP
-                    #line 46 "lexer.l"
-                    { return(AND); }
-                        YY_BREAK
-                    case 21:
-                    YY_RULE_SETUP
-                    #line 47 "lexer.l"
-                    { return(OR); }
-                        YY_BREAK
-                    case 22:
-                    YY_RULE_SETUP
-                    #line 48 "lexer.l"
-                    { return(NOT); }
-                        YY_BREAK
-                    case 23:
-                    YY_RULE_SETUP
-                    #line 49 "lexer.l"
-                    { return(LP); }
-                        YY_BREAK
-                    case 24:
-                    YY_RULE_SETUP
-                    #line 50 "lexer.l"
-                    { return(RP); }
-                        YY_BREAK
-                    case 25:
-                    YY_RULE_SETUP
-                    #line 51 "lexer.l"
-                    { return(LB); }
-                        YY_BREAK
-                    case 26:
-                    YY_RULE_SETUP
-                    #line 52 "lexer.l"
-                    { return(RB); }
-                        YY_BREAK
-                    case 27:
-                    YY_RULE_SETUP
-                    #line 53 "lexer.l"
-                    { return(LC); }
-                        YY_BREAK
-                    case 28:
-                    YY_RULE_SETUP
-                    #line 54 "lexer.l"
-                    { return(RC); }
-                        YY_BREAK
-                    case 29:
-                    YY_RULE_SETUP
-                    #line 55 "lexer.l"
-                    { return(ID); }
-                        YY_BREAK
-                    case 30:
-                    YY_RULE_SETUP
-                    #line 56 "lexer.l"
-                    { return (ERRID); }
-                        YY_BREAK
-                    case 31:
-                        /* rule 31 can match eol */
-                        YY_RULE_SETUP
-                        #line 57 "lexer.l"
-                        { }
-                            YY_BREAK
-                        case 32:
-                        YY_RULE_SETUP
-                        #line 58 "lexer.l"
-                        { return(INT); }
-                            YY_BREAK
-                        case 33:
-                        YY_RULE_SETUP
-                        #line 59 "lexer.l"
-                        ECHO;
-                            YY_BREAK
-                        #line 962 "./Linux/lexer.flex.cpp"
-                        case YY_STATE_EOF(INITIAL):
-                            yyterminate();
+    YY_BREAK
+case 6:
+YY_RULE_SETUP
+#line 31 "lexer.l"
+{yylval.str = strdup(yytext); return(TYPE); }
+    YY_BREAK
+case 7:
+YY_RULE_SETUP
+#line 32 "lexer.l"
+{yylval.str = strdup(yytext); return(ID); }
+    YY_BREAK
+case 8:
+YY_RULE_SETUP
+#line 33 "lexer.l"
+{ return(RETURN); }
+    YY_BREAK
+case 9:
+YY_RULE_SETUP
+#line 34 "lexer.l"
+{ return(FOR); }
+    YY_BREAK
+case 10:
+YY_RULE_SETUP
+#line 35 "lexer.l"
+{ return(WHILE); }
+    YY_BREAK
+case 11:
+YY_RULE_SETUP
+#line 37 "lexer.l"
+{ return(IF); }
+    YY_BREAK
+case 12:
+YY_RULE_SETUP
+#line 38 "lexer.l"
+{ return(SEMI); }
+    YY_BREAK
+case 13:
+YY_RULE_SETUP
+#line 39 "lexer.l"
+{ return(COMMA); }
+    YY_BREAK
+case 14:
+YY_RULE_SETUP
+#line 40 "lexer.l"
+{ return(ASSIGNOP); }
+    YY_BREAK
+case 15:
+YY_RULE_SETUP
+#line 41 "lexer.l"
+{ return(RELOP); }
+    YY_BREAK
+case 16:
+YY_RULE_SETUP
+#line 42 "lexer.l"
+{ return(PLUS); }
+    YY_BREAK
+case 17:
+YY_RULE_SETUP
+#line 43 "lexer.l"
+{ return(MINUS); }
+    YY_BREAK
+case 18:
+YY_RULE_SETUP
+#line 44 "lexer.l"
+{ return(STAR); }
+    YY_BREAK
+case 19:
+YY_RULE_SETUP
+#line 45 "lexer.l"
+{ return(DIV); }
+    YY_BREAK
+case 20:
+YY_RULE_SETUP
+#line 46 "lexer.l"
+{ return(AND); }
+    YY_BREAK
+case 21:
+YY_RULE_SETUP
+#line 47 "lexer.l"
+{ return(OR); }
+    YY_BREAK
+case 22:
+YY_RULE_SETUP
+#line 48 "lexer.l"
+{ return(NOT); }
+    YY_BREAK
+case 23:
+YY_RULE_SETUP
+#line 49 "lexer.l"
+{ return(LP); }
+    YY_BREAK
+case 24:
+YY_RULE_SETUP
+#line 50 "lexer.l"
+{ return(RP); }
+    YY_BREAK
+case 25:
+YY_RULE_SETUP
+#line 51 "lexer.l"
+{ return(LB); }
+    YY_BREAK
+case 26:
+YY_RULE_SETUP
+#line 52 "lexer.l"
+{ return(RB); }
+    YY_BREAK
+case 27:
+YY_RULE_SETUP
+#line 53 "lexer.l"
+{ return(LC); }
+    YY_BREAK
+case 28:
+YY_RULE_SETUP
+#line 54 "lexer.l"
+{ return(RC); }
+    YY_BREAK
+case 29:
+YY_RULE_SETUP
+#line 55 "lexer.l"
+{ yylval.str = strdup(yytext); return(ID); }
+    YY_BREAK
+case 30:
+YY_RULE_SETUP
+#line 56 "lexer.l"
+{ return (ERRID); }
+    YY_BREAK
+case 31:
+    /* rule 31 can match eol */
+    YY_RULE_SETUP
+    #line 57 "lexer.l"
+    { }
+        YY_BREAK
+    case 32:
+    YY_RULE_SETUP
+    #line 58 "lexer.l"
+    { yylval.str = strdup(yytext); return(INT); }
+        YY_BREAK
+    case 33:
+    YY_RULE_SETUP
+    #line 59 "lexer.l"
+    ECHO;
+        YY_BREAK
+    #line 962 "./Linux/lexer.flex.cpp"
+    case YY_STATE_EOF(INITIAL):
+        yyterminate();
 
-                            case YY_END_OF_BUFFER:
-                                {
-                                /* Amount of text matched not including the EOB char. */
-                                int yy_amount_of_matched_text = (int)(yy_cp - (yytext_ptr)) - 1;
-
-                                /* Undo the effects of YY_DO_BEFORE_ACTION. */
-                                *yy_cp = (yy_hold_char);
-                                YY_RESTORE_YY_MORE_OFFSET
-
-                                if (YY_CURRENT_BUFFER_LVALUE->yy_buffer_status == YY_BUFFER_NEW)
+                                case YY_END_OF_BUFFER:
                                     {
-                                    /* We're scanning a new file or input source.  It's
-                                     * possible that this happened because the user
-                                     * just pointed yyin at a new source and called
-                                     * yylex().  If so, then we have to assure
-                                     * consistency between YY_CURRENT_BUFFER and our
-                                     * globals.  Here is the right place to do so, because
-                                     * this is the first action (other than possibly a
-                                     * back-up) that will match for the new input source.
-                                     */
-                                    (yy_n_chars) = YY_CURRENT_BUFFER_LVALUE->yy_n_chars;
-                                    YY_CURRENT_BUFFER_LVALUE->yy_input_file = yyin;
-                                    YY_CURRENT_BUFFER_LVALUE->yy_buffer_status = YY_BUFFER_NORMAL;
-                                    }
+                                    /* Amount of text matched not including the EOB char. */
+                                    int yy_amount_of_matched_text = (int)(yy_cp - (yytext_ptr)) - 1;
 
-                                /* Note that here we test for yy_c_buf_p "<=" to the position
-                                 * of the first EOB in the buffer, since yy_c_buf_p will
-                                 * already have been incremented past the NUL character
-                                 * (since all states make transitions on EOB to the
-                                 * end-of-buffer state).  Contrast this with the test
-                                 * in input().
-                                 */
-                                if ((yy_c_buf_p) <= &YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[(yy_n_chars)])
-                                    { /* This was really a NUL. */
-                                    yy_state_type yy_next_state;
+                                    /* Undo the effects of YY_DO_BEFORE_ACTION. */
+                                    *yy_cp = (yy_hold_char);
+                                    YY_RESTORE_YY_MORE_OFFSET
 
-                                    (yy_c_buf_p) = (yytext_ptr)+yy_amount_of_matched_text;
-
-                                    yy_current_state = yy_get_previous_state();
-
-                                    /* Okay, we're now positioned to make the NUL
-                                     * transition.  We couldn't have
-                                     * yy_get_previous_state() go ahead and do it
-                                     * for us because it doesn't know how to deal
-                                     * with the possibility of jamming (and we don't
-                                     * want to build jamming into it because then it
-                                     * will run more slowly).
-                                     */
-
-                                    yy_next_state = yy_try_NUL_trans(yy_current_state);
-
-                                    yy_bp = (yytext_ptr)+YY_MORE_ADJ;
-
-                                    if (yy_next_state)
+                                    if (YY_CURRENT_BUFFER_LVALUE->yy_buffer_status == YY_BUFFER_NEW)
                                         {
-                                        /* Consume the NUL. */
-                                        yy_cp = ++(yy_c_buf_p);
-                                        yy_current_state = yy_next_state;
-                                        goto yy_match;
+                                        /* We're scanning a new file or input source.  It's
+                                         * possible that this happened because the user
+                                         * just pointed yyin at a new source and called
+                                         * yylex().  If so, then we have to assure
+                                         * consistency between YY_CURRENT_BUFFER and our
+                                         * globals.  Here is the right place to do so, because
+                                         * this is the first action (other than possibly a
+                                         * back-up) that will match for the new input source.
+                                         */
+                                        (yy_n_chars) = YY_CURRENT_BUFFER_LVALUE->yy_n_chars;
+                                        YY_CURRENT_BUFFER_LVALUE->yy_input_file = yyin;
+                                        YY_CURRENT_BUFFER_LVALUE->yy_buffer_status = YY_BUFFER_NORMAL;
                                         }
 
-                                    else
-                                        {
-                                        yy_cp = (yy_c_buf_p);
-                                        goto yy_find_action;
-                                        }
-                                    }
+                                    /* Note that here we test for yy_c_buf_p "<=" to the position
+                                     * of the first EOB in the buffer, since yy_c_buf_p will
+                                     * already have been incremented past the NUL character
+                                     * (since all states make transitions on EOB to the
+                                     * end-of-buffer state).  Contrast this with the test
+                                     * in input().
+                                     */
+                                    if ((yy_c_buf_p) <= &YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[(yy_n_chars)])
+                                        { /* This was really a NUL. */
+                                        yy_state_type yy_next_state;
 
-                                else switch (yy_get_next_buffer())
-                                    {
-                                    case EOB_ACT_END_OF_FILE:
-                                        {
-                                        (yy_did_buffer_switch_on_eof) = 0;
+                                        (yy_c_buf_p) = (yytext_ptr)+yy_amount_of_matched_text;
 
-                                        if (yywrap())
+                                        yy_current_state = yy_get_previous_state();
+
+                                        /* Okay, we're now positioned to make the NUL
+                                         * transition.  We couldn't have
+                                         * yy_get_previous_state() go ahead and do it
+                                         * for us because it doesn't know how to deal
+                                         * with the possibility of jamming (and we don't
+                                         * want to build jamming into it because then it
+                                         * will run more slowly).
+                                         */
+
+                                        yy_next_state = yy_try_NUL_trans(yy_current_state);
+
+                                        yy_bp = (yytext_ptr)+YY_MORE_ADJ;
+
+                                        if (yy_next_state)
                                             {
-                                            /* Note: because we've taken care in
-                                             * yy_get_next_buffer() to have set up
-                                             * yytext, we can now set up
-                                             * yy_c_buf_p so that if some total
-                                             * hoser (like flex itself) wants to
-                                             * call the scanner after we return the
-                                             * YY_NULL, it'll still work - another
-                                             * YY_NULL will get returned.
-                                             */
-                                            (yy_c_buf_p) = (yytext_ptr)+YY_MORE_ADJ;
-
-                                            yy_act = YY_STATE_EOF(YY_START);
-                                            goto do_action;
+                                            /* Consume the NUL. */
+                                            yy_cp = ++(yy_c_buf_p);
+                                            yy_current_state = yy_next_state;
+                                            goto yy_match;
                                             }
 
                                         else
                                             {
-                                            if (!(yy_did_buffer_switch_on_eof))
-                                                YY_NEW_FILE;
+                                            yy_cp = (yy_c_buf_p);
+                                            goto yy_find_action;
                                             }
-                                        break;
                                         }
 
-                                    case EOB_ACT_CONTINUE_SCAN:
-                                        (yy_c_buf_p) =
-                                            (yytext_ptr)+yy_amount_of_matched_text;
+                                    else switch (yy_get_next_buffer())
+                                        {
+                                        case EOB_ACT_END_OF_FILE:
+                                            {
+                                            (yy_did_buffer_switch_on_eof) = 0;
 
-                                        yy_current_state = yy_get_previous_state();
+                                            if (yywrap())
+                                                {
+                                                /* Note: because we've taken care in
+                                                 * yy_get_next_buffer() to have set up
+                                                 * yytext, we can now set up
+                                                 * yy_c_buf_p so that if some total
+                                                 * hoser (like flex itself) wants to
+                                                 * call the scanner after we return the
+                                                 * YY_NULL, it'll still work - another
+                                                 * YY_NULL will get returned.
+                                                 */
+                                                (yy_c_buf_p) = (yytext_ptr)+YY_MORE_ADJ;
 
-                                        yy_cp = (yy_c_buf_p);
-                                        yy_bp = (yytext_ptr)+YY_MORE_ADJ;
-                                        goto yy_match;
+                                                yy_act = YY_STATE_EOF(YY_START);
+                                                goto do_action;
+                                                }
 
-                                    case EOB_ACT_LAST_MATCH:
-                                        (yy_c_buf_p) =
-                                        &YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[(yy_n_chars)];
+                                            else
+                                                {
+                                                if (!(yy_did_buffer_switch_on_eof))
+                                                    YY_NEW_FILE;
+                                                }
+                                            break;
+                                            }
 
-                                        yy_current_state = yy_get_previous_state();
+                                        case EOB_ACT_CONTINUE_SCAN:
+                                            (yy_c_buf_p) =
+                                                (yytext_ptr)+yy_amount_of_matched_text;
 
-                                        yy_cp = (yy_c_buf_p);
-                                        yy_bp = (yytext_ptr)+YY_MORE_ADJ;
-                                        goto yy_find_action;
+                                            yy_current_state = yy_get_previous_state();
+
+                                            yy_cp = (yy_c_buf_p);
+                                            yy_bp = (yytext_ptr)+YY_MORE_ADJ;
+                                            goto yy_match;
+
+                                        case EOB_ACT_LAST_MATCH:
+                                            (yy_c_buf_p) =
+                                            &YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[(yy_n_chars)];
+
+                                            yy_current_state = yy_get_previous_state();
+
+                                            yy_cp = (yy_c_buf_p);
+                                            yy_bp = (yytext_ptr)+YY_MORE_ADJ;
+                                            goto yy_find_action;
+                                        }
+                                    break;
                                     }
-                                break;
-                                }
 
-                            default:
-                                YY_FATAL_ERROR(
-                                    "fatal flex scanner internal error--no action found");
-                            } /* end of action switch */
-                                } /* end of scanning one token */
-                            } /* end of user's declarations */
+                                default:
+                                    YY_FATAL_ERROR(
+                                        "fatal flex scanner internal error--no action found");
+                                } /* end of action switch */
+                                    } /* end of scanning one token */
+                                } /* end of user's declarations */
 } /* end of yylex */
 
 /* yy_get_next_buffer - try to read in a new buffer
