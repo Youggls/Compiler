@@ -5,7 +5,7 @@ class IdentifierASTNode : public AbstractASTNode
 {
 public:
     IdentifierASTNode(char* content);
-    void printInfo();
+    void printInfo(int depth);
     int getValue();
 };
 #endif

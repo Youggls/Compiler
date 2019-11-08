@@ -7,7 +7,7 @@ class VarASTNode : public AbstractASTNode
 {
 public:
     VarASTNode(char* content, AbstractASTNode* value=NULL);
-    void printInfo();
+    void printInfo(int depth);
 };
 
 #endif

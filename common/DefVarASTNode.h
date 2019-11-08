@@ -15,7 +15,7 @@ private:
 public:
     DefVarASTNode(char* content, AbstractASTNode* value=NULL);
     void setAllType(char* type);
-    void printInfo();
+    void printInfo(int depth);
 };
 
 #endif

@@ -23,12 +23,11 @@ private:
     AbstractASTNode* parent;
     AbstractASTNode* peer;
     AbstractASTNode* child;
-    static void __printTree(AbstractASTNode* node, int depth);
 protected:
     std::string content;
+    static void __printTree(AbstractASTNode* node, int depth);
     inline AbstractASTNode* getChild() { return this->child; }
     inline AbstractASTNode* getPeer() { return this->peer; }
-
 public:
     AbstractASTNode();
     AbstractASTNode(ASTNodeType nodetype);
@@ -37,6 +36,6 @@ public:
     void addPeerNode(AbstractASTNode* node);
     AbstractASTNode* getLastPeerNode();
     void printTree();
-    virtual void printInfo() = 0;
+    virtual void printInfo(int depth) = 0;
 };
 #endif

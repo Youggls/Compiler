@@ -7,7 +7,7 @@ DefFunASTNode::DefFunASTNode(char* content, AbstractASTNode* argList, AbstractAS
     this->addChildNode(funcBody);
 }
 
-void DefFunASTNode::printInfo()
+void DefFunASTNode::printInfo(int depth)
 {
     std::cout << "Function define." << this->content;
 }

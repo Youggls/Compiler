@@ -23,20 +23,20 @@ void yyerror(const char *str);
 
 %left <ast> OR
 %left <ast> AND
-%left <ast> RELOP
+%left <str> RELOP
 %left <ast> MINUS PLUS
 %left <ast> STAR DIV
 %right <ast> NOT
 %left LP RP LB RB
 %nonassoc LOWER_THAN_ELSE
 %token ERRID
-%token LC RC
 %token <str> INT
 %token <str> TYPE
 %token <str> ID
 %token FOR
 %nonassoc SEMI COMMA
 %nonassoc RETURN IF ELSE WHILE
+%token LC RC
 %type <str> VarDec Specifier
 %type <ast> ExtDefList ExtDef
 %type <ast> Exp CompSt
@@ -108,6 +108,7 @@ CompSt:
     }
     | error RC { yyerrok; }
     ;
+
 StmtList: 
 	StmtList Stmt {
         if ($1 == NULL) $$ = $2;
@@ -120,25 +121,6 @@ StmtList:
     }
     ;
 
-FORLIST:
-    SEMI SEMI {
-    }
-    | Exp SEMI SEMI {
-    }
-    | SEMI Exp SEMI {
-    }
-    | SEMI SEMI Exp {
-    }
-    | Exp SEMI Exp SEMI Exp {
-    }
-    | Exp SEMI Exp SEMI {
-    }
-    | Exp SEMI SEMI Exp {
-    }
-    | SEMI Exp SEMI Exp {
-    }
-;
-
 Stmt: Exp SEMI {
         AbstractASTNode* temp = new StmtASTNode(StmtType::expStmt);
         temp->addChildNode($1);
@@ -150,31 +132,54 @@ Stmt: Exp SEMI {
         $$ = temp;
     }
     | CompSt {
-        AbstractASTNode* temp = new StmtASTNode(StmtType::compStmt);
-        temp->addChildNode($1);
-        $$ = temp;
+        $$ = $1;
     }
     | RETURN Exp SEMI {
-        $$ = NULL;
+        AbstractASTNode* temp = new StmtASTNode(StmtType::returnStmt);
+        temp->addChildNode($2);
+        $$ = temp;
     }
-    | IF LP Exp RP Stmt {
-        $$ = NULL;
+    | IF LP Exp RP Stmt{
+        $$ = new SelectASTNode((char*)"", SelectType::_if, $5, $3);
     }
-    | IF LP Exp RP Stmt ELSE Stmt %prec LOWER_THAN_ELSE {
-        $$ = NULL;
+    | IF LP Exp RP Stmt ELSE Stmt %prec LOWER_THAN_ELSE{
+        $$ = new SelectASTNode((char*)"", SelectType::_if, $5, $3, $7);
     }
     | WHILE LP Exp RP Stmt {
-        $$ = NULL;
+        $$ = new LoopASTNode((char*)"", LoopType::_whileS, $5, $3);
     }
-    | FOR LP FORLIST RP Stmt {
-        $$ = NULL;
+    | FOR LP SEMI SEMI RP Stmt {
+        $$ = new LoopASTNode((char*)"", LoopType::_for, $6, NULL, NULL, NULL);
+    }
+    | FOR LP Exp SEMI SEMI RP Stmt {
+        $$ = new LoopASTNode((char*)"", LoopType::_for, $7, $3, NULL, NULL);
+    }
+    | FOR LP SEMI Exp SEMI RP Stmt {
+        $$ = new LoopASTNode((char*)"", LoopType::_for, $7, NULL, $4, NULL);
+    }
+    | FOR LP SEMI SEMI Exp RP Stmt {
+        $$ = new LoopASTNode((char*)"", LoopType::_for, $7, NULL, NULL, $5);
+    }
+    | FOR LP Exp SEMI Exp SEMI Exp RP Stmt {
+        $$ = new LoopASTNode((char*)"", LoopType::_for, $9, $3, $5, $7);
+    }
+    | FOR LP Exp SEMI Exp SEMI RP Stmt {
+        $$ = new LoopASTNode((char*)"", LoopType::_for, $8, $3, $5, NULL);
+    }
+    | FOR LP Exp SEMI SEMI Exp RP Stmt {
+        $$ = new LoopASTNode((char*)"", LoopType::_for, $8, $3, NULL, $6);
+    }
+    | FOR LP SEMI Exp SEMI Exp RP Stmt {
+        $$ = new LoopASTNode((char*)"", LoopType::_for, $8, NULL, $4, $6);
     }
     | error SEMI { yyerrok; }
     ;
 
 
+
 /* Local Definitions */
-Def: Specifier DecList SEMI {
+Def: Specifier DecList SEMI{
+        printf("DEF\n");
         DefVarASTNode* temp = (DefVarASTNode*)$2;
         temp->setAllType($1);
         $$ = temp;
@@ -208,34 +213,59 @@ Exp:
         $$ = temp;
     }
     | Exp AND Exp {
-        $$ = NULL;
+        AbstractASTNode* temp = new OperatorASTNode((char*)"&&", opType::And);
+        temp->addChildNode($1);
+        $1->addPeerNode($3);
+        $$ = temp;
     }
     | Exp OR Exp {
-        $$ = NULL;
+        AbstractASTNode* temp = new OperatorASTNode((char*)"||", opType::Or);
+        temp->addChildNode($1);
+        $1->addPeerNode($3);
+        $$ = temp;
     }
     | Exp RELOP Exp {
-        $$ = NULL;
+        AbstractASTNode* temp = new OperatorASTNode($2, opType::Relop);
+        temp->addChildNode($1);
+        $1->addPeerNode($3);
+        $$ = temp;
     }
     | Exp PLUS Exp {
-        $$ = NULL;
+        AbstractASTNode* temp = new OperatorASTNode((char*)"+", opType::Plus);
+        temp->addChildNode($1);
+        $1->addPeerNode($3);
+        $$ = temp;
     }
     | Exp MINUS Exp {
-        $$ = NULL;
+        AbstractASTNode* temp = new OperatorASTNode((char*)"-", opType::Minus);
+        temp->addChildNode($1);
+        $1->addPeerNode($3);
+        $$ = temp;
     }
     | Exp STAR Exp {
-        $$ = NULL;
+        AbstractASTNode* temp = new OperatorASTNode((char*)"*", opType::Times);
+        temp->addChildNode($1);
+        $1->addPeerNode($3);
+        $$ = temp;
     }
     | Exp DIV Exp {
-        $$ = NULL;
+        AbstractASTNode* temp = new OperatorASTNode((char*)"/", opType::Div);
+        temp->addChildNode($1);
+        $1->addPeerNode($3);
+        $$ = temp;
     }
     | LP Exp RP {
-        $$ = NULL;
+        $$ = $2;
     }
     | MINUS Exp {
-        $$ = NULL;
+        AbstractASTNode* temp = new OperatorASTNode((char*)"-", opType::Negative);
+        temp->addChildNode($2);
+        $$ = temp;
     }
     | NOT Exp {
-        $$ = NULL;
+        AbstractASTNode* temp = new OperatorASTNode((char*)"!", opType::Not);
+        temp->addChildNode($2);
+        $$ = temp;
     }
     | ID LP Args RP {
         $$ = NULL;

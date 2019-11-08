@@ -6,7 +6,7 @@ VarASTNode::VarASTNode(char* content, AbstractASTNode* value)
     this->addChildNode(value);
 }
 
-void VarASTNode::printInfo()
+void VarASTNode::printInfo(int depth)
 {
     std::cout << "Variation " << this->content << std::endl;
 }

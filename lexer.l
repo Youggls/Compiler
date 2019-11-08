@@ -28,17 +28,18 @@ ws    {delim}+
 <COMMENT><<EOF>>    {printf("Unterminated comment\n"); return 0;}
  /* C++ comment, a common extension */
 "//".*\n
-"int"                             {yylval.str=strdup(yytext); return(TYPE); }
-"main"                            {yylval.str=strdup(yytext); return(ID);}
+"int"                             { yylval.str=strdup(yytext); return(TYPE); }
+"main"                            { yylval.str=strdup(yytext); return(ID);}
 "return"                          { return(RETURN); }
 "for"                             { return(FOR);}
 "while"                           { return(WHILE);}
 
 "if"                              { return(IF); }
+"else"                            { return(ELSE);}
 ";"                               { return(SEMI); }
 ","                               { return(COMMA); }
 "="                               { return(ASSIGNOP); }
-(>=)|(<=)|(==)|(!=)|<|>           { return(RELOP); }
+(>=)|(<=)|(==)|(!=)|<|>           { yylval.str=strdup(yytext); return(RELOP); }
 "+"                               { return(PLUS); }
 "-"                               { return(MINUS); }
 "*"                               { return(STAR); }

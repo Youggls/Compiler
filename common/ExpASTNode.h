@@ -5,7 +5,7 @@
 class ExpASTNode : public AbstractASTNode {
 public:
     ExpASTNode();
-    void printInfo();
+    void printInfo(int depth);
 };
 
 #endif

@@ -6,6 +6,7 @@ enum class StmtType {
     compStmt = 1,
     expStmt = 2,
     defStmt = 3,
+    returnStmt = 4,
 };
 
 class StmtASTNode : public AbstractASTNode {
@@ -13,7 +14,7 @@ private:
     StmtType type;
 public:
     StmtASTNode(StmtType type);
-    void printInfo();
+    void printInfo(int depth);
 };
 
 #endif

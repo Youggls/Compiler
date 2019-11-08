@@ -11,7 +11,7 @@ public:
     // argList是参数列表，funcBody是函数体
     DefFunASTNode(char* content, AbstractASTNode* argList, AbstractASTNode* funcBody);
     // 通过 AbstractASTNode 继承
-    void printInfo();
+    void printInfo(int depth);
 };
 
 #endif // !FUNCASTNODE_H

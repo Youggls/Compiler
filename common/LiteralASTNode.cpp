@@ -4,7 +4,7 @@ LiteralASTNode::LiteralASTNode(char* content) :AbstractASTNode(content, ASTNodeT
 
 }
 
-void LiteralASTNode::printInfo() {
+void LiteralASTNode::printInfo(int depth) {
     std::cout << "Literal: " << this->getValue() << std::endl;
 }
 

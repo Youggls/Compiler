@@ -4,18 +4,20 @@
 #include "StmtASTNode.h"
 
 enum class SelectType {
-    _if,
-    _else,
-    _else_if
+    _if = 1,
+    _else = 2,
+    _else_if = 3
 };
 class SelectASTNode : public AbstractASTNode
 {
 private:
+    AbstractASTNode* condition;
+    AbstractASTNode* elseStmt;
+    AbstractASTNode* body;
     // if & else if contain 2/3 child node, qulification statement and 'else'/'else if' node(optional)
     SelectType selectType;
 public:
-    SelectASTNode(char* content, SelectType type);
-    void printInfo();
+    SelectASTNode(char* content, SelectType type, AbstractASTNode* body, AbstractASTNode* condition, AbstractASTNode* elseStmt=NULL);
+    void printInfo(int depth);
 };
-#pragma once
 #endif // !SELECTASTNODE_H

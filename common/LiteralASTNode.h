@@ -5,7 +5,7 @@ class LiteralASTNode : public AbstractASTNode {
 public:
     LiteralASTNode(char* content);
     // 通过 AbstractASTNode 继承
-    void printInfo();
+    void printInfo(int depth);
     int getValue();
 };
 #endif

@@ -4,9 +4,9 @@ IdentifierASTNode::IdentifierASTNode(char *content) : AbstractASTNode(content, A
 {
 }
 
-void IdentifierASTNode::printInfo()
+void IdentifierASTNode::printInfo(int depth)
 {
-    std::cout << "Encounter an identifier: " << this->getValue() << std::endl;
+    std::cout << "Identifier: " << this->getValue() << std::endl;
 }
 
 int IdentifierASTNode::getValue()

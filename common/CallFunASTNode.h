@@ -9,6 +9,6 @@ private:
 public:
     CallFunASTNode(char* content, AbstractASTNode* varList);
     // 通过 AbstractASTNode 继承
-    void printInfo();
+    void printInfo(int depth);
 };
 #endif // !CALLFUNASTNODE_H

@@ -6,7 +6,7 @@ CallFunASTNode::CallFunASTNode(char* content, AbstractASTNode* varList) :
     this->varList = varList;
 }
 
-void CallFunASTNode::printInfo()
+void CallFunASTNode::printInfo(int depth)
 {
     std::cout << "Call Function." << this->content;
 }

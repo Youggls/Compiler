@@ -1,11 +1,25 @@
 #include "SelectASTNode.h"
 
-SelectASTNode::SelectASTNode(char* content, SelectType type) : AbstractASTNode(content, ASTNodeType::select)
+SelectASTNode::SelectASTNode(char *content, SelectType type, AbstractASTNode *body,
+                             AbstractASTNode *cond, AbstractASTNode *elseStmt)
+    : AbstractASTNode(content, ASTNodeType::select)
 {
     this->selectType = type;
+    this->body = body;
+    this->condition = cond;
+    this->elseStmt = elseStmt;
 }
 
-void SelectASTNode::printInfo()
+void SelectASTNode::printInfo(int depth)
 {
-    std::cout << "Select: \"" << this->content << "   \"" << std::endl;
+    if (this->selectType == SelectType::_if) {
+        std::cout << "IF" << std::endl;
+        AbstractASTNode::__printTree(this->condition, depth + 1);
+        AbstractASTNode::__printTree(this->body, depth + 1);
+        if (this->elseStmt != NULL) {
+            for (int i = 0; i < depth; i++) std::cout << " ";
+            std::cout << "ELSE" << std::endl;
+            AbstractASTNode::__printTree(this->elseStmt, depth + 1);
+        }
+    }
 }

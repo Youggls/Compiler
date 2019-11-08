@@ -7,13 +7,11 @@ DefVarASTNode::DefVarASTNode(char* content, AbstractASTNode* value)
     this->addChildNode(value);
 }
 
-void DefVarASTNode::printInfo()
+void DefVarASTNode::printInfo(int depth)
 {
     std::cout << "Variation define.";
     if (type == VarType::integer) std::cout << "integer ";
     std::cout << this->content << std::endl;
-    // Need to fix indent
-    if (this->getChild() != NULL) this->getChild()->printInfo();
 }
 
 void DefVarASTNode::setAllType(char* type) {
