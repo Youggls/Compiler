@@ -13,10 +13,10 @@ enum class opType {
     power = 8
 };
 
-class OperatorASTNode:public AbstractASTNode {
+class OperatorASTNode :public AbstractASTNode {
 private:
     opType type;
-public: 
+public:
     OperatorASTNode(char* content, opType type);
     void printInfo();
 };

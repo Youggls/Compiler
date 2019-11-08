@@ -3,31 +3,32 @@
 #include <iostream>
 
 enum class ASTNodeType {
-	defFunc = 1,
-	callFunc = 2,
+    defFunc = 1,
+    callFunc = 2,
     literal = 3,
-    op = 4,           //包含 assignop ， relop， +， -， *， /， %
+    op = 4,         //包含 assignop ， relop， +， -， *， /， %
     exp = 5,
     stmt = 6,
-	loop
+    loop,
+    select
 };
 
 class AbstractASTNode
 {
 private:
-	ASTNodeType nodeType;
-	AbstractASTNode* parent;
-	AbstractASTNode* peer;
-	AbstractASTNode* child;
+    ASTNodeType nodeType;
+    AbstractASTNode* parent;
+    AbstractASTNode* peer;
+    AbstractASTNode* child;
 protected:
-	std::string content;
+    std::string content;
 public:
-	AbstractASTNode();
+    AbstractASTNode();
     AbstractASTNode(ASTNodeType nodetype);
-	AbstractASTNode(char* content, ASTNodeType nodeType);
-	void addChildNode(AbstractASTNode* node);
-	void addPeerNode(AbstractASTNode* node);
-	AbstractASTNode* getLastPeerNode();
-	virtual void printInfo() = 0;
+    AbstractASTNode(char* content, ASTNodeType nodeType);
+    void addChildNode(AbstractASTNode* node);
+    void addPeerNode(AbstractASTNode* node);
+    AbstractASTNode* getLastPeerNode();
+    virtual void printInfo() = 0;
 };
 #endif

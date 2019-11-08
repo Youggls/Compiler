@@ -3,17 +3,17 @@
 #include "ASTNode.h"
 
 enum class LoopType {
-	forLoop,
-	whileLoop
+    _for,
+    _whileS
 };
 
 class LoopASTNode : public AbstractASTNode
 {
 private:
-	// Type of Loop, for or while.
-	LoopType loopType;
+    // Type of Loop, for or while.
+    LoopType loopType;
 public:
-	LoopASTNode(char* content, LoopType type);
-	void printInfo();
+    LoopASTNode(char* content, LoopType type);
+    void printInfo();
 };
 #endif // !LOOPASTNODE_H

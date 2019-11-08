@@ -48,6 +48,15 @@
     <ClCompile Include="common\LoopASTNode.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Linux\grammar.tab.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Linux\lexer.flex.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="common\SelectASTNode.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common\symbol.h">
@@ -80,8 +89,28 @@
     <ClInclude Include="common\LoopASTNode.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="common\SelectASTNode.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Linux\grammar.tab.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Bison Include="grammar.y" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="win_build.bat">
+      <Filter>源文件</Filter>
+    </None>
+    <None Include="LICENSE" />
+    <None Include="Makefile" />
+    <None Include="README.md" />
+    <None Include=".gitignore" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="test\grammar.txt" />
+    <Text Include="test\lexical.txt" />
+    <Text Include="test\test.txt" />
   </ItemGroup>
 </Project>

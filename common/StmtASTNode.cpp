@@ -5,5 +5,5 @@ StmtAstNode::StmtAstNode() : AbstractASTNode(ASTNodeType::stmt) {
 }
 
 void StmtAstNode::printInfo() {
-    std::cout<<"Stmt, "<<std::endl;
+    std::cout << "Stmt, " << std::endl;
 }

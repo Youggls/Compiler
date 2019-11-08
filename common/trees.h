@@ -8,4 +8,5 @@
 #include "ExpASTNode.h"
 #include "OperatorASTNode.h"
 #include "LoopASTNode.h"
+#include "SelectASTNode.h"
 #endif // !TREES_H
