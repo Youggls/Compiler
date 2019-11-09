@@ -41,6 +41,7 @@ void yyerror(const char *str);
 %type <ast> ExtDefList ExtDef
 %type <ast> Exp CompSt
 %type <ast> StmtList Stmt Dec DecList Def
+%type <ast> Args ParamDec VarList FunDec
 %%
 
 Program: ExtDefList {
@@ -57,7 +58,11 @@ ExtDef: Specifier ExtDecList SEMI {
     | Specifier SEMI {
     }
     | Specifier FunDec CompSt {
-        $3->printTree();
+        DefFunASTNode* temp = (DefFunASTNode*)$2;
+        temp->setFunBody($3);
+        temp->setRevType($1);
+        temp->printTree();
+        $$ = temp;
     }
     | Specifier FunDec SEMI {
     }
@@ -84,16 +89,24 @@ VarDec: ID {
     }
     ;
 FunDec: ID LP VarList RP {
+        $$ = new DefFunASTNode($1, $3, NULL);
     }
     | ID LP RP {
+        $$ = new DefFunASTNode($1, NULL, NULL);
     }
     ;
-VarList: ParamDec COMMA VarList {
+VarList: VarList COMMA ParamDec {
+        $1->getLastPeerNode()->addPeerNode($3);
+        $$ = $1;
     }
     | ParamDec {
+        $$ = $1;
     }
     ;
 ParamDec: Specifier VarDec {
+        DefVarASTNode* var = new DefVarASTNode($2, NULL);
+        var->setAllType($1);
+        $$ = var;
     }
     | Specifier {
     }
@@ -179,7 +192,6 @@ Stmt: Exp SEMI {
 
 /* Local Definitions */
 Def: Specifier DecList SEMI{
-        printf("DEF\n");
         DefVarASTNode* temp = (DefVarASTNode*)$2;
         temp->setAllType($1);
         $$ = temp;
@@ -268,10 +280,10 @@ Exp:
         $$ = temp;
     }
     | ID LP Args RP {
-        $$ = NULL;
+        $$ = new CallFunASTNode($1, $3);
     }
     | ID LP RP {
-        $$ = NULL;
+        $$ = new CallFunASTNode($1, NULL);
     }
     | Exp LB Exp RB {
         $$ = NULL;
@@ -286,9 +298,12 @@ Exp:
     }
     | error RP { yyerrok; }
     ;
-Args: Exp COMMA Args {
+Args: Args COMMA Exp {
+        $1->getLastPeerNode()->addPeerNode($3);
+        $$ = $1;
     }
     | Exp {
+        $$ = $1;
     }
     ;
 

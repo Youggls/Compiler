@@ -6,7 +6,8 @@ enum class symbolType {
     integer = 0,
     function = 1,
     pointer = 2,
-    boolean = 3
+    boolean = 3,
+    Void = 4
 };
 
 class symbol {

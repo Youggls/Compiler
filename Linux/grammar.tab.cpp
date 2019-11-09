@@ -426,7 +426,7 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  8
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   448
+#define YYLAST   440
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  30
@@ -484,13 +484,13 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,    46,    46,    50,    52,    55,    57,    59,    62,    64,
-      66,    68,    73,    79,    82,    86,    88,    91,    93,    96,
-      98,   104,   109,   113,   119,   124,   129,   134,   137,   142,
-     145,   148,   151,   154,   157,   160,   163,   166,   169,   172,
-     175,   181,   187,   189,   192,   197,   201,   209,   215,   221,
-     227,   233,   239,   245,   251,   257,   260,   265,   270,   273,
-     276,   279,   283,   287,   289,   291
+       0,    47,    47,    51,    53,    56,    58,    60,    67,    69,
+      71,    73,    78,    84,    87,    91,    94,    98,   102,   106,
+     111,   117,   122,   126,   132,   137,   142,   147,   150,   155,
+     158,   161,   164,   167,   170,   173,   176,   179,   182,   185,
+     188,   194,   199,   201,   204,   209,   213,   221,   227,   233,
+     239,   245,   251,   257,   263,   269,   272,   277,   282,   285,
+     288,   291,   295,   299,   301,   305
 };
 #endif
 
@@ -520,10 +520,10 @@ static const yytype_uint16 yytoknum[] =
 };
 # endif
 
-#define YYPACT_NINF -48
+#define YYPACT_NINF -63
 
 #define yypact_value_is_default(Yystate) \
-  (!!((Yystate) == (-48)))
+  (!!((Yystate) == (-63)))
 
 #define YYTABLE_NINF -3
 
@@ -534,20 +534,20 @@ static const yytype_uint16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int16 yypact[] =
 {
-      23,   -19,   -48,     8,    77,   -48,    47,   -48,   -48,   -48,
-      16,   -48,    21,    31,    18,    70,   -48,    30,    35,    43,
-     -48,   -48,   -48,   -48,    35,    51,    61,    72,   -48,   -48,
-     -48,    79,    78,   -48,    74,   -48,    37,   309,   309,   309,
-     -48,    82,    83,   309,    89,    90,   -48,    35,   -48,   -48,
-     -48,     7,   -48,   -48,   -48,    99,   100,   103,   340,    40,
-     126,   181,   309,   309,     4,    91,    95,   309,   309,   309,
-     309,   309,   309,   309,   309,   309,   -48,   -48,   -48,   169,
-     106,   129,   201,   -48,   352,   364,   309,   -48,    35,   424,
-     434,   156,   145,   100,   100,   103,   103,   327,   309,   -48,
-     253,   221,   149,   104,   104,   424,   -48,   -48,   -48,   104,
-     376,   267,   281,   241,    94,   -48,   -48,   104,   104,   388,
-     104,   400,   295,   104,   -48,   -48,   104,   -48,   104,   104,
-     412,   -48,   -48,   -48,   -48,   104,   -48
+      52,   -19,   -63,     8,    50,   -63,    87,   -63,   -63,   -63,
+      12,   -63,     6,    31,    18,    64,   -63,    39,    28,    49,
+     -63,   -63,   -63,   -63,    28,    59,   -63,    45,   -63,   -63,
+     -63,    69,    65,   -63,    67,   -63,    30,   301,   301,   301,
+     -63,    72,    91,   301,    96,    98,   -63,    28,   -63,   -63,
+     -63,     7,   -63,   -63,   -63,    78,    90,    97,   332,   231,
+     116,   159,   301,   301,     4,   102,    93,   301,   301,   301,
+     301,   301,   301,   301,   301,   301,   -63,   -63,   -63,   416,
+      79,   119,   179,   -63,   344,   356,   301,   -63,    28,   416,
+     426,   146,   135,    90,    90,    97,    97,   319,   -63,   301,
+     245,   199,   139,    94,    94,   416,   -63,   -63,   416,    94,
+     368,   259,   273,   219,    99,   -63,   -63,    94,    94,   380,
+      94,   392,   287,    94,   -63,   -63,    94,   -63,    94,    94,
+     404,   -63,   -63,   -63,   -63,    94,   -63
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -564,7 +564,7 @@ static const yytype_uint8 yydefact[] =
        0,     0,     0,     0,    45,     0,    43,     0,     0,     0,
        0,     0,     0,     0,     0,     0,    25,    55,    59,    65,
        0,     0,     0,    28,     0,     0,     0,    41,     0,    47,
-      49,    48,    50,    52,    51,    53,    54,     0,     0,    58,
+      49,    48,    50,    52,    51,    53,    54,     0,    58,     0,
        0,     0,     0,     0,     0,    46,    44,    60,    64,     0,
        0,     0,     0,     0,    29,    31,    32,     0,     0,     0,
        0,     0,     0,     0,    35,    34,     0,    33,     0,     0,
@@ -572,10 +572,10 @@ static const yytype_uint8 yydefact[] =
 };
 
   /* YYPGOTO[NTERM-NUM].  */
-static const yytype_int8 yypgoto[] =
+static const yytype_int16 yypgoto[] =
 {
-     -48,   -48,   -48,   117,   108,     5,   -20,   -48,   101,   -48,
-     120,   -48,   -47,   -48,    54,   -48,   -37,    41
+     -63,   -63,   -63,   125,   114,     5,   -20,   -63,   -63,   101,
+     133,   -63,   -62,   -63,    60,   -63,   -37,   -63
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
@@ -592,89 +592,87 @@ static const yytype_int16 yytable[] =
 {
       56,    57,    58,     7,    32,     6,    61,    86,     8,     6,
       67,    68,    69,    70,    71,    72,    73,    74,    17,    19,
-      24,    75,    79,    82,     1,    84,    85,    64,    15,    76,
+      24,    75,    79,    82,    15,    84,    85,    64,    16,    76,
       89,    90,    91,    92,    93,    94,    95,    96,    97,    24,
-      20,    55,     2,    16,   101,    17,    21,    37,    27,   105,
-      53,    38,    39,    78,    18,    28,   114,   115,    40,    54,
-      41,    79,   116,   110,    33,   113,    30,    10,    64,    11,
-     124,   125,    30,   127,   119,   121,   131,    -2,     1,   132,
-      36,   133,   134,    23,    34,   130,    37,    35,   136,     2,
-      38,    39,    17,     2,    59,    60,     2,    40,     2,    41,
-      42,    62,    63,    43,    44,    36,    45,    21,    46,    73,
-      74,    37,    53,    87,    75,    38,    39,    75,    88,    99,
-     123,     9,    40,     2,    41,    42,    29,    55,    43,    44,
-      55,    45,    21,    37,    22,    52,    37,    38,    39,   108,
-      38,    39,   106,     0,    40,     0,    41,    40,    81,    41,
-      55,   100,    71,    72,    73,    74,    37,     0,     0,    75,
+      20,   114,   115,    53,   101,    17,    21,   116,    28,   105,
+      -2,     1,    54,     1,    18,   124,   125,    27,   127,    30,
+      35,   131,   108,   110,   132,   113,   133,   134,    64,     2,
+      36,     2,    33,   136,   119,   121,    37,    23,    30,    17,
+      38,    39,    34,     2,    59,   130,     2,    40,     2,    41,
+      42,    53,    98,    43,    44,    36,    45,    21,    46,    73,
+      74,    37,    99,    60,    75,    38,    39,    10,    62,    11,
+      63,    75,    40,     2,    41,    42,    88,    55,    43,    44,
+      55,    45,    21,    37,    87,   123,    37,    38,    39,     9,
+      38,    39,    29,     0,    40,    52,    41,    40,    81,    41,
+      55,   100,    71,    72,    73,    74,    37,    22,   106,    75,
       38,    39,    70,    71,    72,    73,    74,    40,     0,    41,
       75,   112,    67,    68,    69,    70,    71,    72,    73,    74,
-       0,     0,     0,    75,    67,    68,    69,    70,    71,    72,
-      73,    74,    98,     0,     0,    75,     0,     0,     0,     0,
-       0,     0,     0,    83,    67,    68,    69,    70,    71,    72,
-      73,    74,     0,     0,     0,    75,     0,     0,     0,     0,
-       0,     0,     0,   102,    67,    68,    69,    70,    71,    72,
-      73,    74,     0,     0,     0,    75,     0,     0,     0,     0,
-       0,     0,     0,   111,    67,    68,    69,    70,    71,    72,
-      73,    74,     0,     0,    55,    75,     0,     0,     0,     0,
-      37,     0,     0,   122,    38,    39,   109,     0,    55,     0,
-       0,    40,     0,    41,    37,     0,     0,     0,    38,    39,
-     118,     0,    55,     0,     0,    40,     0,    41,    37,     0,
-       0,     0,    38,    39,   120,     0,    55,     0,     0,    40,
-       0,    41,    37,     0,     0,     0,    38,    39,   129,     0,
+       0,     0,     0,    75,     0,     0,     0,     0,     0,     0,
+       0,    83,    67,    68,    69,    70,    71,    72,    73,    74,
+       0,     0,     0,    75,     0,     0,     0,     0,     0,     0,
+       0,   102,    67,    68,    69,    70,    71,    72,    73,    74,
+       0,     0,     0,    75,     0,     0,     0,     0,     0,     0,
+       0,   111,    67,    68,    69,    70,    71,    72,    73,    74,
+       0,     0,    55,    75,     0,     0,     0,     0,    37,     0,
+       0,   122,    38,    39,    78,     0,    55,     0,     0,    40,
+       0,    41,    37,     0,     0,     0,    38,    39,   109,     0,
       55,     0,     0,    40,     0,    41,    37,     0,     0,     0,
-      38,    39,     0,     0,     0,     0,     0,    40,     0,    41,
-      67,    68,    69,    70,    71,    72,    73,    74,     0,     0,
-       0,    75,   107,    67,    68,    69,    70,    71,    72,    73,
-      74,     0,     0,    77,    75,    67,    68,    69,    70,    71,
-      72,    73,    74,     0,     0,   103,    75,    67,    68,    69,
-      70,    71,    72,    73,    74,     0,     0,   104,    75,    67,
-      68,    69,    70,    71,    72,    73,    74,     0,     0,   117,
+      38,    39,   118,     0,    55,     0,     0,    40,     0,    41,
+      37,     0,     0,     0,    38,    39,   120,     0,    55,     0,
+       0,    40,     0,    41,    37,     0,     0,     0,    38,    39,
+     129,     0,    55,     0,     0,    40,     0,    41,    37,     0,
+       0,     0,    38,    39,     0,     0,     0,     0,     0,    40,
+       0,    41,    67,    68,    69,    70,    71,    72,    73,    74,
+       0,     0,     0,    75,   107,    67,    68,    69,    70,    71,
+      72,    73,    74,     0,     0,    77,    75,    67,    68,    69,
+      70,    71,    72,    73,    74,     0,     0,   103,    75,    67,
+      68,    69,    70,    71,    72,    73,    74,     0,     0,   104,
       75,    67,    68,    69,    70,    71,    72,    73,    74,     0,
-       0,   126,    75,    67,    68,    69,    70,    71,    72,    73,
-      74,     0,     0,   128,    75,    67,    68,    69,    70,    71,
-      72,    73,    74,     0,     0,   135,    75,    67,    68,    69,
-      70,    71,    72,    73,    74,     0,     0,     0,    75,    69,
-      70,    71,    72,    73,    74,     0,     0,     0,    75
+       0,   117,    75,    67,    68,    69,    70,    71,    72,    73,
+      74,     0,     0,   126,    75,    67,    68,    69,    70,    71,
+      72,    73,    74,     0,     0,   128,    75,    67,    68,    69,
+      70,    71,    72,    73,    74,     0,     0,   135,    75,    67,
+      68,    69,    70,    71,    72,    73,    74,     0,     0,     0,
+      75,    69,    70,    71,    72,    73,    74,     0,     0,     0,
+      75
 };
 
 static const yytype_int16 yycheck[] =
 {
       37,    38,    39,    22,    24,     0,    43,     3,     0,     4,
        3,     4,     5,     6,     7,     8,     9,    10,    14,     1,
-      15,    14,    59,    60,     1,    62,    63,    47,    12,    22,
+      15,    14,    59,    60,    12,    62,    63,    47,    22,    22,
       67,    68,    69,    70,    71,    72,    73,    74,    75,    34,
-      22,     1,    19,    22,    81,    14,    28,     7,    18,    86,
-      13,    11,    12,    13,    23,    20,   103,   104,    18,    22,
-      20,    98,   109,   100,    13,   102,    29,    20,    88,    22,
-     117,   118,    29,   120,   111,   112,   123,     0,     1,   126,
-       1,   128,   129,    13,    23,   122,     7,    15,   135,    19,
-      11,    12,    14,    19,    12,    12,    19,    18,    19,    20,
-      21,    12,    12,    24,    25,     1,    27,    28,    29,     9,
-      10,     7,    13,    22,    14,    11,    12,    14,    23,    13,
-      26,     4,    18,    19,    20,    21,    18,     1,    24,    25,
-       1,    27,    28,     7,    14,    34,     7,    11,    12,    98,
-      11,    12,    88,    -1,    18,    -1,    20,    18,    22,    20,
-       1,    22,     7,     8,     9,    10,     7,    -1,    -1,    14,
+      22,   103,   104,    13,    81,    14,    28,   109,    20,    86,
+       0,     1,    22,     1,    23,   117,   118,    18,   120,    29,
+      15,   123,    99,   100,   126,   102,   128,   129,    88,    19,
+       1,    19,    13,   135,   111,   112,     7,    13,    29,    14,
+      11,    12,    23,    19,    12,   122,    19,    18,    19,    20,
+      21,    13,    13,    24,    25,     1,    27,    28,    29,     9,
+      10,     7,    23,    12,    14,    11,    12,    20,    12,    22,
+      12,    14,    18,    19,    20,    21,    23,     1,    24,    25,
+       1,    27,    28,     7,    22,    26,     7,    11,    12,     4,
+      11,    12,    18,    -1,    18,    34,    20,    18,    22,    20,
+       1,    22,     7,     8,     9,    10,     7,    14,    88,    14,
       11,    12,     6,     7,     8,     9,    10,    18,    -1,    20,
       14,    22,     3,     4,     5,     6,     7,     8,     9,    10,
-      -1,    -1,    -1,    14,     3,     4,     5,     6,     7,     8,
-       9,    10,    23,    -1,    -1,    14,    -1,    -1,    -1,    -1,
-      -1,    -1,    -1,    22,     3,     4,     5,     6,     7,     8,
-       9,    10,    -1,    -1,    -1,    14,    -1,    -1,    -1,    -1,
-      -1,    -1,    -1,    22,     3,     4,     5,     6,     7,     8,
-       9,    10,    -1,    -1,    -1,    14,    -1,    -1,    -1,    -1,
-      -1,    -1,    -1,    22,     3,     4,     5,     6,     7,     8,
-       9,    10,    -1,    -1,     1,    14,    -1,    -1,    -1,    -1,
-       7,    -1,    -1,    22,    11,    12,    13,    -1,     1,    -1,
-      -1,    18,    -1,    20,     7,    -1,    -1,    -1,    11,    12,
-      13,    -1,     1,    -1,    -1,    18,    -1,    20,     7,    -1,
-      -1,    -1,    11,    12,    13,    -1,     1,    -1,    -1,    18,
+      -1,    -1,    -1,    14,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    22,     3,     4,     5,     6,     7,     8,     9,    10,
+      -1,    -1,    -1,    14,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    22,     3,     4,     5,     6,     7,     8,     9,    10,
+      -1,    -1,    -1,    14,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    22,     3,     4,     5,     6,     7,     8,     9,    10,
+      -1,    -1,     1,    14,    -1,    -1,    -1,    -1,     7,    -1,
+      -1,    22,    11,    12,    13,    -1,     1,    -1,    -1,    18,
       -1,    20,     7,    -1,    -1,    -1,    11,    12,    13,    -1,
        1,    -1,    -1,    18,    -1,    20,     7,    -1,    -1,    -1,
-      11,    12,    -1,    -1,    -1,    -1,    -1,    18,    -1,    20,
-       3,     4,     5,     6,     7,     8,     9,    10,    -1,    -1,
-      -1,    14,    15,     3,     4,     5,     6,     7,     8,     9,
-      10,    -1,    -1,    13,    14,     3,     4,     5,     6,     7,
+      11,    12,    13,    -1,     1,    -1,    -1,    18,    -1,    20,
+       7,    -1,    -1,    -1,    11,    12,    13,    -1,     1,    -1,
+      -1,    18,    -1,    20,     7,    -1,    -1,    -1,    11,    12,
+      13,    -1,     1,    -1,    -1,    18,    -1,    20,     7,    -1,
+      -1,    -1,    11,    12,    -1,    -1,    -1,    -1,    -1,    18,
+      -1,    20,     3,     4,     5,     6,     7,     8,     9,    10,
+      -1,    -1,    -1,    14,    15,     3,     4,     5,     6,     7,
        8,     9,    10,    -1,    -1,    13,    14,     3,     4,     5,
        6,     7,     8,     9,    10,    -1,    -1,    13,    14,     3,
        4,     5,     6,     7,     8,     9,    10,    -1,    -1,    13,
@@ -682,8 +680,10 @@ static const yytype_int16 yycheck[] =
       -1,    13,    14,     3,     4,     5,     6,     7,     8,     9,
       10,    -1,    -1,    13,    14,     3,     4,     5,     6,     7,
        8,     9,    10,    -1,    -1,    13,    14,     3,     4,     5,
-       6,     7,     8,     9,    10,    -1,    -1,    -1,    14,     5,
-       6,     7,     8,     9,    10,    -1,    -1,    -1,    14
+       6,     7,     8,     9,    10,    -1,    -1,    13,    14,     3,
+       4,     5,     6,     7,     8,     9,    10,    -1,    -1,    -1,
+      14,     5,     6,     7,     8,     9,    10,    -1,    -1,    -1,
+      14
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
@@ -695,12 +695,12 @@ static const yytype_uint8 yystos[] =
       22,    28,    40,    13,    35,    38,    39,    18,    20,    34,
       29,    41,    36,    13,    23,    15,     1,     7,    11,    12,
       18,    20,    21,    24,    25,    27,    29,    35,    40,    42,
-      43,    46,    38,    13,    22,     1,    46,    46,    46,    12,
+      43,    46,    39,    13,    22,     1,    46,    46,    46,    12,
       12,    46,    12,    12,    36,    44,    45,     3,     4,     5,
        6,     7,     8,     9,    10,    14,    22,    13,    13,    46,
       47,    22,    46,    22,    46,    46,     3,    22,    23,    46,
-      46,    46,    46,    46,    46,    46,    46,    46,    23,    13,
-      22,    46,    22,    13,    13,    46,    44,    15,    47,    13,
+      46,    46,    46,    46,    46,    46,    46,    46,    13,    23,
+      22,    46,    22,    13,    13,    46,    44,    15,    46,    13,
       46,    22,    22,    46,    42,    42,    42,    13,    13,    46,
       13,    46,    22,    26,    42,    42,    13,    42,    13,    13,
       46,    42,    42,    42,    42,    13,    42
@@ -1497,375 +1497,375 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 46 "grammar.y" /* yacc.c:1646  */
+#line 47 "grammar.y" /* yacc.c:1646  */
     {
     }
 #line 1504 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 3:
-#line 50 "grammar.y" /* yacc.c:1646  */
+#line 51 "grammar.y" /* yacc.c:1646  */
     {
     }
 #line 1511 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 4:
-#line 52 "grammar.y" /* yacc.c:1646  */
+#line 53 "grammar.y" /* yacc.c:1646  */
     {
     }
 #line 1518 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 5:
-#line 55 "grammar.y" /* yacc.c:1646  */
+#line 56 "grammar.y" /* yacc.c:1646  */
     {
     }
 #line 1525 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 6:
-#line 57 "grammar.y" /* yacc.c:1646  */
+#line 58 "grammar.y" /* yacc.c:1646  */
     {
     }
 #line 1532 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 7:
-#line 59 "grammar.y" /* yacc.c:1646  */
+#line 60 "grammar.y" /* yacc.c:1646  */
     {
-        (yyvsp[0].ast)->printTree();
+        DefFunASTNode* temp = (DefFunASTNode*)(yyvsp[-1].ast);
+        temp->setFunBody((yyvsp[0].ast));
+        temp->setRevType((yyvsp[-2].str));
+        temp->printTree();
+        (yyval.ast) = temp;
     }
-#line 1540 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 1544 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 8:
-#line 62 "grammar.y" /* yacc.c:1646  */
+#line 67 "grammar.y" /* yacc.c:1646  */
     {
     }
-#line 1547 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 1551 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 64 "grammar.y" /* yacc.c:1646  */
+#line 69 "grammar.y" /* yacc.c:1646  */
     { yyerrok; (yyval.ast) = NULL;}
-#line 1553 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 1557 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 66 "grammar.y" /* yacc.c:1646  */
+#line 71 "grammar.y" /* yacc.c:1646  */
     {
     }
-#line 1560 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 1564 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 68 "grammar.y" /* yacc.c:1646  */
+#line 73 "grammar.y" /* yacc.c:1646  */
     {
     }
-#line 1567 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 1571 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 12:
-#line 73 "grammar.y" /* yacc.c:1646  */
+#line 78 "grammar.y" /* yacc.c:1646  */
     {
         (yyval.str) = strdup((yyvsp[0].str));
     }
-#line 1575 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 1579 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 79 "grammar.y" /* yacc.c:1646  */
+#line 84 "grammar.y" /* yacc.c:1646  */
     {
         (yyval.str) = strdup((yyvsp[0].str));
     }
-#line 1583 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 1587 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 14:
-#line 82 "grammar.y" /* yacc.c:1646  */
+#line 87 "grammar.y" /* yacc.c:1646  */
     {
         (yyval.str) = NULL;
     }
-#line 1591 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 1595 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 86 "grammar.y" /* yacc.c:1646  */
+#line 91 "grammar.y" /* yacc.c:1646  */
     {
+        (yyval.ast) = new DefFunASTNode((yyvsp[-3].str), (yyvsp[-1].ast), NULL);
     }
-#line 1598 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 1603 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 16:
-#line 88 "grammar.y" /* yacc.c:1646  */
+#line 94 "grammar.y" /* yacc.c:1646  */
     {
+        (yyval.ast) = new DefFunASTNode((yyvsp[-2].str), NULL, NULL);
     }
-#line 1605 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 1611 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 17:
-#line 91 "grammar.y" /* yacc.c:1646  */
+#line 98 "grammar.y" /* yacc.c:1646  */
     {
+        (yyvsp[-2].ast)->getLastPeerNode()->addPeerNode((yyvsp[0].ast));
+        (yyval.ast) = (yyvsp[-2].ast);
     }
-#line 1612 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 1620 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 93 "grammar.y" /* yacc.c:1646  */
+#line 102 "grammar.y" /* yacc.c:1646  */
     {
+        (yyval.ast) = (yyvsp[0].ast);
     }
-#line 1619 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 1628 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 96 "grammar.y" /* yacc.c:1646  */
+#line 106 "grammar.y" /* yacc.c:1646  */
     {
+        DefVarASTNode* var = new DefVarASTNode((yyvsp[0].str), NULL);
+        var->setAllType((yyvsp[-1].str));
+        (yyval.ast) = var;
     }
-#line 1626 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 1638 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 98 "grammar.y" /* yacc.c:1646  */
+#line 111 "grammar.y" /* yacc.c:1646  */
     {
     }
-#line 1633 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 1645 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 104 "grammar.y" /* yacc.c:1646  */
+#line 117 "grammar.y" /* yacc.c:1646  */
     {
         AbstractASTNode* compStmt = new StmtASTNode(StmtType::compStmt);
         compStmt->addChildNode((yyvsp[-1].ast));
         (yyval.ast) = compStmt;
     }
-#line 1643 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 1655 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 109 "grammar.y" /* yacc.c:1646  */
+#line 122 "grammar.y" /* yacc.c:1646  */
     { yyerrok; }
-#line 1649 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 1661 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 113 "grammar.y" /* yacc.c:1646  */
+#line 126 "grammar.y" /* yacc.c:1646  */
     {
         if ((yyvsp[-1].ast) == NULL) (yyval.ast) = (yyvsp[0].ast);
         else {
             (yyvsp[-1].ast)->getLastPeerNode()->addPeerNode((yyvsp[0].ast));
         }
     }
-#line 1660 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 1672 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 119 "grammar.y" /* yacc.c:1646  */
+#line 132 "grammar.y" /* yacc.c:1646  */
     {
         (yyval.ast) = NULL;
     }
-#line 1668 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 1680 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 124 "grammar.y" /* yacc.c:1646  */
+#line 137 "grammar.y" /* yacc.c:1646  */
     {
         AbstractASTNode* temp = new StmtASTNode(StmtType::expStmt);
         temp->addChildNode((yyvsp[-1].ast));
         (yyval.ast) = temp;
     }
-#line 1678 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 1690 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 129 "grammar.y" /* yacc.c:1646  */
+#line 142 "grammar.y" /* yacc.c:1646  */
     {
         AbstractASTNode* temp = new StmtASTNode(StmtType::defStmt);
         temp->addChildNode((yyvsp[0].ast));
         (yyval.ast) = temp;
     }
-#line 1688 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 1700 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 27:
-#line 134 "grammar.y" /* yacc.c:1646  */
+#line 147 "grammar.y" /* yacc.c:1646  */
     {
         (yyval.ast) = (yyvsp[0].ast);
     }
-#line 1696 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 1708 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 137 "grammar.y" /* yacc.c:1646  */
+#line 150 "grammar.y" /* yacc.c:1646  */
     {
         AbstractASTNode* temp = new StmtASTNode(StmtType::returnStmt);
         temp->addChildNode((yyvsp[-1].ast));
         (yyval.ast) = temp;
     }
-#line 1706 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 1718 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 29:
-#line 142 "grammar.y" /* yacc.c:1646  */
+#line 155 "grammar.y" /* yacc.c:1646  */
     {
         (yyval.ast) = new SelectASTNode((char*)"", SelectType::_if, (yyvsp[0].ast), (yyvsp[-2].ast));
     }
-#line 1714 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 1726 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 30:
-#line 145 "grammar.y" /* yacc.c:1646  */
+#line 158 "grammar.y" /* yacc.c:1646  */
     {
         (yyval.ast) = new SelectASTNode((char*)"", SelectType::_if, (yyvsp[-2].ast), (yyvsp[-4].ast), (yyvsp[0].ast));
     }
-#line 1722 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 1734 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 31:
-#line 148 "grammar.y" /* yacc.c:1646  */
+#line 161 "grammar.y" /* yacc.c:1646  */
     {
         (yyval.ast) = new LoopASTNode((char*)"", LoopType::_whileS, (yyvsp[0].ast), (yyvsp[-2].ast));
     }
-#line 1730 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 1742 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 32:
-#line 151 "grammar.y" /* yacc.c:1646  */
+#line 164 "grammar.y" /* yacc.c:1646  */
     {
         (yyval.ast) = new LoopASTNode((char*)"", LoopType::_for, (yyvsp[0].ast), NULL, NULL, NULL);
     }
-#line 1738 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 1750 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 33:
-#line 154 "grammar.y" /* yacc.c:1646  */
+#line 167 "grammar.y" /* yacc.c:1646  */
     {
         (yyval.ast) = new LoopASTNode((char*)"", LoopType::_for, (yyvsp[0].ast), (yyvsp[-4].ast), NULL, NULL);
     }
-#line 1746 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 1758 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 34:
-#line 157 "grammar.y" /* yacc.c:1646  */
+#line 170 "grammar.y" /* yacc.c:1646  */
     {
         (yyval.ast) = new LoopASTNode((char*)"", LoopType::_for, (yyvsp[0].ast), NULL, (yyvsp[-3].ast), NULL);
     }
-#line 1754 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 1766 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 35:
-#line 160 "grammar.y" /* yacc.c:1646  */
+#line 173 "grammar.y" /* yacc.c:1646  */
     {
         (yyval.ast) = new LoopASTNode((char*)"", LoopType::_for, (yyvsp[0].ast), NULL, NULL, (yyvsp[-2].ast));
     }
-#line 1762 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 1774 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 36:
-#line 163 "grammar.y" /* yacc.c:1646  */
+#line 176 "grammar.y" /* yacc.c:1646  */
     {
         (yyval.ast) = new LoopASTNode((char*)"", LoopType::_for, (yyvsp[0].ast), (yyvsp[-6].ast), (yyvsp[-4].ast), (yyvsp[-2].ast));
     }
-#line 1770 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 1782 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 37:
-#line 166 "grammar.y" /* yacc.c:1646  */
+#line 179 "grammar.y" /* yacc.c:1646  */
     {
         (yyval.ast) = new LoopASTNode((char*)"", LoopType::_for, (yyvsp[0].ast), (yyvsp[-5].ast), (yyvsp[-3].ast), NULL);
     }
-#line 1778 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 1790 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 38:
-#line 169 "grammar.y" /* yacc.c:1646  */
+#line 182 "grammar.y" /* yacc.c:1646  */
     {
         (yyval.ast) = new LoopASTNode((char*)"", LoopType::_for, (yyvsp[0].ast), (yyvsp[-5].ast), NULL, (yyvsp[-2].ast));
     }
-#line 1786 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 1798 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 39:
-#line 172 "grammar.y" /* yacc.c:1646  */
+#line 185 "grammar.y" /* yacc.c:1646  */
     {
         (yyval.ast) = new LoopASTNode((char*)"", LoopType::_for, (yyvsp[0].ast), NULL, (yyvsp[-4].ast), (yyvsp[-2].ast));
     }
-#line 1794 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 1806 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 40:
-#line 175 "grammar.y" /* yacc.c:1646  */
+#line 188 "grammar.y" /* yacc.c:1646  */
     { yyerrok; }
-#line 1800 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 1812 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 41:
-#line 181 "grammar.y" /* yacc.c:1646  */
+#line 194 "grammar.y" /* yacc.c:1646  */
     {
-        printf("DEF\n");
         DefVarASTNode* temp = (DefVarASTNode*)(yyvsp[-1].ast);
         temp->setAllType((yyvsp[-2].str));
         (yyval.ast) = temp;
     }
-#line 1811 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 1822 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 42:
-#line 187 "grammar.y" /* yacc.c:1646  */
+#line 199 "grammar.y" /* yacc.c:1646  */
     { yyerrok; }
-#line 1817 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 1828 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 43:
-#line 189 "grammar.y" /* yacc.c:1646  */
+#line 201 "grammar.y" /* yacc.c:1646  */
     {
         (yyval.ast) = (yyvsp[0].ast);
     }
-#line 1825 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 1836 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 44:
-#line 192 "grammar.y" /* yacc.c:1646  */
+#line 204 "grammar.y" /* yacc.c:1646  */
     {
         (yyvsp[-2].ast)->getLastPeerNode()->addPeerNode((yyvsp[0].ast));
         (yyval.ast) = (yyvsp[-2].ast);
     }
-#line 1834 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 1845 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 45:
-#line 197 "grammar.y" /* yacc.c:1646  */
+#line 209 "grammar.y" /* yacc.c:1646  */
     {
         AbstractASTNode* temp = new DefVarASTNode((yyvsp[0].str));
         (yyval.ast) = temp;
     }
-#line 1843 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 1854 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 46:
-#line 201 "grammar.y" /* yacc.c:1646  */
+#line 213 "grammar.y" /* yacc.c:1646  */
     {
         AbstractASTNode* temp = new DefVarASTNode((yyvsp[-2].str), (yyvsp[0].ast));
-        (yyval.ast) = temp;
-    }
-#line 1852 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 47:
-#line 209 "grammar.y" /* yacc.c:1646  */
-    {
-        AbstractASTNode* temp = new OperatorASTNode((char*)"=", opType::Assignop);
-        temp->addChildNode((yyvsp[-2].ast));
-        (yyvsp[-2].ast)->addPeerNode((yyvsp[0].ast));
         (yyval.ast) = temp;
     }
 #line 1863 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 48:
-#line 215 "grammar.y" /* yacc.c:1646  */
+  case 47:
+#line 221 "grammar.y" /* yacc.c:1646  */
     {
-        AbstractASTNode* temp = new OperatorASTNode((char*)"&&", opType::And);
+        AbstractASTNode* temp = new OperatorASTNode((char*)"=", opType::Assignop);
         temp->addChildNode((yyvsp[-2].ast));
         (yyvsp[-2].ast)->addPeerNode((yyvsp[0].ast));
         (yyval.ast) = temp;
@@ -1873,10 +1873,10 @@ yyreduce:
 #line 1874 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 49:
-#line 221 "grammar.y" /* yacc.c:1646  */
+  case 48:
+#line 227 "grammar.y" /* yacc.c:1646  */
     {
-        AbstractASTNode* temp = new OperatorASTNode((char*)"||", opType::Or);
+        AbstractASTNode* temp = new OperatorASTNode((char*)"&&", opType::And);
         temp->addChildNode((yyvsp[-2].ast));
         (yyvsp[-2].ast)->addPeerNode((yyvsp[0].ast));
         (yyval.ast) = temp;
@@ -1884,10 +1884,10 @@ yyreduce:
 #line 1885 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 50:
-#line 227 "grammar.y" /* yacc.c:1646  */
+  case 49:
+#line 233 "grammar.y" /* yacc.c:1646  */
     {
-        AbstractASTNode* temp = new OperatorASTNode((yyvsp[-1].str), opType::Relop);
+        AbstractASTNode* temp = new OperatorASTNode((char*)"||", opType::Or);
         temp->addChildNode((yyvsp[-2].ast));
         (yyvsp[-2].ast)->addPeerNode((yyvsp[0].ast));
         (yyval.ast) = temp;
@@ -1895,10 +1895,10 @@ yyreduce:
 #line 1896 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 51:
-#line 233 "grammar.y" /* yacc.c:1646  */
+  case 50:
+#line 239 "grammar.y" /* yacc.c:1646  */
     {
-        AbstractASTNode* temp = new OperatorASTNode((char*)"+", opType::Plus);
+        AbstractASTNode* temp = new OperatorASTNode((yyvsp[-1].str), opType::Relop);
         temp->addChildNode((yyvsp[-2].ast));
         (yyvsp[-2].ast)->addPeerNode((yyvsp[0].ast));
         (yyval.ast) = temp;
@@ -1906,10 +1906,10 @@ yyreduce:
 #line 1907 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 52:
-#line 239 "grammar.y" /* yacc.c:1646  */
+  case 51:
+#line 245 "grammar.y" /* yacc.c:1646  */
     {
-        AbstractASTNode* temp = new OperatorASTNode((char*)"-", opType::Minus);
+        AbstractASTNode* temp = new OperatorASTNode((char*)"+", opType::Plus);
         temp->addChildNode((yyvsp[-2].ast));
         (yyvsp[-2].ast)->addPeerNode((yyvsp[0].ast));
         (yyval.ast) = temp;
@@ -1917,10 +1917,10 @@ yyreduce:
 #line 1918 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 53:
-#line 245 "grammar.y" /* yacc.c:1646  */
+  case 52:
+#line 251 "grammar.y" /* yacc.c:1646  */
     {
-        AbstractASTNode* temp = new OperatorASTNode((char*)"*", opType::Times);
+        AbstractASTNode* temp = new OperatorASTNode((char*)"-", opType::Minus);
         temp->addChildNode((yyvsp[-2].ast));
         (yyvsp[-2].ast)->addPeerNode((yyvsp[0].ast));
         (yyval.ast) = temp;
@@ -1928,10 +1928,10 @@ yyreduce:
 #line 1929 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 54:
-#line 251 "grammar.y" /* yacc.c:1646  */
+  case 53:
+#line 257 "grammar.y" /* yacc.c:1646  */
     {
-        AbstractASTNode* temp = new OperatorASTNode((char*)"/", opType::Div);
+        AbstractASTNode* temp = new OperatorASTNode((char*)"*", opType::Times);
         temp->addChildNode((yyvsp[-2].ast));
         (yyvsp[-2].ast)->addPeerNode((yyvsp[0].ast));
         (yyval.ast) = temp;
@@ -1939,98 +1939,112 @@ yyreduce:
 #line 1940 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
+  case 54:
+#line 263 "grammar.y" /* yacc.c:1646  */
+    {
+        AbstractASTNode* temp = new OperatorASTNode((char*)"/", opType::Div);
+        temp->addChildNode((yyvsp[-2].ast));
+        (yyvsp[-2].ast)->addPeerNode((yyvsp[0].ast));
+        (yyval.ast) = temp;
+    }
+#line 1951 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+    break;
+
   case 55:
-#line 257 "grammar.y" /* yacc.c:1646  */
+#line 269 "grammar.y" /* yacc.c:1646  */
     {
         (yyval.ast) = (yyvsp[-1].ast);
     }
-#line 1948 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 1959 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 56:
-#line 260 "grammar.y" /* yacc.c:1646  */
+#line 272 "grammar.y" /* yacc.c:1646  */
     {
         AbstractASTNode* temp = new OperatorASTNode((char*)"-", opType::Negative);
         temp->addChildNode((yyvsp[0].ast));
         (yyval.ast) = temp;
     }
-#line 1958 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 1969 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 57:
-#line 265 "grammar.y" /* yacc.c:1646  */
+#line 277 "grammar.y" /* yacc.c:1646  */
     {
         AbstractASTNode* temp = new OperatorASTNode((char*)"!", opType::Not);
         temp->addChildNode((yyvsp[0].ast));
         (yyval.ast) = temp;
     }
-#line 1968 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 1979 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 58:
-#line 270 "grammar.y" /* yacc.c:1646  */
+#line 282 "grammar.y" /* yacc.c:1646  */
     {
-        (yyval.ast) = NULL;
+        (yyval.ast) = new CallFunASTNode((yyvsp[-3].str), (yyvsp[-1].ast));
     }
-#line 1976 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 1987 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 59:
-#line 273 "grammar.y" /* yacc.c:1646  */
+#line 285 "grammar.y" /* yacc.c:1646  */
     {
-        (yyval.ast) = NULL;
+        (yyval.ast) = new CallFunASTNode((yyvsp[-2].str), NULL);
     }
-#line 1984 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 1995 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 60:
-#line 276 "grammar.y" /* yacc.c:1646  */
+#line 288 "grammar.y" /* yacc.c:1646  */
     {
         (yyval.ast) = NULL;
     }
-#line 1992 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 2003 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 61:
-#line 279 "grammar.y" /* yacc.c:1646  */
+#line 291 "grammar.y" /* yacc.c:1646  */
     {
         AbstractASTNode* temp = new VarASTNode((yyvsp[0].str));
         (yyval.ast) = temp;
     }
-#line 2001 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 2012 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 62:
-#line 283 "grammar.y" /* yacc.c:1646  */
+#line 295 "grammar.y" /* yacc.c:1646  */
     {
         AbstractASTNode* temp = new LiteralASTNode((yyvsp[0].str));
         (yyval.ast) = temp;
     }
-#line 2010 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 2021 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 63:
-#line 287 "grammar.y" /* yacc.c:1646  */
+#line 299 "grammar.y" /* yacc.c:1646  */
     { yyerrok; }
-#line 2016 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 2027 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 64:
-#line 289 "grammar.y" /* yacc.c:1646  */
+#line 301 "grammar.y" /* yacc.c:1646  */
     {
+        (yyvsp[-2].ast)->getLastPeerNode()->addPeerNode((yyvsp[0].ast));
+        (yyval.ast) = (yyvsp[-2].ast);
     }
-#line 2023 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 2036 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 65:
-#line 291 "grammar.y" /* yacc.c:1646  */
+#line 305 "grammar.y" /* yacc.c:1646  */
     {
+        (yyval.ast) = (yyvsp[0].ast);
     }
-#line 2030 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 2044 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
     break;
 
 
-#line 2034 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
+#line 2048 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2265,7 +2279,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 295 "grammar.y" /* yacc.c:1906  */
+#line 310 "grammar.y" /* yacc.c:1906  */
 
 
 void yyerror(const char* s) {

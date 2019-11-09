@@ -1,5 +1,5 @@
 #include "DefFunASTNode.h"
-
+#include <cstring>
 DefFunASTNode::DefFunASTNode(char* content, AbstractASTNode* argList, AbstractASTNode* funcBody)
     :AbstractASTNode(content, ASTNodeType::defFunc)
 {
@@ -9,5 +9,20 @@ DefFunASTNode::DefFunASTNode(char* content, AbstractASTNode* argList, AbstractAS
 
 void DefFunASTNode::printInfo(int depth)
 {
-    std::cout << "Function define." << this->content;
+    std::cout << "Function define. Name:" << this->content << std::endl;
+    for (int i = 0; i < depth + 1; i++) std::cout << " ";
+    std::cout << "Retrun type: ";
+    if (this->revType == symbolType::integer) std::cout << "int";
+    else if (this->revType == symbolType::Void) std::cout << "void";
+    std::cout << std::endl;
+    AbstractASTNode::__printTree(this->argList, depth + 1);
+}
+
+void DefFunASTNode::setRevType(char* type)
+{
+    if (strcmp(type, "int") == 0) {
+        this->revType = symbolType::integer;
+    } else if (strcmp(type, "void") == 0) {
+        this->revType = symbolType::Void;
+    }
 }

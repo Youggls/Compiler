@@ -3,6 +3,7 @@
 #include "ASTNode.h"
 #include "symbol.h"
 #include "DefFunASTNode.h"
+#include "CallFunASTNode.h"
 #include "StmtASTNode.h"
 #include "LiteralASTNode.h"
 #include "ExpASTNode.h"
