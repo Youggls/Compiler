@@ -1,7 +1,7 @@
 #ifndef FUNCASTNODE_H
 #define FUNCASTNODE_H
 #include "ASTNode.h"
-#include "symbol.h"
+#include "../symbol.h"
 
 class DefFunASTNode : public AbstractASTNode
 {
