@@ -54,25 +54,27 @@ extern int yydebug;
     PLUS = 263,
     STAR = 264,
     DIV = 265,
-    NOT = 266,
-    LP = 267,
-    RP = 268,
-    LB = 269,
-    RB = 270,
-    LOWER_THAN_ELSE = 271,
-    ERRID = 272,
-    INT = 273,
-    TYPE = 274,
-    ID = 275,
-    FOR = 276,
-    SEMI = 277,
-    COMMA = 278,
-    RETURN = 279,
-    IF = 280,
-    ELSE = 281,
-    WHILE = 282,
-    LC = 283,
-    RC = 284
+    MOD = 266,
+    POWER = 267,
+    NOT = 268,
+    LP = 269,
+    RP = 270,
+    LB = 271,
+    RB = 272,
+    LOWER_THAN_ELSE = 273,
+    ERRID = 274,
+    INT = 275,
+    TYPE = 276,
+    ID = 277,
+    FOR = 278,
+    SEMI = 279,
+    COMMA = 280,
+    RETURN = 281,
+    IF = 282,
+    ELSE = 283,
+    WHILE = 284,
+    LC = 285,
+    RC = 286
   };
 #endif
 
@@ -86,7 +88,7 @@ union YYSTYPE
 	AbstractASTNode* ast;
     char* str;
 
-#line 89 "./Linux/grammar.tab.h" /* yacc.c:1909  */
+#line 91 "./Linux/grammar.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

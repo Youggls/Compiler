@@ -5,6 +5,9 @@
 
 # Linux target file
 parser
+*.o
+*.gch
+
 
 # Mac
 *.DS_Store

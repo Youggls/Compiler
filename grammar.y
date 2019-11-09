@@ -25,7 +25,8 @@ void yyerror(const char *str);
 %left <ast> AND
 %left <str> RELOP
 %left <ast> MINUS PLUS
-%left <ast> STAR DIV
+%left <ast> STAR DIV MOD
+%left <ast> POWER
 %right <ast> NOT
 %left LP RP LB RB
 %nonassoc LOWER_THAN_ELSE
@@ -38,22 +39,31 @@ void yyerror(const char *str);
 %nonassoc RETURN IF ELSE WHILE
 %token LC RC
 %type <str> VarDec Specifier
-%type <ast> ExtDefList ExtDef
+%type <ast> ExtDefList ExtDef ExtDec ExtDecList
 %type <ast> Exp CompSt
 %type <ast> StmtList Stmt Dec DecList Def
-%type <ast> Args ParamDec VarList FunDec
+%type <ast> Args ParamDec VarList FunDec DecFor
 %%
 
 Program: ExtDefList {
+        printf("Root\n");
+        root = $1;
+        root->printTree();
     }
     ;
 ExtDefList:
     ExtDef {
+        $$ = $1;
     }
     | ExtDefList ExtDef {
+        $1->getLastPeerNode()->addPeerNode($2);
+        $$ = $1;
     }
     ;
 ExtDef: Specifier ExtDecList SEMI {
+        DefVarASTNode* defVar = (DefVarASTNode*)$2;
+        defVar->setAllType($1);
+        $$ = defVar;
     }
     | Specifier SEMI {
     }
@@ -61,7 +71,6 @@ ExtDef: Specifier ExtDecList SEMI {
         DefFunASTNode* temp = (DefFunASTNode*)$2;
         temp->setFunBody($3);
         temp->setRevType($1);
-        temp->printTree();
         $$ = temp;
     }
     | Specifier FunDec SEMI {
@@ -69,8 +78,12 @@ ExtDef: Specifier ExtDecList SEMI {
     | error SEMI { yyerrok; $$ = NULL;}
     ;
 ExtDecList: VarDec {
+        $$ = new DefVarASTNode($1);
     }
-    | VarDec COMMA ExtDecList {
+    | ExtDecList COMMA VarDec {
+        DefVarASTNode* temp = new DefVarASTNode($3);
+        $1->getLastPeerNode()->addPeerNode(temp);
+        $$ = $1;
     }
     ;
 
@@ -134,12 +147,21 @@ StmtList:
     }
     ;
 
+DecFor:
+    Def {
+        $$ = $1;
+    }
+    | Exp {
+        $$ = $1;
+    }
+    ;
+
 Stmt: Exp SEMI {
         AbstractASTNode* temp = new StmtASTNode(StmtType::expStmt);
         temp->addChildNode($1);
         $$ = temp;
     }
-    | Def {
+    | Def SEMI {
         AbstractASTNode* temp = new StmtASTNode(StmtType::defStmt);
         temp->addChildNode($1);
         $$ = temp;
@@ -164,7 +186,7 @@ Stmt: Exp SEMI {
     | FOR LP SEMI SEMI RP Stmt {
         $$ = new LoopASTNode((char*)"", LoopType::_for, $6, NULL, NULL, NULL);
     }
-    | FOR LP Exp SEMI SEMI RP Stmt {
+    | FOR LP DecFor SEMI SEMI RP Stmt {
         $$ = new LoopASTNode((char*)"", LoopType::_for, $7, $3, NULL, NULL);
     }
     | FOR LP SEMI Exp SEMI RP Stmt {
@@ -173,13 +195,13 @@ Stmt: Exp SEMI {
     | FOR LP SEMI SEMI Exp RP Stmt {
         $$ = new LoopASTNode((char*)"", LoopType::_for, $7, NULL, NULL, $5);
     }
-    | FOR LP Exp SEMI Exp SEMI Exp RP Stmt {
+    | FOR LP DecFor SEMI Exp SEMI Exp RP Stmt {
         $$ = new LoopASTNode((char*)"", LoopType::_for, $9, $3, $5, $7);
     }
-    | FOR LP Exp SEMI Exp SEMI RP Stmt {
+    | FOR LP DecFor SEMI Exp SEMI RP Stmt {
         $$ = new LoopASTNode((char*)"", LoopType::_for, $8, $3, $5, NULL);
     }
-    | FOR LP Exp SEMI SEMI Exp RP Stmt {
+    | FOR LP DecFor SEMI SEMI Exp RP Stmt {
         $$ = new LoopASTNode((char*)"", LoopType::_for, $8, $3, NULL, $6);
     }
     | FOR LP SEMI Exp SEMI Exp RP Stmt {
@@ -191,7 +213,7 @@ Stmt: Exp SEMI {
 
 
 /* Local Definitions */
-Def: Specifier DecList SEMI{
+Def: Specifier DecList {
         DefVarASTNode* temp = (DefVarASTNode*)$2;
         temp->setAllType($1);
         $$ = temp;
@@ -262,6 +284,18 @@ Exp:
     }
     | Exp DIV Exp {
         AbstractASTNode* temp = new OperatorASTNode((char*)"/", opType::Div);
+        temp->addChildNode($1);
+        $1->addPeerNode($3);
+        $$ = temp;
+    }
+    | Exp MOD Exp {
+        AbstractASTNode* temp = new OperatorASTNode((char*)"%", opType::Mod);
+        temp->addChildNode($1);
+        $1->addPeerNode($3);
+        $$ = temp;
+    }
+    | Exp POWER Exp {
+        AbstractASTNode* temp = new OperatorASTNode((char*)"^", opType::Power);
         temp->addChildNode($1);
         $1->addPeerNode($3);
         $$ = temp;

@@ -18,6 +18,8 @@ void DefVarASTNode::setAllType(char* type) {
     VarType varType;
     if (strcmp(type, "int") == 0) {
         varType = VarType::integer;
+    } else if (strcmp(type, "void") == 0) {
+        varType = VarType::Void;
     }
     this->type = varType;
     DefVarASTNode* peer = (DefVarASTNode*)this->getPeer();

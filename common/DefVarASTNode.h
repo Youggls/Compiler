@@ -6,6 +6,7 @@ enum class VarType {
     unset = 0,
     integer = 1,
     integerPointer = 2,
+    Void = 3
 };
 
 class DefVarASTNode : public AbstractASTNode

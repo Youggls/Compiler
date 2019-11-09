@@ -14,4 +14,7 @@ void StmtASTNode::printInfo(int depth) {
     else if (this->type == StmtType::expStmt) {
         std::cout << "Exp Stmt" << std::endl;
     }
+    else if (this->type == StmtType::returnStmt) {
+        std::cout << "Return Stmt" << std::endl;
+    }
 }

@@ -29,11 +29,11 @@ ws    {delim}+
  /* C++ comment, a common extension */
 "//".*\n
 "int"                             { yylval.str=strdup(yytext); return(TYPE); }
+"void"                            { yylval.str=strdup(yytext); return(TYPE);}
 "main"                            { yylval.str=strdup(yytext); return(ID);}
 "return"                          { return(RETURN); }
 "for"                             { return(FOR);}
 "while"                           { return(WHILE);}
-
 "if"                              { return(IF); }
 "else"                            { return(ELSE);}
 ";"                               { return(SEMI); }
@@ -44,6 +44,8 @@ ws    {delim}+
 "-"                               { return(MINUS); }
 "*"                               { return(STAR); }
 "/"                               { return(DIV); }
+"%"                               { return(MOD);}
+"^"                               { return(POWER);}
 "&&"                              { return(AND); }
 "||"                              { return(OR); }
 "!"                               { return(NOT); }

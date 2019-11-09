@@ -1,7 +1,5 @@
 int main()
 {
-    while(a == 1) {
-        int b = 1;
-        a = 1;
-    }
+    int a;
+    a = (a+a)*a;
 }
