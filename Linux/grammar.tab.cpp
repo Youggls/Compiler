@@ -1511,8 +1511,8 @@ yyreduce:
         case 2:
 #line 48 "grammar.y" /* yacc.c:1646  */
     {
-        printf("Root\n");
-        root = (yyvsp[0].ast);
+        root = new RootASTNode();
+        root->addChildNode((yyvsp[0].ast));
         root->printTree();
     }
 #line 1519 "./Linux/grammar.tab.cpp" /* yacc.c:1646  */

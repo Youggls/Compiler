@@ -46,8 +46,8 @@ void yyerror(const char *str);
 %%
 
 Program: ExtDefList {
-        printf("Root\n");
-        root = $1;
+        root = new RootASTNode();
+        root->addChildNode($1);
         root->printTree();
     }
     ;

@@ -55,3 +55,11 @@ void AbstractASTNode::__printTree(AbstractASTNode* node, int depth) {
 void AbstractASTNode::printTree() {
 	AbstractASTNode::__printTree(this, 0);
 }
+
+RootASTNode::RootASTNode() : AbstractASTNode(ASTNodeType::root) {
+    this->content = "Root";
+}
+
+void RootASTNode::printInfo(int depth) {
+    std::cout << this->content << std::endl;
+}

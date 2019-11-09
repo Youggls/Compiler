@@ -9,11 +9,12 @@ enum class ASTNodeType {
     op = 4,         //包含 assignop ， relop， +， -， *， /， %
     exp = 5,
     stmt = 6,
-    defVar,
-    assignVar,
-    identifier,
-    loop,
-    select
+    defVar = 7,
+    assignVar = 8,
+    identifier = 8,
+    loop = 10,
+    select = 11,
+    root = 12,
 };
 
 class AbstractASTNode
@@ -37,5 +38,12 @@ public:
     AbstractASTNode* getLastPeerNode();
     void printTree();
     virtual void printInfo(int depth) = 0;
+};
+
+class RootASTNode : public AbstractASTNode
+{
+public:
+    RootASTNode();
+    void printInfo(int depth);
 };
 #endif
