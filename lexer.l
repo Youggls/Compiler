@@ -13,7 +13,7 @@ extern FILE * yyin;
 extern YYSTYPE yylval;
 void yyerror(const char *str);
 %}
-
+%option yylineno
 D   [0-9]
 L   [a-zA-Z_]
 E   [Ee][+-]?{D}+

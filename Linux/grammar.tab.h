@@ -83,7 +83,7 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 15 "grammar.y" /* yacc.c:1909  */
+#line 16 "grammar.y" /* yacc.c:1909  */
 
 	AbstractASTNode* ast;
     char* str;

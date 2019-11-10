@@ -8,6 +8,7 @@ extern char *yytext;
 extern int yylex();
 extern int column;
 extern FILE * yyin;
+extern int yylineno;
 AbstractASTNode* root;
 void yyerror(const char *str);
 %}
@@ -345,7 +346,7 @@ Args: Args COMMA Exp {
 %%
 
 void yyerror(const char* s) {
-	fprintf(stderr, "Parse error: %s\n", s);
+	fprintf(stderr, "Parse error: At line %d. %s\n", yylineno, s);
 	exit(1);
 }
 
