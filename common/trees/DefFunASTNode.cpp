@@ -1,4 +1,5 @@
 #include "DefFunASTNode.h"
+#include "DefVarASTNode.h"
 #include <cstring>
 DefFunASTNode::DefFunASTNode(char* content, AbstractASTNode* argList, AbstractASTNode* funcBody)
     :AbstractASTNode(content, ASTNodeType::defFunc)
@@ -15,7 +16,11 @@ void DefFunASTNode::printInfo(int depth)
     if (this->revType == symbolType::integer) std::cout << "int";
     else if (this->revType == symbolType::Void) std::cout << "void";
     std::cout << std::endl;
-    AbstractASTNode::__printTree(this->argList, depth + 1);
+    AbstractASTNode* var = (AbstractASTNode*)this->argList;
+    while (var != NULL) {
+        AbstractASTNode::__printTree(var, depth + 1);
+        var = var->getPeer();
+    }
 }
 
 void DefFunASTNode::setRevType(char* type)

@@ -1,13 +1,16 @@
 #include "CallFunASTNode.h"
-
-CallFunASTNode::CallFunASTNode(char* content, AbstractASTNode* varList) :
-    AbstractASTNode(content, ASTNodeType::callFunc)
+#include "VarASTNode.h"
+CallFunASTNode::CallFunASTNode(char *content, AbstractASTNode *varList)
+    : AbstractASTNode(content, ASTNodeType::callFunc)
 {
     this->varList = varList;
 }
 
-void CallFunASTNode::printInfo(int depth)
-{
+void CallFunASTNode::printInfo(int depth) {
     std::cout << "Call Function." << this->content << std::endl;
-    AbstractASTNode::__printTree(this->varList, depth + 1);
+    AbstractASTNode *var = this->varList;
+    while (var != NULL) {
+        AbstractASTNode::__printTree(var, depth + 1);
+        var = var->getPeer();
+    }
 }

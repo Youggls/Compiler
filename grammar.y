@@ -39,7 +39,7 @@ void yyerror(const char *str);
 %nonassoc RETURN IF ELSE WHILE
 %token LC RC
 %type <str> VarDec Specifier
-%type <ast> ExtDefList ExtDef ExtDec ExtDecList
+%type <ast> ExtDefList ExtDef ExtDecList
 %type <ast> Exp CompSt
 %type <ast> StmtList Stmt Dec DecList Def
 %type <ast> Args ParamDec VarList FunDec DecFor
@@ -173,6 +173,9 @@ Stmt: Exp SEMI {
         AbstractASTNode* temp = new StmtASTNode(StmtType::returnStmt);
         temp->addChildNode($2);
         $$ = temp;
+    }
+    | RETURN SEMI {
+        $$ = new StmtASTNode(StmtType::returnStmt);
     }
     | IF LP Exp RP Stmt{
         $$ = new SelectASTNode((char*)"", SelectType::_if, $5, $3);
@@ -323,12 +326,10 @@ Exp:
         $$ = NULL;
     }
     | ID {
-        AbstractASTNode* temp = new VarASTNode($1);
-        $$ = temp;
+        $$ = new VarASTNode($1);
     }
     | INT {
-        AbstractASTNode* temp = new LiteralASTNode($1);
-        $$ = temp;
+        $$ = new LiteralASTNode($1);
     }
     | error RP { yyerrok; }
     ;

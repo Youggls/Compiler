@@ -1,5 +1,7 @@
-int main()
+int main(int argc, int argv)
 {
-    int a;
-    a = (a+a)*a;
+    for (;;) {
+        a = 1;
+        print(dsafdf, a, c);
+    }
 }
