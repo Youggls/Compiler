@@ -27,8 +27,9 @@ private:
     std::unordered_map<std::string, symbol*> symbolHashTable;
     SymbolTable* parentTable;
     SymbolTable* childTable;
+    symbol* findInThisTable(const std::string name);
 public:
-    // Judge the symoble is successfully added.
+    // Judge the symbol is successfully added.
     static const int SUCCESS = 0;
     static const int FAIL = -1;
     SymbolTable();
