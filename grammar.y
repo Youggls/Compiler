@@ -49,7 +49,6 @@ void yyerror(const char *str);
 Program: ExtDefList {
         root = new RootASTNode();
         root->addChildNode($1);
-        root->printTree();
     }
     ;
 ExtDefList:
@@ -355,11 +354,32 @@ void yyerror(const char* s) {
 
 int main(int argc,char* argv[])
 {
-    FILE* file = fopen(argv[1], "r");
+    bool flag_print_ast = false;
+    char* filename = NULL;
+    if (argc == 1) {
+        printf("Error! Please input file name!\n");
+        printf("Usage: parser [-t] [-v] [-B] [-i] source [out]\n");
+        printf("  -t  print the abstract syntax tree (AST)\n");
+        printf("  -v  verbose mode\n");
+        printf("  -B  disable basic block optimizing\n");
+        printf("  -i  generate IR code instead of assemble code\n");
+        return -1;
+    } else if (argc >= 2) {
+        for (int i=1; i<argc; i++) {
+            if (*argv[i] != '-') {
+                if (filename == NULL) filename = argv[i];
+            }
+            else if (strcmp(argv[i], "-t") == 0) flag_print_ast = true;
+            else printf("Invalid parameter \"%s\"\n", argv[i]);
+        }
+    }
+    FILE* file = fopen(filename, "r");
     yyin = file;
     do {
 		yyparse();
 	} while(!feof(yyin));
-    
+    if (flag_print_ast) {
+        root->printTree();
+    }
     return 0;
 }
