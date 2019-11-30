@@ -10,6 +10,7 @@ parser
 
 # Lex and yacc target file
 Linux/
+win/
 
 # Mac
 *.DS_Store
