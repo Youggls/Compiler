@@ -8,6 +8,8 @@ parser
 *.o
 *.gch
 
+# Lex and yacc target file
+Linux/
 
 # Mac
 *.DS_Store
