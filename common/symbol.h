@@ -3,6 +3,7 @@
 #include <string>
 #include <unordered_map>
 enum class symbolType {
+    unset = -1,
     integer = 0,
     function = 1,
     pointer = 2,

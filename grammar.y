@@ -92,6 +92,9 @@ ExtDecList: VarDec {
 Specifier: TYPE {
         $$ = strdup($1);
     }
+    | TYPE STAR {
+        $$ = (char*)("integer pointer");
+    }
 ;
 
 /* Declarators */

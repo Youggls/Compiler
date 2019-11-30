@@ -2,17 +2,12 @@
 #define DEFVARASTNODE_H
 #include "ASTNode.h"
 #include "IdentifierASTNode.h"
-enum class VarType {
-    unset = 0,
-    integer = 1,
-    integerPointer = 2,
-    Void = 3
-};
+#include "../symbol.h"
 
 class DefVarASTNode : public AbstractASTNode
 {
 private:
-    VarType type;
+    symbolType type;
 public:
     DefVarASTNode(char* content, AbstractASTNode* value=NULL);
     void setAllType(char* type);
