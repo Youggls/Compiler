@@ -26,4 +26,4 @@ endif
 	$(CXX) -c $< -o $@ -std=$(CXXVER)
 
 clean:
-	rm -rf $(GRAMMARFOLDER) $(OBJ)
+	rm -rf $(GRAMMARFOLDER) $(OBJ) $(PROGRAM)
