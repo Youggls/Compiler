@@ -37,6 +37,8 @@ public:
     AbstractASTNode* getLastPeerNode();
     void printTree();
     inline AbstractASTNode* getPeer() { return this->peer; }
+    inline ASTNodeType getNodeType() { return this->nodeType; }
+    inline std::string getContent() { return this->content; }
     virtual void printInfo(int depth) = 0;
 };
 

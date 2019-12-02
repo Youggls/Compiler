@@ -1,7 +1,7 @@
 #ifndef TREES_H
 #define TREES_H
 #include "./trees/ASTNode.h"
-#include "symbol.h"
+#include "./symbol/symbol.h"
 #include "./trees/DefFunASTNode.h"
 #include "./trees/CallFunASTNode.h"
 #include "./trees/StmtASTNode.h"

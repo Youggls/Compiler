@@ -2,6 +2,7 @@
 #define SYMBOL_H
 #include <string>
 #include <unordered_map>
+#include <vector>
 enum class symbolType {
     unset = -1,
     integer = 0,
