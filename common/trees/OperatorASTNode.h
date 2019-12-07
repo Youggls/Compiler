@@ -15,6 +15,7 @@ enum class opType {
     Or = 10,
     Negative = 11,
     Not = 12,
+    SingalAnd = 13,
 };
 
 class OperatorASTNode :public AbstractASTNode {

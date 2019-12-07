@@ -24,6 +24,7 @@ void yyerror(const char *str);
 
 %left <ast> OR
 %left <ast> AND
+%left <ast> SINGALAND
 %left <str> RELOP
 %left <ast> MINUS PLUS
 %left <ast> STAR DIV MOD
@@ -318,6 +319,12 @@ Exp:
         AbstractASTNode* temp = new OperatorASTNode((char*)"!", opType::Not);
         temp->addChildNode($2);
         $$ = temp;
+    }
+    | SINGALAND ID {
+        AbstractASTNode* op = new OperatorASTNode((char*)"&", opType::SingalAnd);
+        AbstractASTNode* var = new VarASTNode((char*)$2);
+        op->addChildNode(var);
+        $$ = op;
     }
     | ID LP Args RP {
         $$ = new CallFunASTNode($1, $3);

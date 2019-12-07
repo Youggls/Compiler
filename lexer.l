@@ -47,6 +47,7 @@ ws    {delim}+
 "%"                               { return(MOD);}
 "^"                               { return(POWER);}
 "&&"                              { return(AND); }
+"&"                               { return(SINGALAND); }
 "||"                              { return(OR); }
 "!"                               { return(NOT); }
 "("                               { return(LP); }
