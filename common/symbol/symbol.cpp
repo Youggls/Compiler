@@ -26,15 +26,33 @@ symbol* SymbolTable::findInThisTable(const std::string name) {
     else return NULL;
 }
 
-SymbolTable::SymbolTable() {
+SymbolTable::SymbolTable(bool isFun) {
     this->childTable = NULL;
     this->parentTable = NULL;
+    this->baseTable = this;
+    this->symbolItemCount = 0;
+    this->totalOffset = 0;
+    this->isFunctionTable = isFun;
+    if (isFun) {
+        this->symbolArray = new std::vector<symbol*>();
+    }
 }
 
-SymbolTable::SymbolTable(SymbolTable* parent) {
+SymbolTable::SymbolTable(SymbolTable* parent, bool isFun) {
     this->childTable = NULL;
     this->parentTable = parent;
-    parent->setChild(this);
+    // parent->setChild(this);
+    SymbolTable* p = this;
+    while (p->isFunctionTable) {
+        p = p->parentTable;
+    }
+    this->baseTable = p;
+    this->symbolItemCount = 0;
+    this->totalOffset = 0;
+    this->isFunctionTable = isFun;
+    if (isFun) {
+        this->symbolArray = new std::vector<symbol*>();
+    }
 }
 
 symbol* SymbolTable::findSymbol(std::string name) {
@@ -51,10 +69,36 @@ symbol* SymbolTable::findSymbol(std::string name) {
     return NULL;
 }
 
-int SymbolTable::addSymbol(symbol* symbol) {
-    if (this->findInThisTable(symbol->getIdName()) == NULL) {
-        this->symbolHashTable[symbol->getIdName()] = symbol;
+SymbolTable* SymbolTable::createChildTable(bool isFun) {
+    SymbolTable* child = new SymbolTable(this, isFun);
+    if (this->childTable == NULL) this->setChild(child);
+    else {
+        SymbolTable* peer = this->childTable->peerTable;
+        while (peer != NULL) {
+            if (peer->peerTable == NULL) break;
+            peer = peer->peerTable;
+        }
+        peer->peerTable = child;
+    }
+    return child;
+}
+
+int SymbolTable::addSymbol(symbol* s) {
+    if (this->findInThisTable(s->getIdName()) == NULL) {
+        this->symbolHashTable[s->getIdName()] = s;
         return SUCCESS;
     }
     else return FAIL;
+}
+
+int SymbolTable::addSymbol(std::string idName, symbolType idType) {
+    symbol* s = new symbol(idName, idType);
+    if (this->findInThisTable(s->getIdName()) != NULL) return FAIL;
+
+    this->baseTable->symbolArray->push_back(s);
+    s->setIndex(this->baseTable->symbolItemCount++);
+    if (idType == symbolType::integer || idType == symbolType::pointer) {
+        this->baseTable->totalOffset += INT_OFFSET;
+    }
+    return this->addSymbol(s);
 }
