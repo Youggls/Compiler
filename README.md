@@ -79,7 +79,7 @@
 
     |类方法|返回值|参数列表|作用|参数意义|
     |:----:|:---:|:-----:|:--:|:-----:|
-    |`SymbolTable`|\\|`bool isFun`|创建一个空的符号表|该作用域是否为函数|
+    |`SymbolTable`||`bool isFun`|唯一公有构造函数，创建一个空的符号表|该作用域是否为函数|
     |`createChildTable`|`SymbolTable*`|`bool isFun`|创建一个子符号表并返回（已经设置了peer指针和child指针，调用者无需负责）|该子符号表控制作用域是否为函数|
     |`addSymbol`|`int`|`string idName, symbolType idType`|尝试向当前符号表添加符号，如果存在相同符号名返回-1，成功则返回0|符号名和符号类型|
     |`findSymbol`|`symbol*`|`const string name`|在符号表中搜索符号，如果当前符号表没有搜索到则向父级符号表搜索|符号名|
