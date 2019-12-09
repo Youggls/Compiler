@@ -56,12 +56,34 @@
 
     包含了主要类文件，目录下的trees.h文件包含了与语法树相关的类，外部使用时只需要包含该头文件即可包含所有相关头文件
 
-2. `win`目录
+    * `symbol`子目录
 
-    包含windows操作系统相关的文件
+        包含了symbol符号表类、FuncSymbol符号表类的源文件
 
-3. `Linux`/`MacOS`
+    * `trees`子目录
 
-4. `win_build.bat`，在windows操作系统下，由yacc文件和lex文件生成c++代码的脚本，请参考[该博客](./https://blog.csdn.net/tankloverainbow/article/details/86653044)进行配置
+        包含了抽象语法树（AST）相关类源文件
+    
+    * `util`子目录
 
-5. `Makefile`，Linux系统的构建文件
+        包含主要工具类，中间代码类、汇编代码生成类、io汇编源文件
+
+2. `Linux`/`MacOS`
+
+
+3. `Makefile`，Linux系统的构建文件
+
+## 相关代码说明
+
+1. `./common/symbol/symbol.h`中`SymbolTable`类的说明
+
+    |类方法|返回值|参数列表|作用|参数意义|
+    |:----:|:---:|:-----:|:--:|:-----:|
+    |`SymbolTable`|\\|`bool isFun`|创建一个空的符号表|该作用域是否为函数|
+    |`createChildTable`|`SymbolTable*`|`bool isFun`|创建一个子符号表并返回（已经设置了peer指针和child指针，调用者无需负责）|该子符号表控制作用域是否为函数|
+    |`addSymbol`|`int`|`string idName, symbolType idType`|尝试向当前符号表添加符号，如果存在相同符号名返回-1，成功则返回0|符号名和符号类型|
+    |`findSymbol`|`symbol*`|`const string name`|在符号表中搜索符号，如果当前符号表没有搜索到则向父级符号表搜索|符号名|
+
+2. `./common/symbol/symbol.h`中`symbol`类的说明
+
+    请负责中间代码生成部分的程序员注意，不需要修改offset值和index值，开放给中间代码生成部分的类成员变量只有idName和idType
