@@ -97,6 +97,7 @@ int SymbolTable::addSymbol(std::string idName, symbolType idType) {
 
     this->baseTable->symbolArray->push_back(s);
     s->setIndex(this->baseTable->symbolItemCount++);
+    s->setOffset(this->baseTable->totalOffset);
     if (idType == symbolType::integer || idType == symbolType::pointer) {
         this->baseTable->totalOffset += INT_OFFSET;
     }
