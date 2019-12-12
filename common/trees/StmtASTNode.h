@@ -2,16 +2,19 @@
 #define STMTASTNODE_H
 #include "ASTNode.h"
 
-enum class StmtType {
+enum class StmtType
+{
     compStmt = 1,
     expStmt = 2,
     defStmt = 3,
     returnStmt = 4,
 };
 
-class StmtASTNode : public AbstractASTNode {
+class StmtASTNode : public AbstractASTNode
+{
 private:
     StmtType type;
+
 public:
     StmtASTNode(StmtType type);
     void printInfo(int depth);

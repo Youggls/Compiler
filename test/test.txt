@@ -1,5 +1,9 @@
 int main(int argc, int argv)
 {
+    {
+        int c;
+    }
     int a = 1;
     int* aa = &a;
+    int b = 3;
 }
