@@ -1,15 +1,38 @@
 #ifndef INTERMEDIATE_H
 #define INTERMEDIATE_H
+
+#define VAR "10VarASTNode"
+#define STMT "11StmtASTNode"
+#define ROOT "11RootASTNode"
+#define LOOP "11LoopASTNode"
+#define DEFINE_VAR "13DefVarASTNode"
+#define DEFINE_FUN "13DefFunASTNode"
+#define SELECT "13SelectASTNode"
+#define LITERAL "14LiteralASTNode" // 常量
+#define CALL "14CallFunASTNode"
+// IdentifierASTNode 等着删了，没用
+#define OPERATOR "15OperatorASTNode"
+
 #include "../trees.h"
+#include "./Quad.h"
+#include "../symbol/symbol.h"
+#include "../symbol/FuncSymbol.h"
 #include <typeinfo>
-class InterMediateCodeGenerator
+// Inter mediate code generator
+class InterMediate
 {
 private:
     RootASTNode *root;
-    
+    std::vector<Quad> quads;
+    std::vector<symbol> tempVar;
+    FuncTable funcTable;
+    SymbolTable *rootTable;
 
 public:
-    InterMediateCodeGenerator(RootASTNode *rootNode);
-    
+    InterMediate(RootASTNode *rootNode);
+    void Generate(AbstractASTNode *node, SymbolTable *symbolTable);
+    // Create a child symbol table to generate follow code.
+    SymbolTable *GenerateStmt(StmtASTNode *node, SymbolTable *symbolTable);
+    symbol *GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable);
 };
 #endif

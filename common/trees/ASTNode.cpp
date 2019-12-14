@@ -43,11 +43,10 @@ AbstractASTNode* AbstractASTNode::getLastPeerNode()
 
 void AbstractASTNode::__printTree(AbstractASTNode* node, int depth) {
 	if (node == NULL) return;
-    std::cout << typeid(*node).name() << "\t";
+    std::cout << (int)node->nodeType<<" "  << typeid(*node).name() << "  " << "\t";
     std::cout << depth;
 	for (int i = 0; i < depth; i++) std::cout << " ";
 	node->printInfo(depth);
-	// AbstractASTNode::__printTree(node->child, depth + 1);
 	AbstractASTNode* p = node->child;
 	while (p != NULL) {
 		AbstractASTNode::__printTree(p, depth + 1);

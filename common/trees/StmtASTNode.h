@@ -16,6 +16,7 @@ private:
     StmtType type;
 
 public:
+    inline StmtType getStmtType(){ return this->type;}
     StmtASTNode(StmtType type);
     void printInfo(int depth);
 };

@@ -8,10 +8,11 @@ class DefVarASTNode : public AbstractASTNode
 {
 private:
     symbolType type;
+
 public:
-    DefVarASTNode(char* content, AbstractASTNode* value=NULL);
+    DefVarASTNode(char *content, AbstractASTNode *value = NULL);
     inline symbolType getSymbolType() { return this->type; }
-    void setAllType(char* type);
+    void setAllType(char *type);
     void printInfo(int depth);
 };
 

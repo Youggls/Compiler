@@ -4,7 +4,7 @@
 
 enum class LoopType {
     _for,
-    _whileS
+    _while
 };
 
 class LoopASTNode : public AbstractASTNode

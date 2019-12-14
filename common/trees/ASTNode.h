@@ -7,11 +7,11 @@ enum class ASTNodeType {
     callFunc = 2,
     literal = 3,
     op = 4,         //包含 assignop ， relop， +， -， *， /， %
-    exp = 5,
+    exp = 5,        // 没用上
     stmt = 6,
     defVar = 7,
     assignVar = 8,
-    identifier = 8,
+    identifier = 9, // 也没用上
     loop = 10,
     select = 11,
     root = 12,
@@ -27,7 +27,7 @@ private:
 protected:
     std::string content;
     static void __printTree(AbstractASTNode* node, int depth);
-    inline AbstractASTNode* getChild() { return this->child; }
+    // inline AbstractASTNode* getChild() { return this->child; }
 public:
     AbstractASTNode();
     AbstractASTNode(ASTNodeType nodetype);
@@ -39,6 +39,7 @@ public:
     inline AbstractASTNode* getPeer() { return this->peer; }
     inline ASTNodeType getNodeType() { return this->nodeType; }
     inline std::string getContent() { return this->content; }
+    inline AbstractASTNode* getChild() { return this->child;}
     virtual void printInfo(int depth) = 0;
 };
 

@@ -188,7 +188,7 @@ Stmt: Exp SEMI {
         $$ = new SelectASTNode((char*)"", SelectType::_if, $5, $3, $7);
     }
     | WHILE LP Exp RP Stmt {
-        $$ = new LoopASTNode((char*)"", LoopType::_whileS, $5, $3);
+        $$ = new LoopASTNode((char*)"", LoopType::_while, $5, $3);
     }
     | FOR LP SEMI SEMI RP Stmt {
         $$ = new LoopASTNode((char*)"", LoopType::_for, $6, NULL, NULL, NULL);
