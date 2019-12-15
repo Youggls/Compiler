@@ -51,16 +51,17 @@ SymbolTable::SymbolTable(SymbolTable *parent, bool isFun)
 {
     this->childTable = NULL;
     this->parentTable = parent;
+    this->isFunctionTable = isFun;
     // parent->setChild(this);
     SymbolTable *p = this;
-    while (p->isFunctionTable)
+    while (!p->isFunctionTable)
     {
         p = p->parentTable;
     }
     this->baseTable = p;
     this->symbolItemCount = 0;
     this->totalOffset = 0;
-    this->isFunctionTable = isFun;
+
     if (isFun)
     {
         this->symbolArray = new std::vector<symbol *>();
@@ -91,6 +92,10 @@ SymbolTable *SymbolTable::createChildTable(bool isFun)
     SymbolTable *child = new SymbolTable(this, isFun);
     if (this->childTable == NULL)
         this->setChild(child);
+    else if (this->childTable->peerTable == NULL)
+    {
+        this->childTable->peerTable = child;
+    }
     else
     {
         SymbolTable *peer = this->childTable->peerTable;
