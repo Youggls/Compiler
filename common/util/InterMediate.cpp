@@ -111,10 +111,37 @@ void InterMediate::Generate(AbstractASTNode *node, SymbolTable *symbolTable)
             int end = quads.size();
             backpatch(&JudgeFalse, end);
         }
+        break;
+    case ASTNodeType::select: // Just IF and ELSE.
+    {
+        SelectASTNode *select = (SelectASTNode *)node;
+        Generate(select->getCondition(), symbolTable);
+        int start = quads.size();
+        std::list<int> JudgeTrue = trueList.top();
+        std::list<int> JudgeFalse = falseList.top();
+        trueList.pop();
+        falseList.pop();
 
+        backpatch(&JudgeTrue, start);
+        Generate(select->getBody(), symbolTable);
+        if (select->getElse() != NULL)
+        {
+            Quad *temp = new Quad(OpCode::JUMP, (int)NULL);
+            quads.push_back(*temp);
+            temp = &quads.back();
+            int elseStart = quads.size();
+            Generate(select->getElse(), symbolTable);
+            backpatch(&JudgeFalse, elseStart);
+            int end = quads.size();
+            temp->backpatch(end);
+        }
+        else
+        {
+            int end = quads.size();
+            backpatch(&JudgeFalse, end);
+        }
         break;
-    case ASTNodeType::select:
-        break;
+    }
     case ASTNodeType::root:
         while (p != NULL)
         {
@@ -123,7 +150,7 @@ void InterMediate::Generate(AbstractASTNode *node, SymbolTable *symbolTable)
         }
         break;
     default:
-        std::cout << "Hello";
+        std::cout << "Hello! Something Wrong happened!";
         break;
     }
 }
@@ -141,7 +168,7 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
 {
     Quad *temp;
     AbstractASTNode *arg1Node, *arg2Node;
-    switch (node->getType())
+    switch (node->getType()) // 报错是switch 多重定义
     {
     case opType::Assignop:
         symbol *result;
