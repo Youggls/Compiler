@@ -130,9 +130,9 @@ void InterMediate::Generate(AbstractASTNode *node, SymbolTable *symbolTable)
 
 SymbolTable *InterMediate::GenerateStmt(StmtASTNode *node, SymbolTable *symbolTable)
 {
-    if (node->getParent()->getNodeType() == ASTNodeType::loop)
-        return symbolTable;
     if (node->getStmtType() != StmtType::compStmt)
+        return symbolTable;
+    if (node->getParent()->getNodeType() == ASTNodeType::loop)
         return symbolTable;
     return symbolTable->createChildTable(false);
 }
