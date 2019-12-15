@@ -17,7 +17,8 @@
 #include "./Quad.h"
 #include "../symbol/symbol.h"
 #include "../symbol/FuncSymbol.h"
-#include <typeinfo>
+#include <stack>
+#include <list>
 // Inter mediate code generator
 class InterMediate
 {
@@ -28,11 +29,15 @@ private:
     FuncTable funcTable;
     SymbolTable *rootTable;
 
+    std::stack<std::list<int>> trueList;
+    std::stack<std::list<int>> falseList;
+
 public:
     InterMediate(RootASTNode *rootNode);
     void Generate(AbstractASTNode *node, SymbolTable *symbolTable);
     // Create a child symbol table to generate follow code.
     SymbolTable *GenerateStmt(StmtASTNode *node, SymbolTable *symbolTable);
     symbol *GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable);
+    Quad *CaculateOp(OpCode op, AbstractASTNode *arg1Node, AbstractASTNode *arg2Node, symbol *result, SymbolTable *symbalTable);
 };
 #endif
