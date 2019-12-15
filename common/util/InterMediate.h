@@ -25,7 +25,7 @@ class InterMediate
 private:
     RootASTNode *root;
     std::vector<Quad> quads;
-    std::vector<symbol> tempVar;
+    std::vector<symbol*> tempVar;
     FuncTable funcTable;
     SymbolTable *rootTable;
 
