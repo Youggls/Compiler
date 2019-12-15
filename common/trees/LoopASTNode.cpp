@@ -40,6 +40,7 @@ void LoopASTNode::printInfo(int depth)
     else
     {
         std::cout << "WHILE" << std::endl;
+        std::cout << (int)this->getChild()->getNodeType() <<std::endl;
         AbstractASTNode::__printTree(this->cond, depth + 1);
     }
 }

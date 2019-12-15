@@ -1,5 +1,5 @@
 #include "InterMediate.h"
-
+#include <typeinfo>
 InterMediate::InterMediate(RootASTNode *rootNode)
 {
     tempVar.reserve(100);
@@ -11,13 +11,11 @@ void InterMediate::Generate(AbstractASTNode *node, SymbolTable *symbolTable)
 {
     if (node == NULL)
     {
-        std::cout << "NULL"<<std::endl;
+        std::cout << "NULL" << std::endl;
     }
-    std::cout << "1" << node->getContent() << std::endl;
     if (node == NULL)
         return;
     AbstractASTNode *p = node->getChild();
-    std::cout << "2" << node->getContent() << std::endl;
 
     switch (node->getNodeType())
     {
@@ -52,9 +50,9 @@ void InterMediate::Generate(AbstractASTNode *node, SymbolTable *symbolTable)
                 Quad *trueQuad = new Quad(OpCode::JUMP_GREAT, std::stoi(node->getContent()), 0, (int)NULL);
                 Quad *falseQuad = new Quad(OpCode::JUMP, (int)NULL);
                 std::list<int> trueL(quads.size());
-                quads.push_back(*trueQuad);
+                this->quads.push_back(*trueQuad);
                 std::list<int> falseL(quads.size());
-                quads.push_back(*falseQuad);
+                this->quads.push_back(*falseQuad);
                 trueList.push(trueL);
                 falseList.push(falseL);
             }
@@ -63,6 +61,11 @@ void InterMediate::Generate(AbstractASTNode *node, SymbolTable *symbolTable)
     }
     case ASTNodeType::op: // 它的子节点只能是 literal / assignVar / op
     {
+        while (p != NULL)
+        {
+            Generate(p, symbolTable);
+            p = p->getPeer();
+        }
         this->GenerateOp((OperatorASTNode *)node, symbolTable);
         break;
     }
@@ -97,9 +100,9 @@ void InterMediate::Generate(AbstractASTNode *node, SymbolTable *symbolTable)
                 Quad *trueQuad = new Quad(OpCode::JUMP_GREAT, arg1, 0, (int)NULL);
                 Quad *falseQuad = new Quad(OpCode::JUMP, (int)NULL);
                 std::list<int> trueL(quads.size());
-                quads.push_back(*trueQuad);
+                this->quads.push_back(*trueQuad);
                 std::list<int> falseL(quads.size());
-                quads.push_back(*falseQuad);
+                this->quads.push_back(*falseQuad);
                 trueList.push(trueL);
                 falseList.push(falseL);
             }
@@ -115,19 +118,22 @@ void InterMediate::Generate(AbstractASTNode *node, SymbolTable *symbolTable)
         else if (loop->getType() == LoopType::_while)
         {
             int start = quads.size();
+            Generate(((LoopASTNode *)node)->getCond(), symbolTable);
+            std::cout << "TrueList：" << this->trueList.size() << std::endl
+                      << "FalseList: " << this->falseList.size() << std::endl;
+            std::list<int> JudgeTrue = trueList.top();
+            std::list<int> JudgeFalse = falseList.top();
+            trueList.pop();
+            falseList.pop();
+            backpatch(&JudgeTrue, JudgeTrue.back() + 2);
             while (p != NULL)
             {
                 Generate(p, symbolTable->createChildTable(false));
                 p = p->getPeer();
             }
-            std::list<int> JudgeTrue = trueList.top();
-            std::list<int> JudgeFalse = falseList.top();
-            trueList.pop();
-            falseList.pop();
 
-            backpatch(&JudgeTrue, JudgeTrue.back() + 2);
             Quad *temp = new Quad(OpCode::JUMP, start);
-            quads.push_back(*temp);
+            this->quads.push_back(*temp);
             int end = quads.size();
             backpatch(&JudgeFalse, end);
         }
@@ -148,7 +154,7 @@ void InterMediate::Generate(AbstractASTNode *node, SymbolTable *symbolTable)
         if (select->getElse() != NULL)
         {
             Quad *temp = new Quad(OpCode::JUMP, (int)NULL);
-            quads.push_back(*temp);
+            this->quads.push_back(*temp);
             temp = &quads.back();
             int elseStart = quads.size();
             Generate(select->getElse(), symbolTable);
@@ -176,8 +182,7 @@ void InterMediate::Generate(AbstractASTNode *node, SymbolTable *symbolTable)
         std::cout << "Hello! Something Wrong happened!";
         break;
     }
-    std::cout << "Last:    " << node->getContent() << std::endl;
-
+    std::cout << "Last content is: " << node->getContent() << "\tType is:" << (int)node->getNodeType() << std::endl;
 }
 
 SymbolTable *InterMediate::GenerateStmt(StmtASTNode *node, SymbolTable *symbolTable)
@@ -505,9 +510,10 @@ void InterMediate::RelopOp(Quad *trueQuad, Quad *falseQuad, OpCode op, AbstractA
         falseQuad = new Quad(OpCode::JUMP, (int)NULL);
     }
     std::list<int> trueL(quads.size()); // Use size to get the index of true quad will be pushed.
-    quads.push_back(*trueQuad);
+    this->quads.push_back(*trueQuad);
     std::list<int> falseL(quads.size()); // Same as the upper on.
-    quads.push_back(*falseQuad);
+    this->quads.push_back(*falseQuad);
+    std::cout << "Here relop Push in" << std::endl;
     trueList.push(trueL);
     falseList.push(falseL);
     // 感觉这儿可能会出问题，留意！

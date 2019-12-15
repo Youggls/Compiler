@@ -22,5 +22,6 @@ public:
     LoopASTNode(char *content, LoopType type, AbstractASTNode *body, AbstractASTNode *dec, AbstractASTNode *condition, AbstractASTNode *action);
     void printInfo(int depth);
     inline LoopType getType() { return this->loopType; }
+    inline AbstractASTNode *getCond() { return this->cond; }
 };
 #endif // !LOOPASTNODE_H

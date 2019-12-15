@@ -87,6 +87,7 @@ public:
     Quad(OpCode op, int arg1, int arg2, int result);
 
     inline void backpatch(int target) { this->result.target = target; };
+    void printQuad();
     // Quad(OpCode op, symbol *arg1, symbol *arg2, symbol *result);
     // Quad(OpCode op, symbol *arg1, symbol *arg2, int result)
 };

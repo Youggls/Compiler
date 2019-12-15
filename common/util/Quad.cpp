@@ -73,3 +73,8 @@ Quad::Quad(OpCode op, int arg1, int arg2, int result)
     this->arg2.target = arg2;
     this->result.target = result;
 }
+
+void Quad::printQuad()
+{
+    std::cout << (int)this->op << std::endl;
+}

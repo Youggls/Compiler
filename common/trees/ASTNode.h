@@ -41,7 +41,7 @@ public:
     inline AbstractASTNode *getParent() { return this->parent; }
     inline AbstractASTNode *getPeer() { return this->peer; }
     inline AbstractASTNode *getChild() { return this->child; }
-
+    inline void setParent(AbstractASTNode *parent) { this->parent = parent; }
     inline ASTNodeType getNodeType() { return this->nodeType; }
     inline std::string getContent() { return this->content; }
     virtual void printInfo(int depth) = 0;
