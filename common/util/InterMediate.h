@@ -25,7 +25,7 @@ class InterMediate
 private:
     RootASTNode *root;
     std::vector<Quad> quads;
-    std::vector<symbol*> tempVar;
+    std::vector<symbol *> tempVar;
     FuncTable funcTable;
     SymbolTable *rootTable;
 
@@ -38,12 +38,14 @@ private:
     void backpatch(std::list<int> *backList, int target);
 
 public:
+    inline AbstractASTNode *getRoot() { return this->root; }
+    inline SymbolTable *getTable() { return this->rootTable; }
     InterMediate(RootASTNode *rootNode);
     void Generate(AbstractASTNode *node, SymbolTable *symbolTable);
     // Create a child symbol table to generate follow code.
     SymbolTable *GenerateStmt(StmtASTNode *node, SymbolTable *symbolTable);
     symbol *GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable);
     Quad *CaculateOp(OpCode op, AbstractASTNode *arg1Node, AbstractASTNode *arg2Node, symbol *result, SymbolTable *symbalTable);
-    void RelopOp(Quad *trueQuad, Quad *falseQuad,OpCode op, AbstractASTNode *arg1Node, AbstractASTNode *arg2Node, SymbolTable *symbolTable);
+    void RelopOp(Quad *trueQuad, Quad *falseQuad, OpCode op, AbstractASTNode *arg1Node, AbstractASTNode *arg2Node, SymbolTable *symbolTable);
 };
 #endif

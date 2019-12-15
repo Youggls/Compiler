@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <cstring>
 #include "../common/trees.h"
+#include "../common/util/InterMediate.h"
 class AbstractASTNode;
 extern char *yytext;
 extern int yylex();
@@ -361,6 +362,7 @@ void yyerror(const char* s) {
 
 int main(int argc,char* argv[])
 {
+    InterMediate* im;
     bool flag_print_ast = false;
     char* filename = NULL;
     if (argc == 1) {
@@ -387,6 +389,8 @@ int main(int argc,char* argv[])
 	} while(!feof(yyin));
     if (flag_print_ast) {
         root->printTree();
+        im = new InterMediate((RootASTNode *)root);
+        im->Generate(im->getRoot(), im->getTable());
     }
     return 0;
 }

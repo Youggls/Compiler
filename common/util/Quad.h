@@ -34,8 +34,9 @@
  * @enum MOD:   arg1 % arg2 to result
  * @enum POWER: arg1 ^ arg2 to result
  * @enum NEGATIVE:   - arg1 to result
- * @enum ASSIGN:       arg1 to result 
- * *********************
+ * @enum ASSIGN:       arg1 to result
+ * @enum PARAM: Param of the function will be called
+ ************************
 */
 enum class OpCode
 {
@@ -53,7 +54,8 @@ enum class OpCode
     MOD,
     POWER,
     NEGATIVE,
-    ASSIGN
+    ASSIGN,
+    PARAM
 };
 
 union Arg {
