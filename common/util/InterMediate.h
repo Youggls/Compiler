@@ -32,6 +32,11 @@ private:
     std::stack<std::list<int>> trueList;
     std::stack<std::list<int>> falseList;
 
+    // Function for backpatch.
+    std::list<int> *makelist(int index);
+    std::list<int> *merge(std::list<int> *list1, std::list<int> *list2);
+    void backpatch(std::list<int> *backList, int target);
+
 public:
     InterMediate(RootASTNode *rootNode);
     void Generate(AbstractASTNode *node, SymbolTable *symbolTable);
@@ -39,8 +44,6 @@ public:
     SymbolTable *GenerateStmt(StmtASTNode *node, SymbolTable *symbolTable);
     symbol *GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable);
     Quad *CaculateOp(OpCode op, AbstractASTNode *arg1Node, AbstractASTNode *arg2Node, symbol *result, SymbolTable *symbalTable);
-    std::list<int> *makelist(int index);
-    std::list<int> *merge(std::list<int> *list1, std::list<int> *list2);
-    void backpatch(std::list<int> *backList, int target);
+    void RelopOp(Quad *trueQuad, Quad *falseQuad,OpCode op, AbstractASTNode *arg1Node, AbstractASTNode *arg2Node, SymbolTable *symbolTable);
 };
 #endif
