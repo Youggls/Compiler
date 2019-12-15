@@ -389,7 +389,6 @@ int main(int argc,char* argv[])
 	} while(!feof(yyin));
     if (flag_print_ast) {
         root->printTree();
-        root->printTree();
         im = new InterMediate((RootASTNode *)root);
         im->Generate(im->getRoot(), im->getTable());
     }
