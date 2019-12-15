@@ -39,5 +39,8 @@ public:
     SymbolTable *GenerateStmt(StmtASTNode *node, SymbolTable *symbolTable);
     symbol *GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable);
     Quad *CaculateOp(OpCode op, AbstractASTNode *arg1Node, AbstractASTNode *arg2Node, symbol *result, SymbolTable *symbalTable);
+    std::list<int> *makelist(int index);
+    std::list<int> *merge(std::list<int> *list1, std::list<int> *list2);
+    void backpatch(std::list<int> *backList, int target);
 };
 #endif

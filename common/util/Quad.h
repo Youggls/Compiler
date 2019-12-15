@@ -19,27 +19,31 @@
 #include "../trees.h"
 
 /***********************
- * Operation Code for a Quad.
+ * Operation Code for a Quad:
  * @enum JUMP:  JUMP operation.
- * @enum JUMP_SMALL:    if arg1 < arg2, JUMP
- * @enum JUMP_GRATE:    if arg1 > arg2, JUMP
- * @enum JUMP_EQUAL:    if arg1 = arg2, JUMP
- * @enum JUMP_NOT_EQUAL:    if arg1 != arg2, JUMP
+ * @enum JUMP_SMALL:    if arg1 <  arg2, JUMP
+ * @enum JUMP_EQ_SMALL: if arg1 <= arg2, JUMP
+ * @enum JUMP_GRATE:    if arg1 >  arg2, JUMP
+ * @enum JUMP_EQ_GRATE: if arg1 >= arg2, JUMP
+ * @enum JUMP_EQUAL:    if arg1 == arg2, JUMP
+ * @enum JUMP_NOT_EQUAL:if arg1 != arg2, JUMP
  * @enum PLUS:  arg1 + arg2 to result
- * @enum MINUS:   arg1 - arg2 to result
+ * @enum MINUS: arg1 - arg2 to result
  * @enum TIMES: arg1 * arg2 to result
  * @enum DIV:   arg1 / arg2 to result
  * @enum MOD:   arg1 % arg2 to result
  * @enum POWER: arg1 ^ arg2 to result
- * @enum SUB: - arg1 to result.
- * @enum ASSIGN:    result = arg1 
+ * @enum SUB:        - arg1 to result
+ * @enum ASSIGN:       arg1 to result 
  * *********************
 */
 enum class OpCode
 {
     JUMP,
     JUMP_SMALL,
+    JUMP_EQ_SMALL,
     JUMP_GREAT,
+    JUMP_EQ_GRATE,
     JUMP_EQUAL,
     JUMP_NOT_EQUAL,
     PLUS,
@@ -77,9 +81,8 @@ public:
     Quad(OpCode op, int arg1, int arg2, symbol *result);
 
     Quad(OpCode op, symbol *arg1, symbol *arg2, int result);
+    inline void backpatch(int target) { this->result.target = target; };
     // Quad(OpCode op, symbol *arg1, symbol *arg2, symbol *result);
     // Quad(OpCode op, symbol *arg1, symbol *arg2, int result)
 };
-
-std::vector<Quad> GenerateMC(AbstractASTNode *node, int depth);
 #endif

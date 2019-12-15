@@ -116,7 +116,7 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
         }
         this->quads.push_back(*temp);
         break;
-    case opType::Relop: // 需要回填
+    case opType::Relop: // 需要回填 < <= > >= != == 子节点 只可能是assignVar、literal
         break;
     case opType::Plus: // 可能需要重构一下，方便看
         symbol *result = new symbol(std::to_string(tempVar.size()), symbolType::integer);
@@ -178,7 +178,7 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
         break;
     case opType::Not:
         break;
-    // 上述好像得回填，跟relop一块解决
+    // 上述好像得回填，跟relop一块解决 子节点可能是assignVar、literal和OperatorASTNode
     default:
         break;
     }
@@ -249,3 +249,25 @@ Quad *InterMediate::CaculateOp(OpCode op, AbstractASTNode *arg1Node, AbstractAST
     }
     return temp;
 }
+
+std::list<int> *InterMediate::makelist(int index)
+{
+    std::list<int> *jumpList = new std::list<int>();
+    jumpList->push_back(index);
+    return jumpList;
+}
+std::list<int> *InterMediate::merge(std::list<int> *list1, std::list<int> *list2)
+{
+    list1->merge(*list2);
+    return list1;
+}
+void InterMediate::backpatch(std::list<int> *backList, int target)
+{
+    std::list<int>::iterator it;
+    for (it = backList->begin(); it != backList->end(); it++)
+    {
+        quads[*it].backpatch(target);
+    }
+    return;
+}
+// void InterMediate::CompareOp(OpCode op, AbstractASTNode* arg1Node, AbstractASTNode *arg2Node, symbol)
