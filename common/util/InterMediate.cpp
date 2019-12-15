@@ -55,12 +55,12 @@ void InterMediate::Generate(AbstractASTNode *node, SymbolTable *symbolTable)
             p = p->getPeer();
         }
         break;
-    // case ASTNodeType::assignVar: // 叶节点
-    //     break;
-    // case ASTNodeType::loop:
-    //     break;
-    // case ASTNodeType::select:
-    //     break;
+    case ASTNodeType::assignVar: // 叶节点
+        break;
+    case ASTNodeType::loop:
+        break;
+    case ASTNodeType::select:
+        break;
     case ASTNodeType::root:
         while (p != NULL)
         {
@@ -200,13 +200,74 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
         temp = this->CaculateOp(OpCode::POWER, arg1Node, arg2Node, result, symbolTable);
         this->quads.push_back(*temp);
         break;
-    case opType::And:
+    case opType::Negative:
+        symbol *result = new symbol(std::to_string(tempVar.size()), symbolType::integer);
+        arg1Node = node->getChild();
+        tempVar.push_back(*result);
+        result = &tempVar.back();
+        if (arg1Node->getNodeType() == ASTNodeType::assignVar)
+        {
+            symbol *arg1 = symbolTable->findSymbol(arg1Node->getContent());
+            temp = new Quad(OpCode::NEGATIVE, arg1, result);
+        }
+        else if (arg1Node->getNodeType() == ASTNodeType::literal)
+        {
+            int arg1 = std::stoi(arg1Node->getContent());
+            temp = new Quad(OpCode::NEGATIVE, arg1, result);
+        }
+        else if (arg1Node->getNodeType() == ASTNodeType::op)
+        {
+            symbol *arg1 = GenerateOp((OperatorASTNode *)arg1Node, symbolTable);
+            temp = new Quad(OpCode::NEGATIVE, arg1, result);
+        }
+        this->quads.push_back(*temp);
+        break;
+
+    case opType::SingalAnd:
+        std::cout<< "Operation for '&' has not been finished."<<std::endl;
+        break;
+    case opType::And: // 保证栈顶是：node2List, node1List,所以得先遍历子节点，再到&&节点
+        std::list<int> leftTrue, rightTrue, leftFalse, rightFalse;
+        rightTrue = trueList.top();
+        trueList.pop();
+        leftTrue = trueList.top();
+        trueList.pop();
+        rightFalse = falseList.top();
+        falseList.pop();
+        leftFalse = falseList.top();
+        falseList.pop();
+        leftFalse.merge(rightFalse);
+        falseList.push(leftFalse);
+        trueList.push(rightTrue);
+        backpatch(&leftTrue, rightTrue.front()); // rightTrue.fromt() 这儿感觉会出bug，rightTrue里面不止一个的时候咋办
         break;
     case opType::Or:
+        std::list<int> leftTrue, rightTrue, leftFalse, rightFalse;
+        rightTrue = trueList.top();
+        trueList.pop();
+        leftTrue = trueList.top();
+        trueList.pop();
+        rightFalse = falseList.top();
+        falseList.pop();
+        leftFalse = falseList.top();
+        falseList.pop();
+
+        leftTrue.merge(rightTrue);
+        trueList.push(leftTrue);
+        falseList.push(rightFalse);
+        backpatch(&leftFalse, rightTrue.front());
         break;
     case opType::Not:
+        std::list<int> trueL, falseL;
+        trueL = trueList.top();
+        trueList.pop();
+        falseL = falseList.top();
+        falseList.pop();
+
+        trueList.push(falseL);
+        falseList.push(trueL);
         break;
-    // 上述好像得回填，跟relop一块解决 子节点可能是assignVar、literal和OperatorASTNode
+    // 上述好像得回填，跟relop一块解决 子节点可能是assignVar、literal和relop
     default:
         break;
     }

@@ -33,7 +33,7 @@
  * @enum DIV:   arg1 / arg2 to result
  * @enum MOD:   arg1 % arg2 to result
  * @enum POWER: arg1 ^ arg2 to result
- * @enum SUB:        - arg1 to result
+ * @enum NEGATIVE:   - arg1 to result
  * @enum ASSIGN:       arg1 to result 
  * *********************
 */
@@ -52,7 +52,7 @@ enum class OpCode
     DIV,
     MOD,
     POWER,
-    SUB,
+    NEGATIVE,
     ASSIGN
 };
 
