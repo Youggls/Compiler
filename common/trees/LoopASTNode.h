@@ -23,5 +23,7 @@ public:
     void printInfo(int depth);
     inline LoopType getType() { return this->loopType; }
     inline AbstractASTNode *getCond() { return this->cond; }
+    inline AbstractASTNode *getDec() { return this->dec; }
+    inline AbstractASTNode *getAction() { return this->action; }
 };
 #endif // !LOOPASTNODE_H

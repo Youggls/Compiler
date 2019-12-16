@@ -33,14 +33,20 @@ void LoopASTNode::printInfo(int depth)
     if (this->loopType == LoopType::_for)
     {
         std::cout << "FOR" << std::endl;
+        // std::cout << "DEC:::::";
+
         AbstractASTNode::__printTree(this->dec, depth + 1);
+        // std::cout << "COND:::::";
+
         AbstractASTNode::__printTree(this->cond, depth + 1);
+        // std::cout << "ACTION:::::";
+
         AbstractASTNode::__printTree(this->action, depth + 1);
     }
     else
     {
         std::cout << "WHILE" << std::endl;
-        std::cout << (int)this->getChild()->getNodeType() <<std::endl;
+        std::cout << (int)this->getChild()->getNodeType() << std::endl;
         AbstractASTNode::__printTree(this->cond, depth + 1);
     }
 }

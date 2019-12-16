@@ -130,6 +130,26 @@ void InterMediate::Generate(AbstractASTNode *node, SymbolTable *symbolTable)
         LoopASTNode *loop = (LoopASTNode *)node;
         if (loop->getType() == LoopType::_for)
         {
+            SymbolTable *childTable = symbolTable->createChildTable(false);
+            Generate(((LoopASTNode *)node)->getDec(), childTable);
+            int start = quads.size();
+            Generate(((LoopASTNode *)node)->getCond(), childTable);
+            std::list<int> JudgeTrue = trueList.top();
+            std::list<int> JudgeFalse = falseList.top();
+            trueList.pop();
+            falseList.pop();
+            backpatch(&JudgeTrue, JudgeTrue.back() + 2);
+            while (p != NULL)
+            {
+                Generate(p, childTable);
+                p = p->getPeer();
+            }
+            Generate(((LoopASTNode *)node)->getAction(), childTable);
+
+            Quad *temp = new Quad(OpCode::JUMP, start);
+            this->quads.push_back(*temp);
+            int end = quads.size();
+            backpatch(&JudgeFalse, end);
         }
         else if (loop->getType() == LoopType::_while)
         {
@@ -384,7 +404,23 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
     }
     case opType::SingalAnd:
     {
-        std::cout << "Operation for '&' has not been finished." << std::endl;
+        symbol *result = new symbol("Temp" + std::to_string(tempVar.size()), symbolType::integer);
+        arg1Node = node->getChild();
+        tempVar.push_back(result);
+        if (arg1Node->getNodeType() == ASTNodeType::assignVar)
+        {
+            symbol *arg1 = symbolTable->findSymbol(arg1Node->getContent());
+            temp = new Quad(OpCode::GET_ADDRESS, arg1, result);
+        }
+        else
+        {
+            // std::cout << "\033[33mError: \033[0m"
+            //           << " lvalue required as unary ‘&’ operand" << std::endl;
+            exit(-1);
+        }
+        this->quads.push_back(*temp);
+        return result;
+        // std::cout << "Operation for '&' has not been finished." << std::endl;
         break;
     }
     case opType::And: // 保证栈顶是：node2List, node1List,所以得先遍历子节点，再到&&节点

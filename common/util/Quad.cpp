@@ -4,6 +4,8 @@
 Quad::Quad(OpCode op, int result)
 {
     this->op = op;
+    this->arg1.var = NULL;
+    this->arg2.var = NULL;
     this->result.target = result;
     this->flag = 3;
 }
@@ -12,6 +14,7 @@ Quad::Quad(OpCode op, symbol *arg1, symbol *result)
 {
     this->op = op;
     this->arg1.var = arg1;
+    this->arg2.var = NULL;
     this->result.var = result;
     this->flag = 7;
 }
@@ -20,6 +23,7 @@ Quad::Quad(OpCode op, int arg1, symbol *result)
 {
     this->op = op;
     this->arg1.target = arg1;
+    this->arg2.var = NULL;
     this->result.var = result;
     this->flag = 6;
 }
@@ -117,6 +121,8 @@ std::string Quad::printOp()
         return "   NEGATIVE   ";
     case OpCode::ASSIGN:
         return "    ASSIGN    ";
+    case OpCode::GET_ADDRESS:
+        return " GET_ADDRESS  ";
     case OpCode::PARAM:
         return "    PARAM     ";
     case OpCode::RETURN:

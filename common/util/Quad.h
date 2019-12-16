@@ -35,6 +35,7 @@
  * @enum POWER: arg1 ^ arg2 to result
  * @enum NEGATIVE:   - arg1 to result
  * @enum ASSIGN:       arg1 to result
+ * @enum GET_ADDRESS: &arg1 to reuslt
  * @enum PARAM: Param of the function will be called
  * @enum RETURN: Exit from a function
  ************************
@@ -56,6 +57,7 @@ enum class OpCode
     POWER,
     NEGATIVE,
     ASSIGN,
+    GET_ADDRESS,
     PARAM,
     RETURN
 };

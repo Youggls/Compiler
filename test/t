@@ -1,5 +1,10 @@
 int main()
 {
     int a;
-    a=a+2;
+    a = &a;
+    a = a + 2;
+    for (a = 3; a < 5; a = a + 2)
+    {
+        a = a - 1;
+    }
 }
