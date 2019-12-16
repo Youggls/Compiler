@@ -1,7 +1,9 @@
 void main() {
-    int b = 12;
+    int b;
+    b = 12;
 
-    int a = 0;
+    int a;
+    a = 0;
     a = b + 13;
     int i;
     if ( !a ) {

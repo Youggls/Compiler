@@ -31,6 +31,7 @@ private:
 
     std::stack<std::list<int>> trueList;
     std::stack<std::list<int>> falseList;
+    std::stack<int> signal;
 
     // Function for backpatch.
     std::list<int> *makelist(int index);
@@ -40,7 +41,7 @@ private:
 public:
     inline AbstractASTNode *getRoot() { return this->root; }
     inline SymbolTable *getTable() { return this->rootTable; }
-    inline std::vector<Quad> getQuads() {return this->quads;}
+    inline std::vector<Quad> getQuads() { return this->quads; }
     InterMediate(RootASTNode *rootNode);
     void Generate(AbstractASTNode *node, SymbolTable *symbolTable);
     // Create a child symbol table to generate follow code.

@@ -64,10 +64,19 @@ void InterMediate::Generate(AbstractASTNode *node, SymbolTable *symbolTable)
     }
     case ASTNodeType::op: // 它的子节点只能是 literal / assignVar / op
     {
-        while (p != NULL)
+        if (((OperatorASTNode *)node)->getType() == opType::And || ((OperatorASTNode *)node)->getType() == opType::Or)
         {
             Generate(p, symbolTable);
-            p = p->getPeer();
+            signal.push(quads.size());
+            Generate(p->getPeer(), symbolTable);
+        }
+        else if (((OperatorASTNode *)node)->getType() == opType::Not || ((OperatorASTNode *)node)->getType() == opType::Relop)
+        {
+            while (p != NULL)
+            {
+                Generate(p, symbolTable);
+                p = p->getPeer();
+            }
         }
         this->GenerateOp((OperatorASTNode *)node, symbolTable);
         break;
@@ -209,7 +218,7 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
 {
     Quad *temp;
     AbstractASTNode *arg1Node, *arg2Node;
-    switch (node->getType()) // 报错是switch 多重定义
+    switch (node->getType())
     {
     case opType::Assignop:
     {
@@ -242,8 +251,8 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
             temp = new Quad(OpCode::ASSIGN, arg1, result);
         }
         this->quads.push_back(*temp);
-        break;
         return result;
+        break;
     }
     case opType::Relop: // 需要回填：把index加入trueList和falseList，等别的操作回填它。 < <= > >= != == 子节点 只可能是assignVar、literal
     {
@@ -285,8 +294,8 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
         result = tempVar.back();
         temp = this->CaculateOp(OpCode::PLUS, arg1Node, arg2Node, result, symbolTable);
         this->quads.push_back(*temp);
-        break;
         return result;
+        break;
     }
     case opType::Minus:
     {
@@ -297,8 +306,8 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
         result = tempVar.back();
         temp = this->CaculateOp(OpCode::MINUS, arg1Node, arg2Node, result, symbolTable);
         this->quads.push_back(*temp);
-        break;
         return result;
+        break;
     }
     case opType::Times:
     {
@@ -309,8 +318,8 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
         result = tempVar.back();
         temp = this->CaculateOp(OpCode::TIMES, arg1Node, arg2Node, result, symbolTable);
         this->quads.push_back(*temp);
-        break;
         return result;
+        break;
     }
     case opType::Div:
     {
@@ -321,8 +330,8 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
         result = tempVar.back();
         temp = this->CaculateOp(OpCode::DIV, arg1Node, arg2Node, result, symbolTable);
         this->quads.push_back(*temp);
-        break;
         return result;
+        break;
     }
     case opType::Mod:
     {
@@ -333,8 +342,8 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
         result = tempVar.back();
         temp = this->CaculateOp(OpCode::MOD, arg1Node, arg2Node, result, symbolTable);
         this->quads.push_back(*temp);
-        break;
         return result;
+        break;
     }
     case opType::Power:
     {
@@ -345,8 +354,8 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
         result = tempVar.back();
         temp = this->CaculateOp(OpCode::POWER, arg1Node, arg2Node, result, symbolTable);
         this->quads.push_back(*temp);
-        break;
         return result;
+        break;
     }
     case opType::Negative:
     {
@@ -370,8 +379,8 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
             temp = new Quad(OpCode::NEGATIVE, arg1, result);
         }
         this->quads.push_back(*temp);
-        break;
         return result;
+        break;
     }
     case opType::SingalAnd:
     {
@@ -389,10 +398,12 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
         falseList.pop();
         leftFalse = falseList.top();
         falseList.pop();
+        // !!!!!
         leftFalse.merge(rightFalse);
         falseList.push(leftFalse);
         trueList.push(rightTrue);
-        backpatch(&leftTrue, rightTrue.front()); // rightTrue.fromt() 这儿感觉会出bug，rightTrue里面不止一个的时候咋办
+        backpatch(&leftTrue, signal.top());
+        signal.pop();
         break;
     }
     case opType::Or:
@@ -406,11 +417,12 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
         falseList.pop();
         leftFalse = falseList.top();
         falseList.pop();
-
+        //!!!!!
         leftTrue.merge(rightTrue);
         trueList.push(leftTrue);
         falseList.push(rightFalse);
-        backpatch(&leftFalse, rightTrue.front());
+        backpatch(&leftFalse, signal.top());
+        signal.pop();
         break;
     }
     case opType::Not:
@@ -527,7 +539,6 @@ void InterMediate::RelopOp(Quad *trueQuad, Quad *falseQuad, OpCode op, AbstractA
     std::list<int> falseL; // Same as the upper on.
     falseL.push_back(quads.size());
     this->quads.push_back(*falseQuad);
-    std::cout << "Here relop Push in" << std::endl;
     trueList.push(trueL);
     falseList.push(falseL);
     // 感觉这儿可能会出问题，留意！
@@ -557,9 +568,11 @@ void InterMediate::backpatch(std::list<int> *backList, int target)
 void InterMediate::printQuads()
 {
     std::vector<Quad>::iterator it;
-    std::cout << "   Operator   \targ1\targ2\tresult" << std::endl;
+    std::cout << "\t   Operator   \targ1\targ2\tresult" << std::endl;
+    int count = 0;
     for (it = this->quads.begin(); it != this->quads.end(); it++)
     {
+        std::cout << count++ << "\t";
         it->printQuad();
     }
     return;
