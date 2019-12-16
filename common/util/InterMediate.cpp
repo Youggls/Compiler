@@ -1,5 +1,6 @@
 #include "InterMediate.h"
 #include <typeinfo>
+#include <cstdio>
 InterMediate::InterMediate(RootASTNode *rootNode)
 {
     tempVar.reserve(100);
@@ -16,7 +17,7 @@ void InterMediate::Generate(AbstractASTNode *node, SymbolTable *symbolTable)
     if (node == NULL)
         return;
     AbstractASTNode *p = node->getChild();
-
+    node->printInfo(1);
     switch (node->getNodeType())
     {
     case ASTNodeType::defFunc:
@@ -49,9 +50,11 @@ void InterMediate::Generate(AbstractASTNode *node, SymbolTable *symbolTable)
             {
                 Quad *trueQuad = new Quad(OpCode::JUMP_GREAT, std::stoi(node->getContent()), 0, (int)NULL);
                 Quad *falseQuad = new Quad(OpCode::JUMP, (int)NULL);
-                std::list<int> trueL(quads.size());
+                std::list<int> trueL;
+                trueL.push_back(quads.size());
                 this->quads.push_back(*trueQuad);
-                std::list<int> falseL(quads.size());
+                std::list<int> falseL;
+                falseL.push_back(quads.size());
                 this->quads.push_back(*falseQuad);
                 trueList.push(trueL);
                 falseList.push(falseL);
@@ -82,6 +85,8 @@ void InterMediate::Generate(AbstractASTNode *node, SymbolTable *symbolTable)
     {
         DefVarASTNode *tempNode = (DefVarASTNode *)node; // 下面一直报错，看着烦
         symbolTable->addSymbol(tempNode->getContent(), tempNode->getSymbolType());
+        std::cout << "插入符号表：" << std::endl;
+        symbol *ppp = symbolTable->findSymbol(tempNode->getContent());
         while (p != NULL)
         {
             Generate(p, symbolTable);
@@ -99,9 +104,11 @@ void InterMediate::Generate(AbstractASTNode *node, SymbolTable *symbolTable)
                 symbol *arg1 = symbolTable->findSymbol(node->getContent());
                 Quad *trueQuad = new Quad(OpCode::JUMP_GREAT, arg1, 0, (int)NULL);
                 Quad *falseQuad = new Quad(OpCode::JUMP, (int)NULL);
-                std::list<int> trueL(quads.size());
+                std::list<int> trueL;
+                trueL.push_back(quads.size());
                 this->quads.push_back(*trueQuad);
-                std::list<int> falseL(quads.size());
+                std::list<int> falseL;
+                falseL.push_back(quads.size());
                 this->quads.push_back(*falseQuad);
                 trueList.push(trueL);
                 falseList.push(falseL);
@@ -182,7 +189,7 @@ void InterMediate::Generate(AbstractASTNode *node, SymbolTable *symbolTable)
         std::cout << "Hello! Something Wrong happened!";
         break;
     }
-    std::cout << "Last content is: " << node->getContent() << "\tType is:" << (int)node->getNodeType() << std::endl;
+    // std::cout << "Last content is: " << node->getContent() << "\tType is:" << (int)node->getNodeType() << std::endl;
 }
 
 SymbolTable *InterMediate::GenerateStmt(StmtASTNode *node, SymbolTable *symbolTable)
@@ -191,6 +198,10 @@ SymbolTable *InterMediate::GenerateStmt(StmtASTNode *node, SymbolTable *symbolTa
         return symbolTable;
     if (node->getParent()->getNodeType() == ASTNodeType::loop)
         return symbolTable;
+    if (node->getParent()->getNodeType() == ASTNodeType::defFunc)
+        return symbolTable;
+    // std::cout << symbolTable << "新建了一个子表" << std::endl;
+    printf("%d 新建了一个子表\n", symbolTable);
     return symbolTable->createChildTable(false);
 }
 
@@ -210,8 +221,9 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
         }
         catch (...)
         {
-            std::cout << "Exception occured" << std::endl;
+            std::cout << "Exception occured. 出现异常了！" << std::endl;
         }
+        std::cout << node->getChild()->getContent() << std::endl;
         // 这里可能得捕获 赋值给常量的异常、变量未定义的异常
         AbstractASTNode *arg1Node = node->getChild()->getPeer();
         if (arg1Node->getNodeType() == ASTNodeType::assignVar) // Var = Var
@@ -509,9 +521,11 @@ void InterMediate::RelopOp(Quad *trueQuad, Quad *falseQuad, OpCode op, AbstractA
         trueQuad = new Quad(op, std::stoi(arg1Node->getContent()), std::stoi(arg2Node->getContent()), (int)NULL);
         falseQuad = new Quad(OpCode::JUMP, (int)NULL);
     }
-    std::list<int> trueL(quads.size()); // Use size to get the index of true quad will be pushed.
+    std::list<int> trueL; // Use size to get the index of true quad will be pushed.
+    trueL.push_back(quads.size());
     this->quads.push_back(*trueQuad);
-    std::list<int> falseL(quads.size()); // Same as the upper on.
+    std::list<int> falseL; // Same as the upper on.
+    falseL.push_back(quads.size());
     this->quads.push_back(*falseQuad);
     std::cout << "Here relop Push in" << std::endl;
     trueList.push(trueL);

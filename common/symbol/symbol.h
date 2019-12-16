@@ -60,7 +60,7 @@ public:
     static const int FAIL = -1;
     // 如果当前作用域是函数，isFun则为true，否则为false
     SymbolTable(bool isFun);
-    // If success, return SUCCESS, else return FAILED.
+    // If success, return SUCCESS = 0, else return FAILED = -1.
     int addSymbol(std::string idName, symbolType idType);
     // Create child symbol table, set peer table automatically
     SymbolTable *createChildTable(bool isFun);
