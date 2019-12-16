@@ -125,6 +125,8 @@ std::string Quad::printOp()
         return " GET_ADDRESS  ";
     case OpCode::PARAM:
         return "    PARAM     ";
+    case OpCode::CALL:
+        return "     CALL     ";
     case OpCode::RETURN:
         return "   RETURN     ";
     default:

@@ -31,7 +31,52 @@ void InterMediate::Generate(AbstractASTNode *node, SymbolTable *symbolTable)
         }
         break;
     }
-        // case ASTNodeType::callFunc:
+    case ASTNodeType::callFunc:
+    {
+        int count = 0;
+        AbstractASTNode *var = ((CallFunASTNode *)node)->getVarList();
+        while (var != NULL)
+        {
+            count = count + 1;
+            Quad *temp;
+            std::cout << var->getContent() << "\t Type is: " << (int)var->getNodeType() << std::endl;
+            if (var->getNodeType() == ASTNodeType::assignVar)
+            {
+                symbol *arg1 = symbolTable->findSymbol(var->getContent());
+                if (arg1 == NULL)
+                {
+                    std::cout << "\033[31mError: \033[0m"
+                              << "value not defined" << std::endl;
+                    exit(1);
+                }
+                temp = new Quad(OpCode::PARAM, arg1, (symbol *)NULL);
+            }
+            else if (var->getNodeType() == ASTNodeType::literal)
+            {
+                int arg1 = std::stoi(var->getContent());
+                temp = new Quad(OpCode::PARAM, arg1, (symbol *)NULL);
+            }
+            else if (var->getNodeType() == ASTNodeType::op)
+            {
+                symbol *arg1 = GenerateOp((OperatorASTNode *)var, symbolTable, false);
+                temp = new Quad(OpCode::PARAM, arg1, (symbol *)NULL);
+            }
+            this->quads.push_back(*temp);
+            var = var->getPeer();
+        }
+        // FuncSymbol
+        FuncSymbol *funSym = this->funcTable.findFunction(node->getContent());
+        if (funSym == NULL)
+        {
+            std::cout << "\033[31Error: \033[0m"
+                      << " function is not decleared." << std::endl;
+            exit(1);
+        }
+        symbol *funcSymbol = new symbol(funSym->getFunName(), symbolType::Void);
+        symbol *tempV = new symbol("Temp" + std::to_string(tempVar.size()), symbolType::integer);
+        Quad *temp = new Quad(OpCode::CALL, funcSymbol, count, tempV);
+        this->quads.push_back(*temp);
+    }
         // 暂且放下，没想好四元式咋表示
         // JUMP - - Functable
         /*
@@ -41,7 +86,7 @@ void InterMediate::Generate(AbstractASTNode *node, SymbolTable *symbolTable)
             param t_4
             call f, 4
         */
-    case ASTNodeType::literal: //必是叶节点，直接pass. ！不能直接pass，父节点是&& || !的时候，要弄个truelist 和falselist
+    case ASTNodeType::literal:
     {
         if (node->getParent()->getNodeType() == ASTNodeType::op)
         {
@@ -62,7 +107,7 @@ void InterMediate::Generate(AbstractASTNode *node, SymbolTable *symbolTable)
         }
         break;
     }
-    case ASTNodeType::op: // 它的子节点只能是 literal / assignVar / op
+    case ASTNodeType::op:
     {
         if (((OperatorASTNode *)node)->getType() == opType::And || ((OperatorASTNode *)node)->getType() == opType::Or)
         {
@@ -78,10 +123,10 @@ void InterMediate::Generate(AbstractASTNode *node, SymbolTable *symbolTable)
                 p = p->getPeer();
             }
         }
-        this->GenerateOp((OperatorASTNode *)node, symbolTable);
+        this->GenerateOp((OperatorASTNode *)node, symbolTable, false);
         break;
     }
-    case ASTNodeType::stmt: // (1/1) 子符号表 仅在Exp Stmt时候创建子符号表
+    case ASTNodeType::stmt:
     {
         while (p != NULL)
         {
@@ -92,7 +137,7 @@ void InterMediate::Generate(AbstractASTNode *node, SymbolTable *symbolTable)
     }
     case ASTNodeType::defVar:
     {
-        DefVarASTNode *tempNode = (DefVarASTNode *)node; // 下面一直报错，看着烦
+        DefVarASTNode *tempNode = (DefVarASTNode *)node;
         symbolTable->addSymbol(tempNode->getContent(), tempNode->getSymbolType());
         std::cout << "插入符号表：" << std::endl;
         symbol *ppp = symbolTable->findSymbol(tempNode->getContent());
@@ -103,7 +148,7 @@ void InterMediate::Generate(AbstractASTNode *node, SymbolTable *symbolTable)
         }
         break;
     }
-    case ASTNodeType::assignVar: // 叶节点
+    case ASTNodeType::assignVar:
     {
         if (node->getParent()->getNodeType() == ASTNodeType::op)
         {
@@ -229,12 +274,10 @@ SymbolTable *InterMediate::GenerateStmt(StmtASTNode *node, SymbolTable *symbolTa
         return symbolTable;
     if (node->getParent()->getNodeType() == ASTNodeType::defFunc)
         return symbolTable;
-    // std::cout << symbolTable << "新建了一个子表" << std::endl;
-    printf("%d 新建了一个子表\n", symbolTable);
     return symbolTable->createChildTable(false);
 }
 
-symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable)
+symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable, bool FuncCall)
 {
     Quad *temp;
     AbstractASTNode *arg1Node, *arg2Node;
@@ -255,14 +298,14 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
         std::cout << node->getChild()->getContent() << std::endl;
         // 这里可能得捕获 赋值给常量的异常、变量未定义的异常
         AbstractASTNode *arg1Node = node->getChild()->getPeer();
-        if (arg1Node->getNodeType() == ASTNodeType::assignVar) // Var = Var
+        if (arg1Node->getNodeType() == ASTNodeType::assignVar)
         {
             symbol *arg1 = symbolTable->findSymbol(arg1Node->getContent());
             temp = new Quad(OpCode::ASSIGN, arg1, result);
         }
         else if (arg1Node->getNodeType() == ASTNodeType::op)
         {
-            symbol *arg1 = GenerateOp((OperatorASTNode *)arg1Node, symbolTable);
+            symbol *arg1 = GenerateOp((OperatorASTNode *)arg1Node, symbolTable, FuncCall);
             temp = new Quad(OpCode::ASSIGN, arg1, result);
         }
         else if (arg1Node->getNodeType() == ASTNodeType::literal)
@@ -270,7 +313,8 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
             int arg1 = std::stoi(arg1Node->getContent());
             temp = new Quad(OpCode::ASSIGN, arg1, result);
         }
-        this->quads.push_back(*temp);
+        if (!FuncCall)
+            this->quads.push_back(*temp);
         return result;
         break;
     }
@@ -312,8 +356,9 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
         arg2Node = arg1Node->getPeer();
         tempVar.push_back(result);
         result = tempVar.back();
-        temp = this->CaculateOp(OpCode::PLUS, arg1Node, arg2Node, result, symbolTable);
-        this->quads.push_back(*temp);
+        temp = this->CaculateOp(OpCode::PLUS, arg1Node, arg2Node, result, symbolTable, FuncCall);
+        if (!FuncCall)
+            this->quads.push_back(*temp);
         return result;
         break;
     }
@@ -324,8 +369,9 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
         arg2Node = arg1Node->getPeer();
         tempVar.push_back(result);
         result = tempVar.back();
-        temp = this->CaculateOp(OpCode::MINUS, arg1Node, arg2Node, result, symbolTable);
-        this->quads.push_back(*temp);
+        temp = this->CaculateOp(OpCode::MINUS, arg1Node, arg2Node, result, symbolTable, FuncCall);
+        if (!FuncCall)
+            this->quads.push_back(*temp);
         return result;
         break;
     }
@@ -336,8 +382,9 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
         arg2Node = arg1Node->getPeer();
         tempVar.push_back(result);
         result = tempVar.back();
-        temp = this->CaculateOp(OpCode::TIMES, arg1Node, arg2Node, result, symbolTable);
-        this->quads.push_back(*temp);
+        temp = this->CaculateOp(OpCode::TIMES, arg1Node, arg2Node, result, symbolTable, FuncCall);
+        if (!FuncCall)
+            this->quads.push_back(*temp);
         return result;
         break;
     }
@@ -348,8 +395,9 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
         arg2Node = arg1Node->getPeer();
         tempVar.push_back(result);
         result = tempVar.back();
-        temp = this->CaculateOp(OpCode::DIV, arg1Node, arg2Node, result, symbolTable);
-        this->quads.push_back(*temp);
+        temp = this->CaculateOp(OpCode::DIV, arg1Node, arg2Node, result, symbolTable, FuncCall);
+        if (!FuncCall)
+            this->quads.push_back(*temp);
         return result;
         break;
     }
@@ -360,8 +408,9 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
         arg2Node = arg1Node->getPeer();
         tempVar.push_back(result);
         result = tempVar.back();
-        temp = this->CaculateOp(OpCode::MOD, arg1Node, arg2Node, result, symbolTable);
-        this->quads.push_back(*temp);
+        temp = this->CaculateOp(OpCode::MOD, arg1Node, arg2Node, result, symbolTable, FuncCall);
+        if (!FuncCall)
+            this->quads.push_back(*temp);
         return result;
         break;
     }
@@ -372,8 +421,9 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
         arg2Node = arg1Node->getPeer();
         tempVar.push_back(result);
         result = tempVar.back();
-        temp = this->CaculateOp(OpCode::POWER, arg1Node, arg2Node, result, symbolTable);
-        this->quads.push_back(*temp);
+        temp = this->CaculateOp(OpCode::POWER, arg1Node, arg2Node, result, symbolTable, FuncCall);
+        if (!FuncCall)
+            this->quads.push_back(*temp);
         return result;
         break;
     }
@@ -395,10 +445,11 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
         }
         else if (arg1Node->getNodeType() == ASTNodeType::op)
         {
-            symbol *arg1 = GenerateOp((OperatorASTNode *)arg1Node, symbolTable);
+            symbol *arg1 = GenerateOp((OperatorASTNode *)arg1Node, symbolTable, FuncCall);
             temp = new Quad(OpCode::NEGATIVE, arg1, result);
         }
-        this->quads.push_back(*temp);
+        if (!FuncCall)
+            this->quads.push_back(*temp);
         return result;
         break;
     }
@@ -414,13 +465,13 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
         }
         else
         {
-            // std::cout << "\033[33mError: \033[0m"
-            //           << " lvalue required as unary ‘&’ operand" << std::endl;
+            std::cout << "\033[31mError: \033[0m"
+                      << " lvalue required as unary ‘&’ operand" << std::endl;
             exit(-1);
         }
-        this->quads.push_back(*temp);
+        if (!FuncCall)
+            this->quads.push_back(*temp);
         return result;
-        // std::cout << "Operation for '&' has not been finished." << std::endl;
         break;
     }
     case opType::And: // 保证栈顶是：node2List, node1List,所以得先遍历子节点，再到&&节点
@@ -434,7 +485,6 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
         falseList.pop();
         leftFalse = falseList.top();
         falseList.pop();
-        // !!!!!
         leftFalse.merge(rightFalse);
         falseList.push(leftFalse);
         trueList.push(rightTrue);
@@ -453,7 +503,6 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
         falseList.pop();
         leftFalse = falseList.top();
         falseList.pop();
-        //!!!!!
         leftTrue.merge(rightTrue);
         trueList.push(leftTrue);
         falseList.push(rightFalse);
@@ -468,19 +517,17 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
         trueList.pop();
         falseL = falseList.top();
         falseList.pop();
-
         trueList.push(falseL);
         falseList.push(trueL);
         break;
     }
-    // 上述好像得回填，跟relop一块解决 子节点可能是assignVar、literal和relop
     default:
         break;
     }
     return NULL;
 }
 
-Quad *InterMediate::CaculateOp(OpCode op, AbstractASTNode *arg1Node, AbstractASTNode *arg2Node, symbol *result, SymbolTable *symbolTable)
+Quad *InterMediate::CaculateOp(OpCode op, AbstractASTNode *arg1Node, AbstractASTNode *arg2Node, symbol *result, SymbolTable *symbolTable, bool FuncCall)
 {
     Quad *temp;
     // symbol *result = new symbol(std::to_string(tempVar.size()), symbolType::integer);
@@ -496,7 +543,7 @@ Quad *InterMediate::CaculateOp(OpCode op, AbstractASTNode *arg1Node, AbstractAST
     else if (arg1Node->getNodeType() == ASTNodeType::assignVar && arg2Node->getNodeType() == ASTNodeType::op)
     {
         symbol *arg1 = symbolTable->findSymbol(arg1Node->getContent());
-        symbol *arg2 = GenerateOp((OperatorASTNode *)arg2Node, symbolTable);
+        symbol *arg2 = GenerateOp((OperatorASTNode *)arg2Node, symbolTable, FuncCall);
         temp = new Quad(op, arg1, arg2, result);
     }
     else if (arg1Node->getNodeType() == ASTNodeType::assignVar && arg2Node->getNodeType() == ASTNodeType::literal)
@@ -507,19 +554,19 @@ Quad *InterMediate::CaculateOp(OpCode op, AbstractASTNode *arg1Node, AbstractAST
     }
     else if (arg1Node->getNodeType() == ASTNodeType::op && arg2Node->getNodeType() == ASTNodeType::assignVar)
     {
-        symbol *arg1 = GenerateOp((OperatorASTNode *)arg1Node, symbolTable);
+        symbol *arg1 = GenerateOp((OperatorASTNode *)arg1Node, symbolTable, FuncCall);
         symbol *arg2 = symbolTable->findSymbol(arg2Node->getContent());
         temp = new Quad(op, arg1, arg2, result);
     }
     else if (arg1Node->getNodeType() == ASTNodeType::op && arg2Node->getNodeType() == ASTNodeType::op)
     {
-        symbol *arg1 = GenerateOp((OperatorASTNode *)arg1Node, symbolTable);
-        symbol *arg2 = GenerateOp((OperatorASTNode *)arg2Node, symbolTable);
+        symbol *arg1 = GenerateOp((OperatorASTNode *)arg1Node, symbolTable, FuncCall);
+        symbol *arg2 = GenerateOp((OperatorASTNode *)arg2Node, symbolTable, FuncCall);
         temp = new Quad(op, arg1, arg2, result);
     }
     else if (arg1Node->getNodeType() == ASTNodeType::op && arg2Node->getNodeType() == ASTNodeType::literal)
     {
-        symbol *arg1 = GenerateOp((OperatorASTNode *)arg1Node, symbolTable);
+        symbol *arg1 = GenerateOp((OperatorASTNode *)arg1Node, symbolTable, FuncCall);
         int arg2 = std::stoi(arg2Node->getContent());
         temp = new Quad(op, arg1, arg2, result);
     }
@@ -533,7 +580,7 @@ Quad *InterMediate::CaculateOp(OpCode op, AbstractASTNode *arg1Node, AbstractAST
     else if (arg1Node->getNodeType() == ASTNodeType::literal && arg2Node->getNodeType() == ASTNodeType::op)
     {
         int arg1 = std::stoi(arg1Node->getContent());
-        symbol *arg2 = GenerateOp((OperatorASTNode *)arg2Node, symbolTable);
+        symbol *arg2 = GenerateOp((OperatorASTNode *)arg2Node, symbolTable, FuncCall);
         temp = new Quad(op, arg1, arg2, result);
     }
     else if (arg1Node->getNodeType() == ASTNodeType::literal && arg2Node->getNodeType() == ASTNodeType::literal)
@@ -547,8 +594,6 @@ Quad *InterMediate::CaculateOp(OpCode op, AbstractASTNode *arg1Node, AbstractAST
 
 void InterMediate::RelopOp(Quad *trueQuad, Quad *falseQuad, OpCode op, AbstractASTNode *arg1Node, AbstractASTNode *arg2Node, SymbolTable *symbolTable)
 {
-    // arg1 assignVar || literal
-
     if (arg1Node->getNodeType() == ASTNodeType::assignVar && arg2Node->getNodeType() == ASTNodeType::assignVar)
     {
         trueQuad = new Quad(op, symbolTable->findSymbol(arg1Node->getContent()), symbolTable->findSymbol(arg2Node->getContent()), (int)NULL);
@@ -569,16 +614,19 @@ void InterMediate::RelopOp(Quad *trueQuad, Quad *falseQuad, OpCode op, AbstractA
         trueQuad = new Quad(op, std::stoi(arg1Node->getContent()), std::stoi(arg2Node->getContent()), (int)NULL);
         falseQuad = new Quad(OpCode::JUMP, (int)NULL);
     }
-    std::list<int> trueL; // Use size to get the index of true quad will be pushed.
+    std::list<int> trueL; // Use size to get the index of true quad will be pushed
     trueL.push_back(quads.size());
     this->quads.push_back(*trueQuad);
-    std::list<int> falseL; // Same as the upper on.
+    std::list<int> falseL; // Same as the upper one
     falseL.push_back(quads.size());
     this->quads.push_back(*falseQuad);
     trueList.push(trueL);
     falseList.push(falseL);
-    // 感觉这儿可能会出问题，留意！
     return;
+}
+
+symbol *InterMediate::GenerateOpFuncCall(OperatorASTNode *node, SymbolTable *symbolTable)
+{
 }
 
 std::list<int> *InterMediate::makelist(int index)
@@ -613,4 +661,3 @@ void InterMediate::printQuads()
     }
     return;
 }
-// void InterMediate::CompareOp(OpCode op, AbstractASTNode* arg1Node, AbstractASTNode *arg2Node, symbol)

@@ -1,18 +1,6 @@
 #ifndef QUAD_H
 #define QUAD_H
 
-#define VAR "10VarASTNode"
-#define STMT "11StmtASTNode"
-#define ROOT "11RootASTNode"
-#define LOOP "11LoopASTNode"
-#define DEFINE_VAR "13DefVarASTNode"
-#define DEFINE_FUN "13DefFunASTNode"
-#define SELECT "13SelectASTNode"
-#define LITERAL "14LiteralASTNode" // 常量
-#define CALL "14CallFunASTNode"
-// IdentifierASTNode 等着删了，没用
-#define OPERATOR "15OperatorASTNode"
-
 #include <iostream>
 #include <string>
 #include "../symbol/symbol.h"
@@ -37,6 +25,7 @@
  * @enum ASSIGN:       arg1 to result
  * @enum GET_ADDRESS: &arg1 to reuslt
  * @enum PARAM: Param of the function will be called
+ * @enum CALL: CALL function
  * @enum RETURN: Exit from a function
  ************************
 */
@@ -59,6 +48,7 @@ enum class OpCode
     ASSIGN,
     GET_ADDRESS,
     PARAM,
+    CALL,
     RETURN
 };
 

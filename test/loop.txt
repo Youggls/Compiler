@@ -1,5 +1,6 @@
 int main()
 {
+    int a, b, c;
     int i;
     i = 1;
     while(i < 9) {
@@ -12,6 +13,6 @@ int main()
         i = i + 1;
     }
     {
-        main();
+        main(a, 2 + 2, 2);
     }
 }

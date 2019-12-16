@@ -1,17 +1,17 @@
 #ifndef INTERMEDIATE_H
 #define INTERMEDIATE_H
 
-#define VAR "10VarASTNode"
-#define STMT "11StmtASTNode"
-#define ROOT "11RootASTNode"
-#define LOOP "11LoopASTNode"
-#define DEFINE_VAR "13DefVarASTNode"
-#define DEFINE_FUN "13DefFunASTNode"
-#define SELECT "13SelectASTNode"
-#define LITERAL "14LiteralASTNode" // 常量
-#define CALL "14CallFunASTNode"
-// IdentifierASTNode 等着删了，没用
-#define OPERATOR "15OperatorASTNode"
+// #define VAR "10VarASTNode"
+// #define STMT "11StmtASTNode"
+// #define ROOT "11RootASTNode"
+// #define LOOP "11LoopASTNode"
+// #define DEFINE_VAR "13DefVarASTNode"
+// #define DEFINE_FUN "13DefFunASTNode"
+// #define SELECT "13SelectASTNode"
+// #define LITERAL "14LiteralASTNode" // 常量
+// #define CALL "14CallFunASTNode"
+// // IdentifierASTNode 等着删了，没用
+// #define OPERATOR "15OperatorASTNode"
 
 #include "../trees.h"
 #include "./Quad.h"
@@ -46,8 +46,9 @@ public:
     void Generate(AbstractASTNode *node, SymbolTable *symbolTable);
     // Create a child symbol table to generate follow code.
     SymbolTable *GenerateStmt(StmtASTNode *node, SymbolTable *symbolTable);
-    symbol *GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable);
-    Quad *CaculateOp(OpCode op, AbstractASTNode *arg1Node, AbstractASTNode *arg2Node, symbol *result, SymbolTable *symbalTable);
+    symbol *GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable, bool FuncCall);
+    Quad *CaculateOp(OpCode op, AbstractASTNode *arg1Node, AbstractASTNode *arg2Node, symbol *result, SymbolTable *symbalTable, bool FuncCall);
+    symbol *GenerateOpFuncCall(OperatorASTNode *node, SymbolTable *symbolTable);
     void RelopOp(Quad *trueQuad, Quad *falseQuad, OpCode op, AbstractASTNode *arg1Node, AbstractASTNode *arg2Node, SymbolTable *symbolTable);
     void printQuads();
 };
