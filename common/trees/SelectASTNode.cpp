@@ -10,12 +10,8 @@ SelectASTNode::SelectASTNode(char *content, SelectType type, AbstractASTNode *bo
     this->condition = cond;
     this->condition->setParent(this);
     this->elseStmt = elseStmt;
-    try
-    {
+    if (elseStmt) {
         this->elseStmt->setParent(this);
-    }
-    catch (...)
-    {
     }
 }
 
