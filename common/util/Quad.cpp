@@ -112,9 +112,9 @@ std::string Quad::printOp()
     case OpCode::TIMES:
         return "    TIMES     ";
     case OpCode::DIV:
-        return "      DIV     ";
+        return "     DIV      ";
     case OpCode::MOD:
-        return "      MOD     ";
+        return "     MOD      ";
     case OpCode::POWER:
         return "    POWER     ";
     case OpCode::NEGATIVE:
@@ -128,7 +128,7 @@ std::string Quad::printOp()
     case OpCode::CALL:
         return "     CALL     ";
     case OpCode::RETURN:
-        return "   RETURN     ";
+        return "    RETURN    ";
     default:
         break;
     }

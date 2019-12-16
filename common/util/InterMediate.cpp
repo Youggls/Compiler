@@ -90,6 +90,7 @@ void InterMediate::Generate(AbstractASTNode *node, SymbolTable *symbolTable)
         symbol *funcSymbol = new symbol(funSym->getKeyName(), symbolType::Void);
         // symbol *funcSymbol = new symbol(funSym->getFunName(), symbolType::Void);
         symbol *tempV = new symbol("Temp" + std::to_string(tempVar.size()), symbolType::integer);
+        tempVar.push_back(tempV);
         Quad *temp = new Quad(OpCode::CALL, funcSymbol, count, tempV);
         this->quads.push_back(*temp);
     }
@@ -146,11 +147,33 @@ void InterMediate::Generate(AbstractASTNode *node, SymbolTable *symbolTable)
     {
         DefVarASTNode *tempNode = (DefVarASTNode *)node;
         symbolTable->addSymbol(tempNode->getContent(), tempNode->getSymbolType());
-        symbol *ppp = symbolTable->findSymbol(tempNode->getContent());
-        while (p != NULL)
+        symbol *varSymbol = symbolTable->findSymbol(node->getContent());
+        if (p != NULL)
         {
-            Generate(p, symbolTable);
-            p = p->getPeer();
+            Quad *temp;
+            std::cout << "Def的子节点是：" << p->getContent() << std::endl;
+            if (p->getNodeType() == ASTNodeType::literal)
+            {
+                int arg1 = std::stoi(p->getContent());
+                temp = new Quad(OpCode::ASSIGN, arg1, varSymbol);
+            }
+            else if (p->getNodeType() == ASTNodeType::assignVar)
+            {
+                symbol *arg1 = symbolTable->findSymbol(p->getContent());
+                if (arg1 == NULL)
+                {
+                    std::cout << "\033[31mError: \033[0m"
+                              << "value not defined" << std::endl;
+                    exit(1);
+                }
+                temp = new Quad(OpCode::ASSIGN, arg1, varSymbol);
+            }
+            else if (p->getNodeType() == ASTNodeType::op)
+            {
+                symbol *arg1 = this->GenerateOp((OperatorASTNode *)p, symbolTable);
+                temp = new Quad(OpCode::ASSIGN, arg1, varSymbol);
+            }
+            this->quads.push_back(*temp);
         }
         break;
     }
@@ -274,13 +297,49 @@ void InterMediate::Generate(AbstractASTNode *node, SymbolTable *symbolTable)
 
 SymbolTable *InterMediate::GenerateStmt(StmtASTNode *node, SymbolTable *symbolTable)
 {
-    if (node->getStmtType() != StmtType::compStmt)
-        return symbolTable;
-    if (node->getParent()->getNodeType() == ASTNodeType::loop)
-        return symbolTable;
-    if (node->getParent()->getNodeType() == ASTNodeType::defFunc)
-        return symbolTable;
-    return symbolTable->createChildTable(false);
+    switch (node->getStmtType())
+    {
+    case StmtType::compStmt:
+    {
+        if (node->getParent()->getNodeType() == ASTNodeType::loop)
+            return symbolTable;
+        if (node->getParent()->getNodeType() == ASTNodeType::defFunc)
+            return symbolTable;
+        return symbolTable->createChildTable(false);
+    }
+    break;
+    case StmtType::returnStmt:
+    {
+        AbstractASTNode *p = node->getChild();
+        Quad *temp;
+        symbol *result = new symbol("Temp" + std::to_string(tempVar.size()), symbolType::integer);
+        tempVar.push_back(result);
+        if (p == NULL)
+        {
+            temp = new Quad(OpCode::RETURN, (symbol *)NULL, (symbol *)NULL, (symbol *)NULL);
+        }
+        else if (p->getNodeType() == ASTNodeType::literal)
+        {
+            int arg1 = std::stoi(p->getContent());
+            temp = new Quad(OpCode::RETURN, arg1, result);
+        }
+        else if (p->getNodeType() == ASTNodeType::assignVar)
+        {
+            symbol *arg1 = symbolTable->findSymbol(p->getContent());
+            temp = new Quad(OpCode::RETURN, arg1, result);
+        }
+        else if (p->getNodeType() == ASTNodeType::op)
+        {
+            symbol *arg1 = this->GenerateOp((OperatorASTNode *)p, symbolTable);
+            temp = new Quad(OpCode::RETURN, arg1, result);
+        }
+        quads.push_back(*temp);
+    }
+    break;
+    default:
+        break;
+    }
+    return symbolTable;
 }
 
 symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable)
