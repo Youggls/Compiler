@@ -1,5 +1,7 @@
-int a;
-void main() {
+void print(int a) {
+    int c;
+}
+int main() {
     a;
     int a, b = 1;
     a = b + (10 / 2) ^ 3; // pay attention to operation priority
@@ -13,8 +15,5 @@ void main() {
         }
     }
     print(a); // you can change this to your output function
-    return;
-}
-void print(int a) {
-    int c;
+    return a;
 }
