@@ -3,7 +3,10 @@ int main(int argc, int argv)
     {
         int c;
     }
-    int a = 1 + 1;
+    int a;
+    a = 1 + 1;
+    int b;
+    b = a + 2;
     int* aa = &a;
     int b = 3;
 }

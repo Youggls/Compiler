@@ -24,7 +24,7 @@
  * @enum JUMP_SMALL:    if arg1 <  arg2, JUMP
  * @enum JUMP_EQ_SMALL: if arg1 <= arg2, JUMP
  * @enum JUMP_GRATE:    if arg1 >  arg2, JUMP
- * @enum JUMP_EQ_GRATE: if arg1 >= arg2, JUMP
+ * @enum JUMP_EQ_GREAT: if arg1 >= arg2, JUMP
  * @enum JUMP_EQUAL:    if arg1 == arg2, JUMP
  * @enum JUMP_NOT_EQUAL:if arg1 != arg2, JUMP
  * @enum PLUS:  arg1 + arg2 to result
@@ -36,6 +36,7 @@
  * @enum NEGATIVE:   - arg1 to result
  * @enum ASSIGN:       arg1 to result
  * @enum PARAM: Param of the function will be called
+ * @enum RETURN: Exit from a function
  ************************
 */
 enum class OpCode
@@ -44,7 +45,7 @@ enum class OpCode
     JUMP_SMALL,
     JUMP_EQ_SMALL,
     JUMP_GREAT,
-    JUMP_EQ_GRATE,
+    JUMP_EQ_GREAT,
     JUMP_EQUAL,
     JUMP_NOT_EQUAL,
     PLUS,
@@ -55,7 +56,8 @@ enum class OpCode
     POWER,
     NEGATIVE,
     ASSIGN,
-    PARAM
+    PARAM,
+    RETURN
 };
 
 union Arg {
@@ -71,7 +73,14 @@ private:
     Arg arg1;
     Arg arg2;
     Arg result;
-
+/*********************
+ * |      | arg1 | arg2 | result|
+ * | int  |  0   |   0  |   0   |
+ * |symbol|  1   |   2  |   4   |
+ *********************
+*/
+    int flag;
+    std::string printOp();
 public:
     // Jump to the target
     Quad(OpCode op, int result);

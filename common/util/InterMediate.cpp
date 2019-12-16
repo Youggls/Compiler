@@ -186,7 +186,7 @@ void InterMediate::Generate(AbstractASTNode *node, SymbolTable *symbolTable)
         break;
     }
     default:
-        std::cout << "Hello! Something Wrong happened!";
+        std::cout << "Hello! Something Wrong happened!\n";
         break;
     }
     // std::cout << "Last content is: " << node->getContent() << "\tType is:" << (int)node->getNodeType() << std::endl;
@@ -256,7 +256,7 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
         }
         else if (node->getContent() == ">=")
         {
-            RelopOp(tempTrue, tempFalse, OpCode::JUMP_EQ_GRATE, arg1Node, arg2Node, symbolTable);
+            RelopOp(tempTrue, tempFalse, OpCode::JUMP_EQ_GREAT, arg1Node, arg2Node, symbolTable);
         }
         else if (node->getContent() == "<")
         {
@@ -278,7 +278,7 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
     }
     case opType::Plus: // 可能需要重构一下，方便看
     {
-        symbol *result = new symbol(std::to_string(tempVar.size()), symbolType::integer);
+        symbol *result = new symbol("Temp" + std::to_string(tempVar.size()), symbolType::integer);
         arg1Node = node->getChild();
         arg2Node = arg1Node->getPeer();
         tempVar.push_back(result);
@@ -290,7 +290,7 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
     }
     case opType::Minus:
     {
-        symbol *result = new symbol(std::to_string(tempVar.size()), symbolType::integer);
+        symbol *result = new symbol("Temp" + std::to_string(tempVar.size()), symbolType::integer);
         arg1Node = node->getChild();
         arg2Node = arg1Node->getPeer();
         tempVar.push_back(result);
@@ -302,7 +302,7 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
     }
     case opType::Times:
     {
-        symbol *result = new symbol(std::to_string(tempVar.size()), symbolType::integer);
+        symbol *result = new symbol("Temp" + std::to_string(tempVar.size()), symbolType::integer);
         arg1Node = node->getChild();
         arg2Node = arg1Node->getPeer();
         tempVar.push_back(result);
@@ -314,7 +314,7 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
     }
     case opType::Div:
     {
-        symbol *result = new symbol(std::to_string(tempVar.size()), symbolType::integer);
+        symbol *result = new symbol("Temp" + std::to_string(tempVar.size()), symbolType::integer);
         arg1Node = node->getChild();
         arg2Node = arg1Node->getPeer();
         tempVar.push_back(result);
@@ -326,7 +326,7 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
     }
     case opType::Mod:
     {
-        symbol *result = new symbol(std::to_string(tempVar.size()), symbolType::integer);
+        symbol *result = new symbol("Temp" + std::to_string(tempVar.size()), symbolType::integer);
         arg1Node = node->getChild();
         arg2Node = arg1Node->getPeer();
         tempVar.push_back(result);
@@ -338,7 +338,7 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
     }
     case opType::Power:
     {
-        symbol *result = new symbol(std::to_string(tempVar.size()), symbolType::integer);
+        symbol *result = new symbol("Temp" + std::to_string(tempVar.size()), symbolType::integer);
         arg1Node = node->getChild();
         arg2Node = arg1Node->getPeer();
         tempVar.push_back(result);
@@ -350,7 +350,7 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
     }
     case opType::Negative:
     {
-        symbol *result = new symbol(std::to_string(tempVar.size()), symbolType::integer);
+        symbol *result = new symbol("Temp" + std::to_string(tempVar.size()), symbolType::integer);
         arg1Node = node->getChild();
         tempVar.push_back(result);
         result = tempVar.back();
@@ -551,6 +551,16 @@ void InterMediate::backpatch(std::list<int> *backList, int target)
     for (it = backList->begin(); it != backList->end(); it++)
     {
         quads[*it].backpatch(target);
+    }
+    return;
+}
+void InterMediate::printQuads()
+{
+    std::vector<Quad>::iterator it;
+    std::cout << "   Operator   \targ1\targ2\tresult" << std::endl;
+    for (it = this->quads.begin(); it != this->quads.end(); it++)
+    {
+        it->printQuad();
     }
     return;
 }

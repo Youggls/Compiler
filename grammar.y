@@ -391,6 +391,7 @@ int main(int argc,char* argv[])
         root->printTree();
         im = new InterMediate((RootASTNode *)root);
         im->Generate(im->getRoot(), im->getTable());
+        im->printQuads();
     }
     return 0;
 }
