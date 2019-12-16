@@ -18,11 +18,10 @@ public:
 class AsmGenerator
 {
 private:
-    std::ostream os;
-    static int eax;
-    static int ebx;
-    static int ecx;
-    static int edx;
+    int eax;
+    int ebx;
+    int ecx;
+    int edx;
     std::string getRegister();
     void generateCallFunction();
     void generateSetArg();
@@ -30,7 +29,7 @@ private:
     void generateJmp();
     void generateDefFunction();
 public:
-    AsmGenerator(std::fstream& fos);
+    AsmGenerator();
     void generate();
 };
 
