@@ -22,6 +22,6 @@ AsmGenerator::AsmGenerator() {
     edx = 0;
 }
 
-std::string AsmGenerator::findRegister() {
-    
+std::string AsmGenerator::getRegister() {
+
 }

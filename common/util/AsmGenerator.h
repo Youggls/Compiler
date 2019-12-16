@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <fstream>
 #include "./AsmCode.h"
 
 class AsmCode {
@@ -17,7 +18,7 @@ public:
 class AsmGenerator
 {
 private:
-    std::ostream& os;
+    std::ostream os;
     static int eax;
     static int ebx;
     static int ecx;
@@ -29,7 +30,7 @@ private:
     void generateJmp();
     void generateDefFunction();
 public:
-    AsmGenerator();
+    AsmGenerator(std::fstream& fos);
     void generate();
 };
 
