@@ -24,7 +24,15 @@ AbstractASTNode::AbstractASTNode(char* content, ASTNodeType nodeType) {
 }
 
 void AbstractASTNode::addChildNode(AbstractASTNode* node) {
-    if (node != NULL) node->parent = this;
+    if (node != NULL) 
+    {
+        node->parent = this;
+        AbstractASTNode* peerNode = node->peer;
+        while(peerNode != NULL) {
+            peerNode->parent = this;
+            peerNode = peerNode->peer;
+        }
+    }
     this->child = node;
 }
 
