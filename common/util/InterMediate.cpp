@@ -23,6 +23,10 @@ void InterMediate::Generate(AbstractASTNode *node, SymbolTable *symbolTable)
     {
         FuncSymbol *func = new FuncSymbol(node);
         this->funcTable.addFunction(func);
+        Quad *temp;
+        symbol *tempSym = new symbol(func->getFunName(), symbolType::Void);
+        temp = new Quad(OpCode::FUNC_DEF, tempSym, (symbol *)NULL);
+        this->quads.push_back(*temp);
         while (p != NULL)
         {
             Generate(p, symbolTable->createChildTable(true));
@@ -378,6 +382,18 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
             int arg1 = std::stoi(arg1Node->getContent());
             temp = new Quad(OpCode::ASSIGN, arg1, result);
         }
+        else if (arg1Node->getNodeType() == ASTNodeType::callFunc)
+        {
+            Generate(arg1Node, symbolTable);
+            symbol *arg1 = tempVar.back();
+            temp = new Quad(OpCode::ASSIGN, arg1, result);
+        }
+        else
+        {
+            std::cout << "\033[31mError: \033[0m"
+                      << "No match type of" << (int)arg1Node->getNodeType() << "  Content:" << arg1Node->getContent() << std::endl;
+            exit(1);
+        }
         this->quads.push_back(*temp);
         return result;
         break;
@@ -644,6 +660,12 @@ Quad *InterMediate::CaculateOp(OpCode op, AbstractASTNode *arg1Node, AbstractAST
         int arg1 = std::stoi(arg1Node->getContent());
         int arg2 = std::stoi(arg2Node->getContent());
         temp = new Quad(op, arg1, arg2, result);
+    }
+    else
+    {
+        std::cout << "\033[31mError: \033[0m"
+                  << "No match type of" << (int)arg1Node->getNodeType() << "  Content:" << arg1Node->getContent() << std::endl;
+        exit(1);
     }
     return temp;
 }
