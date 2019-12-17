@@ -1,4 +1,5 @@
 #include "ASTNode.h"
+#include <typeinfo>
 
 AbstractASTNode::AbstractASTNode() {
     this->child = NULL;
@@ -23,10 +24,20 @@ AbstractASTNode::AbstractASTNode(char* content, ASTNodeType nodeType) {
 }
 
 void AbstractASTNode::addChildNode(AbstractASTNode* node) {
+    if (node != NULL) 
+    {
+        node->parent = this;
+        AbstractASTNode* peerNode = node->peer;
+        while(peerNode != NULL) {
+            peerNode->parent = this;
+            peerNode = peerNode->peer;
+        }
+    }
     this->child = node;
 }
 
 void AbstractASTNode::addPeerNode(AbstractASTNode* node) {
+    if (node != NULL) node->parent = this->parent;
     this->peer = node;
 }
 
@@ -42,9 +53,10 @@ AbstractASTNode* AbstractASTNode::getLastPeerNode()
 
 void AbstractASTNode::__printTree(AbstractASTNode* node, int depth) {
 	if (node == NULL) return;
+    std::cout << (int)node->nodeType<<" "  << typeid(*node).name() << "  " << "\t";
+    std::cout << depth;
 	for (int i = 0; i < depth; i++) std::cout << " ";
 	node->printInfo(depth);
-	// AbstractASTNode::__printTree(node->child, depth + 1);
 	AbstractASTNode* p = node->child;
 	while (p != NULL) {
 		AbstractASTNode::__printTree(p, depth + 1);
