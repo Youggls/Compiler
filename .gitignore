@@ -8,7 +8,7 @@ build/
 parser
 *.o
 *.gch
-
+out.asm
 # Lex and yacc target file
 Linux/
 win/
