@@ -1,6 +1,6 @@
 #include "VarASTNode.h"
 
-VarASTNode::VarASTNode(char* content, AbstractASTNode* value)
+VarASTNode::VarASTNode(char *content, AbstractASTNode *value)
     : AbstractASTNode(content, ASTNodeType::assignVar)
 {
     this->addChildNode(value);

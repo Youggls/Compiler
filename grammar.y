@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <cstring>
 #include "../common/trees.h"
+#include "../common/util/InterMediate.h"
 class AbstractASTNode;
 extern char *yytext;
 extern int yylex();
@@ -188,7 +189,7 @@ Stmt: Exp SEMI {
         $$ = new SelectASTNode((char*)"", SelectType::_if, $5, $3, $7);
     }
     | WHILE LP Exp RP Stmt {
-        $$ = new LoopASTNode((char*)"", LoopType::_whileS, $5, $3);
+        $$ = new LoopASTNode((char*)"", LoopType::_while, $5, $3);
     }
     | FOR LP SEMI SEMI RP Stmt {
         $$ = new LoopASTNode((char*)"", LoopType::_for, $6, NULL, NULL, NULL);
@@ -361,6 +362,7 @@ void yyerror(const char* s) {
 
 int main(int argc,char* argv[])
 {
+    InterMediate* im;
     bool flag_print_ast = false;
     char* filename = NULL;
     if (argc == 1) {
@@ -387,6 +389,9 @@ int main(int argc,char* argv[])
 	} while(!feof(yyin));
     if (flag_print_ast) {
         root->printTree();
+        im = new InterMediate((RootASTNode *)root);
+        im->Generate(im->getRoot(), im->getTable());
+        im->printQuads();
     }
     return 0;
 }

@@ -11,6 +11,7 @@ DefFunASTNode::DefFunASTNode(char* content, AbstractASTNode* argList, AbstractAS
 void DefFunASTNode::printInfo(int depth)
 {
     std::cout << "Function define. Name:" << this->content << std::endl;
+    std::cout << " ";
     for (int i = 0; i < depth + 1; i++) std::cout << " ";
     std::cout << "Retrun type: ";
     if (this->revType == symbolType::integer) std::cout << "int";

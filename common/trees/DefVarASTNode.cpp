@@ -1,6 +1,6 @@
 #include "DefVarASTNode.h"
 #include <cstring>
-DefVarASTNode::DefVarASTNode(char* content, AbstractASTNode* value)
+DefVarASTNode::DefVarASTNode(char *content, AbstractASTNode *value)
     : AbstractASTNode(content, ASTNodeType::defVar)
 {
     this->type = symbolType::unset;
@@ -10,24 +10,33 @@ DefVarASTNode::DefVarASTNode(char* content, AbstractASTNode* value)
 void DefVarASTNode::printInfo(int depth)
 {
     std::cout << "Variation define.";
-    if (type == symbolType::integer) std::cout << "integer ";
-    else if (type == symbolType::pointer) std::cout << "pointer ";
+    if (type == symbolType::integer)
+        std::cout << "integer ";
+    else if (type == symbolType::pointer)
+        std::cout << "pointer ";
     std::cout << this->content << std::endl;
 }
 
-void DefVarASTNode::setAllType(char* type) {
+void DefVarASTNode::setAllType(char *type)
+{
     symbolType varType;
-    if (strcmp(type, "int") == 0) {
+    if (strcmp(type, "int") == 0)
+    {
         varType = symbolType::integer;
-    } else if (strcmp(type, "void") == 0) {
+    }
+    else if (strcmp(type, "void") == 0)
+    {
         varType = symbolType::Void;
-    } else if (strcmp(type, "integer pointer") == 0) {
+    }
+    else if (strcmp(type, "integer pointer") == 0)
+    {
         varType = symbolType::pointer;
     }
     this->type = varType;
-    DefVarASTNode* peer = (DefVarASTNode*)this->getPeer();
-    while (peer != NULL) {
+    DefVarASTNode *peer = (DefVarASTNode *)this->getPeer();
+    while (peer != NULL)
+    {
         peer->type = varType;
-        peer = (DefVarASTNode*)peer->getPeer();
+        peer = (DefVarASTNode *)peer->getPeer();
     }
 }
