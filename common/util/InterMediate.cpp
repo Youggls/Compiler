@@ -155,7 +155,6 @@ void InterMediate::Generate(AbstractASTNode *node, SymbolTable *symbolTable)
         if (p != NULL)
         {
             Quad *temp;
-            std::cout << "Def的子节点是：" << p->getContent() << std::endl;
             if (p->getNodeType() == ASTNodeType::literal)
             {
                 int arg1 = std::stoi(p->getContent());
@@ -233,8 +232,6 @@ void InterMediate::Generate(AbstractASTNode *node, SymbolTable *symbolTable)
         {
             int start = quads.size();
             Generate(((LoopASTNode *)node)->getCond(), symbolTable);
-            // std::cout << "TrueList：" << this->trueList.size() << std::endl
-            //           << "FalseList: " << this->falseList.size() << std::endl;
             std::list<int> JudgeTrue = trueList.top();
             std::list<int> JudgeFalse = falseList.top();
             trueList.pop();
@@ -296,7 +293,6 @@ void InterMediate::Generate(AbstractASTNode *node, SymbolTable *symbolTable)
         std::cout << "Hello! Something Wrong happened!\n";
         break;
     }
-    // std::cout << "Last content is: " << node->getContent() << "\tType is:" << (int)node->getNodeType() << std::endl;
 }
 
 SymbolTable *InterMediate::GenerateStmt(StmtASTNode *node, SymbolTable *symbolTable)
@@ -362,10 +358,8 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
         }
         catch (...)
         {
-            std::cout << "Exception occured. 出现异常了！" << std::endl;
+            std::cout << "Exception occured!" << std::endl;
         }
-        // std::cout << node->getChild()->getContent() << std::endl;
-        // 这里可能得捕获 赋值给常量的异常、变量未定义的异常
         AbstractASTNode *arg1Node = node->getChild()->getPeer();
         if (arg1Node->getNodeType() == ASTNodeType::assignVar)
         {

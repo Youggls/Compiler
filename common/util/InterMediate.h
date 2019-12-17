@@ -1,24 +1,13 @@
 #ifndef INTERMEDIATE_H
 #define INTERMEDIATE_H
 
-// #define VAR "10VarASTNode"
-// #define STMT "11StmtASTNode"
-// #define ROOT "11RootASTNode"
-// #define LOOP "11LoopASTNode"
-// #define DEFINE_VAR "13DefVarASTNode"
-// #define DEFINE_FUN "13DefFunASTNode"
-// #define SELECT "13SelectASTNode"
-// #define LITERAL "14LiteralASTNode" // 常量
-// #define CALL "14CallFunASTNode"
-// // IdentifierASTNode 等着删了，没用
-// #define OPERATOR "15OperatorASTNode"
-
 #include "../trees.h"
 #include "./Quad.h"
 #include "../symbol/symbol.h"
 #include "../symbol/FuncSymbol.h"
 #include <stack>
 #include <list>
+
 // Inter mediate code generator
 class InterMediate
 {
