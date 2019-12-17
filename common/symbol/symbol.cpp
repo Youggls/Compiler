@@ -1,4 +1,6 @@
-#include "symbol.h"
+#include "../trees/DefVarASTNode.h"
+#include "../trees/DefFunASTNode.h"
+#include "./symbol.h"
 #include <string>
 
 symbol::symbol()
@@ -44,6 +46,7 @@ SymbolTable::SymbolTable(bool isFun)
     if (isFun)
     {
         this->symbolArray = new std::vector<symbol *>();
+        this->argArray = new std::vector<symbol*>();
     }
 }
 
@@ -52,7 +55,6 @@ SymbolTable::SymbolTable(SymbolTable *parent, bool isFun)
     this->childTable = NULL;
     this->parentTable = parent;
     this->isFunctionTable = isFun;
-    // parent->setChild(this);
     SymbolTable *p = this;
     while (!p->isFunctionTable)
     {
@@ -64,7 +66,8 @@ SymbolTable::SymbolTable(SymbolTable *parent, bool isFun)
 
     if (isFun)
     {
-        this->symbolArray = new std::vector<symbol *>();
+        this->symbolArray = new std::vector<symbol*>();
+        this->argArray = new std::vector<symbol*>();
     }
 }
 
@@ -110,7 +113,7 @@ SymbolTable *SymbolTable::createChildTable(bool isFun)
     return child;
 }
 
-int SymbolTable::addSymbol(symbol *s) // 为啥不按照下面操作操作
+int SymbolTable::addSymbol(symbol *s)
 {
     if (this->findInThisTable(s->getIdName()) == NULL)
     {
@@ -135,4 +138,28 @@ int SymbolTable::addSymbol(std::string idName, symbolType idType)
         this->baseTable->totalOffset += INT_OFFSET;
     }
     return this->addSymbol(s);
+}
+
+void SymbolTable::visitFuncArgs(AbstractASTNode* funArg, int& offset, int& index) {
+    if (funArg == NULL) return;
+    else {
+        this->visitFuncArgs(funArg->getPeer(), offset, index);
+        DefVarASTNode* arg = (DefVarASTNode*) funArg;
+        if (arg->getSymbolType() == symbolType::integer || arg->getSymbolType() == symbolType::integer) {
+            offset -= 4;
+            symbol* s = new symbol(arg->getContent(), arg->getSymbolType());
+            s->setIndex(index--);
+            s->setOffset(offset);
+            symbolHashTable[s->getIdName()] = s;
+            arg = (DefVarASTNode*)arg->getPeer();
+        }
+    }
+}
+
+void SymbolTable::addFromFunctionArgs(AbstractASTNode* func) {
+    DefFunASTNode* defFunc = (DefFunASTNode*)func;
+    int offset = -4;
+    int index = -1;
+    this->visitFuncArgs(defFunc->getArgList(), offset, index);
+    this->argTotalOffset = -(offset + 4);
 }

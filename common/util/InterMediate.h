@@ -37,6 +37,7 @@ public:
     void Generate(AbstractASTNode *node, SymbolTable *symbolTable);
     // Create a child symbol table to generate follow code.
     SymbolTable *GenerateStmt(StmtASTNode *node, SymbolTable *symbolTable);
+    SymbolTable* GenerateReturn(StmtASTNode *node, SymbolTable *symbolTable);
     symbol *GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable);
     Quad *CaculateOp(OpCode op, AbstractASTNode *arg1Node, AbstractASTNode *arg2Node, symbol *result, SymbolTable *symbalTable);
     void RelopOp(Quad *trueQuad, Quad *falseQuad, OpCode op, AbstractASTNode *arg1Node, AbstractASTNode *arg2Node, SymbolTable *symbolTable);

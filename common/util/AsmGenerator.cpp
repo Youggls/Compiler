@@ -14,6 +14,25 @@ std::string AsmCode::transRegister(asmRegister reg) {
     else return "";
 }
 
+std::string AsmCode::generateVar(int offset) {
+    std::string ans = ASM_LB + std::string(ASM_EBP);
+    if (offset > 0) {
+        ans += "-";
+        ans += std::to_string(offset);
+    } else {
+        ans += "+";
+        ans += std::to_string(-offset);
+    }
+    ans += ASM_RB;
+    return ans;
+}
+
+std::string AsmCode::generateInstanceNumber(int value) {
+    std::string ans = DOUBLE_WORD;
+    ans += " " + std::to_string(value);
+    return ans;
+}
+
 void AsmCode::generateBinaryInstructor(std::string instructor, asmRegister reg1, asmRegister reg2) {
     this->codeBuffer += instructor + std::string(" ") + this->transRegister(reg1) 
                         + "," + this->transRegister(reg2) + "\n";
@@ -103,6 +122,10 @@ void AsmCode::push(std::string var) {
     this->generateUnaryInstructor(ASM_PUSH, var);
 }
 
+void AsmCode::pop(asmRegister reg) {
+    this->generateUnaryInstructor(ASM_POP, reg);
+}
+
 void AsmCode::label(std::string label) {
     this->codeBuffer += label + ASM_COLON + "\n";
 }
@@ -165,14 +188,15 @@ void AsmGenerator::generateArithmetic(Quad& q) {
     if (opcode == OpCode::ASSIGN) {
         symbol* result = q.getArg(3).var;
         int offset = result->getOffset();
-        if (flag == 5) {
+        std::string result_ebp_offset = this->asmcode.generateVar(offset);
+        if (flag == 7) {
             std::string tempVar = q.getArg(1).var->getIdName();
             asmRegister tempVarReg = this->findRegister(tempVar);
-            this->asmcode.mov("[ebp - " + std::to_string(offset) + "]", tempVarReg);
+            this->asmcode.mov(result_ebp_offset, tempVarReg);
         }
         else {
-            int tempVar = (int)q.getArg(1).target;
-            this->asmcode.mov("[ebp - " + std::to_string(offset) + "]", DOUBLE_WORD + std::string(" ") +std::to_string(tempVar));
+            int tempVar = q.getArg(1).target;
+            this->asmcode.mov(result_ebp_offset, DOUBLE_WORD + std::string(" ") +std::to_string(tempVar));
         }
         return;
     }
@@ -210,6 +234,56 @@ void AsmGenerator::generateArithmetic(Quad& q) {
         if (resultIdName[0] == 'T') {
             resultReg = this->getRegister(resultIdName);
         }
+        if (tempVar1Reg != asmRegister::unset && tempVar2Reg != asmRegister::unset) {
+            this->asmcode.generateBinaryInstructor(instructor, tempVar1Reg, tempVar2Reg);
+            if (resultReg != asmRegister::unset) {
+                if (tempVar1Reg != resultReg) {
+                    this->asmcode.mov(resultReg, tempVar1Reg);
+                }
+            } else {
+                symbol* result = q.getArg(3).var;
+                int offset = result->getOffset();
+                std::string ebp_offset = this->asmcode.generateVar(offset);
+                this->asmcode.mov(ebp_offset, tempVar1Reg);
+            }
+        } else if (tempVar1Reg != asmRegister::unset || tempVar2Reg != asmRegister::unset) {
+            asmRegister reg = asmRegister::unset;
+            symbol* vars = NULL;
+            std::string var = "";
+            if (tempVar1Reg == asmRegister::unset) {
+                reg = tempVar2Reg;
+                symbol* vars = q.getArg(1).var;
+                int offset = vars->getOffset();
+                var = this->asmcode.generateVar(offset);
+                this->asmcode.generateBinaryInstructor(instructor, var, reg);
+                this->asmcode.mov(reg, var);
+            } else {
+                reg = tempVar1Reg;
+                symbol* vars = q.getArg(2).var;
+                int offset = vars->getOffset();
+                var = this->asmcode.generateVar(offset);
+                this->asmcode.generateBinaryInstructor(instructor, reg, var);
+            }
+            if (resultReg != asmRegister::unset) {
+                if (reg != resultReg) {
+                    this->asmcode.mov(resultReg, reg);
+                }
+            } else {
+                symbol* result = q.getArg(3).var;
+                int offset = result->getOffset();
+                std::string ebp_offset = this->asmcode.generateVar(offset);
+                this->asmcode.mov(ebp_offset, reg);
+            }
+        } else if (tempVar1Reg == asmRegister::unset && tempVar2Reg == asmRegister::unset) {
+            symbol* var1 = q.getArg(1).var;
+            symbol* var2 = q.getArg(2).var;
+            std::string var1_ebp_offset = this->asmcode.generateVar(var1->getOffset());
+            std::string var2_ebp_offset = this->asmcode.generateVar(var2->getOffset());
+            if (resultReg != asmRegister::unset) {
+                this->asmcode.mov(resultReg, var1_ebp_offset);
+                this->asmcode.generateBinaryInstructor(instructor, resultReg, var2_ebp_offset);
+            }
+        }
     } else if (flag == 6 || flag == 5) {
         if (flag == 6) {
             value1 = q.getArg(1).target;
@@ -237,8 +311,41 @@ void AsmGenerator::generateArithmetic(Quad& q) {
 }
 
 void AsmGenerator::generateDefFunction(Quad& q) {
+    this->asmcode.push(asmRegister::ebx);
+    this->asmcode.push(asmRegister::ecx);
     std::string funcName = q.getArg(1).var->getIdName();
     this->asmcode.label(funcName);
+}
+
+void AsmGenerator::generateReturn(Quad& q) {
+    if (q.getArg(1).target == 0) {
+        this->generateEndFunction(q);
+        return;
+    }
+    int flag = q.getFlag();
+    if (flag == 7) {
+        symbol* s = q.getArg(1).var;
+        std::string name = s->getIdName();
+        if (name[0] == 'T') {
+            asmRegister reg = this->findRegister(name);
+            this->releaseRegister(reg);
+            this->asmcode.mov(asmRegister::eax, reg);
+        } else {
+            int offset = s->getOffset();
+            std::string varEbpOffset = this->asmcode.generateVar(offset);
+            this->asmcode.mov(asmRegister::eax, varEbpOffset);
+        }
+    } else {
+        int value = q.getArg(1).target;
+        this->asmcode.mov(asmRegister::eax, std::to_string(value));
+    }
+}
+
+void AsmGenerator::generateEndFunction(Quad& q) {
+    this->asmcode.pop(asmRegister::ecx);
+    this->asmcode.pop(asmRegister::ebx);
+    this->asmcode.addCode(ASM_LEAVE);
+    this->asmcode.addCode(ASM_RET);
 }
 
 void AsmGenerator::generateCallBuildInFunction(Quad& q, Quad& arg) {
@@ -257,12 +364,14 @@ void AsmGenerator::generateCallBuildInFunction(Quad& q, Quad& arg) {
         if (tempVarReg != asmRegister::unset) {
             this->asmcode.mov(asmRegister::eax, tempVarReg);
         } else {
-            this->asmcode.mov(asmRegister::eax, "[ebp - " + std::to_string(varOffSet) + "]");
+            std::string varEbpOffset = this->asmcode.generateVar(varOffSet);
+            this->asmcode.mov(asmRegister::eax, varEbpOffset);
         }
         this->generateCallFunction(q);
     } else if (funcName == "read_int_i") {
         this->generateCallFunction(q);
-        this->asmcode.mov("[ebp - " + std::to_string(varOffSet) + "]", asmRegister::eax);
+        std::string varEbpOffset = this->asmcode.generateVar(varOffSet);
+        this->asmcode.mov(varEbpOffset, asmRegister::eax);
     }
 }
 
@@ -273,6 +382,31 @@ void AsmGenerator::generateCallFunction(Quad& q) {
         std::string tempVar = q.getArg(3).var->getIdName();
         asmRegister tempReg = this->getRegister(tempVar);
         this->asmcode.mov(tempReg, asmRegister::eax);
+    }
+    // Protect the esp
+    FuncSymbol* func = funcTable.findFunction(funcName);
+    int offset = func->getTotalArgOffset();
+    if (offset != 0) this->asmcode.sub(asmRegister::esp, std::to_string(offset));
+}
+
+void AsmGenerator::generateSetArg(Quad& q) {
+    int flag = q.getFlag();
+    std::string varName = "";
+    if (flag == 7) {
+        varName = q.getArg(1).var->getIdName();
+        if (varName[0] != 'T') {
+            int offset = q.getArg(1).var->getOffset();
+            std::string varEbpOffset = this->asmcode.generateVar(offset);
+            this->asmcode.push(varEbpOffset);
+        } else {
+            asmRegister reg = this->findRegister(varName);
+            this->releaseRegister(reg);
+            this->asmcode.push(reg);
+        }
+    } else {
+        int value = q.getArg(1).target;
+        std::string instanceNumber = this->asmcode.generateInstanceNumber(value);
+        this->asmcode.push(instanceNumber);
     }
 }
 
@@ -306,11 +440,14 @@ void AsmGenerator::generate() {
                     }
             }
             // Push the args to stack
+            this->generateSetArg(q);
         }
         else if (opcode == OpCode::CALL) {
             this->generateCallFunction(q);
+        } else if (opcode == OpCode::END_FUNCTION) {
+            this->generateEndFunction(q);
+        } else if (opcode == OpCode::RETURN) {
+            this->generateReturn(q);
         }
     }
-    this->asmcode.addCode(ASM_LEAVE);
-    this->asmcode.addCode("ret");
 }

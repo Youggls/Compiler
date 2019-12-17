@@ -50,7 +50,8 @@ enum class OpCode
     PARAM,
     CALL,
     RETURN,
-    FUNC_DEF
+    FUNC_DEF,
+    END_FUNCTION
 };
 
 union Arg {

@@ -1,5 +1,13 @@
+int test(int a, int b) {
+    int d = 1;
+    return a - b;
+}
 int main()
 {
     int b = 1;
-    print_int(1 + 2 + 3);
+    int c;
+    int d;
+    d = test(1, 2);
+    d = d + 3;
+    print_int(d);
 }

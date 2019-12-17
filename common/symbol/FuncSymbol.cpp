@@ -19,6 +19,7 @@ FuncSymbol::FuncSymbol(AbstractASTNode* func) {
         } else if (var->getSymbolType() == symbolType::pointer) {
             this->keyName += "_p";
         }
+        totalArgOffset += 4;
         t = t->getPeer();
     }   
 }

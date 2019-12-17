@@ -24,6 +24,8 @@ private:
     std::string transRegister(asmRegister reg);
 public:
     AsmCode();
+    std::string generateVar(int offset);
+    std::string generateInstanceNumber(int value);
     void generateBinaryInstructor(std::string instructor, asmRegister reg1, asmRegister reg2);
     void generateBinaryInstructor(std::string instructor, asmRegister reg, std::string var);
     void generateBinaryInstructor(std::string instructor, std::string var, asmRegister reg);
@@ -46,6 +48,7 @@ public:
     void div(asmRegister reg, std::string var);
     void push(asmRegister reg);
     void push(std::string var);
+    void pop(asmRegister reg);
     void label(std::string label);
     void addCode(std::string code);
     friend std::ostream& operator<<(std::ostream& os, const AsmCode& asmcode);
@@ -69,6 +72,8 @@ private:
     asmRegister getRegister(std::string var);
     asmRegister findRegister(std::string var);
     void generateDefFunction(Quad& q);
+    void generateReturn(Quad& q);
+    void generateEndFunction(Quad& q);
     void generateCallFunction(Quad& q);
     void generateCallBuildInFunction(Quad& q, Quad& arg);
     void generateSetArg(Quad& q);
