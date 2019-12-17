@@ -66,7 +66,7 @@ private:
     Arg arg1;
     Arg arg2;
     Arg result;
-/*********************
+    /*********************
  * |      | arg1 | arg2 | result|
  * | int  |  0   |   0  |   0   |
  * |symbol|  1   |   2  |   4   |
@@ -74,6 +74,7 @@ private:
 */
     int flag;
     std::string printOp();
+
 public:
     // Jump to the target
     Quad(OpCode op, int result);
@@ -89,7 +90,7 @@ public:
     Quad(OpCode op, int arg1, int arg2, int result);
 
     inline void backpatch(int target) { this->result.target = target; };
-    inline int getResult(){ return this->result==NULL ? }
+    inline int getResult() { return this->result.target == 0 ? 1 : 0; }
     void printQuad();
     // Quad(OpCode op, symbol *arg1, symbol *arg2, symbol *result);
     // Quad(OpCode op, symbol *arg1, symbol *arg2, int result)
