@@ -1,8 +1,5 @@
-int test(int i) {
-    return i;
-}
 int main()
 {
     int b = 1;
-    b = test(1 + 2 / 3);
+    print_int(1 + 2 + 3);
 }
