@@ -30,8 +30,9 @@ private:
 public:
     inline AbstractASTNode *getRoot() { return this->root; }
     inline SymbolTable *getTable() { return this->rootTable; }
-    inline std::vector<Quad> getQuads() { return this->quads; }
-    inline std::vector<symbol*> getTempVars() { return this->tempVar; }
+    inline FuncTable& getFuncTable() { return this->funcTable; }
+    inline std::vector<Quad>& getQuads() { return this->quads; }
+    inline std::vector<symbol*>& getTempVars() { return this->tempVar; }
     InterMediate(RootASTNode *rootNode);
     void Generate(AbstractASTNode *node, SymbolTable *symbolTable);
     // Create a child symbol table to generate follow code.

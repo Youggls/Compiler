@@ -70,6 +70,7 @@ public:
     inline void setParent(SymbolTable *parent) { this->parentTable = parent; };
     inline SymbolTable *getParent() { return this->parentTable; };
     inline SymbolTable *getChild() { return this->childTable; };
+    inline SymbolTable *getPeer() { return this->peerTable; }
 };
 
 #endif // !SYMBOL_H

@@ -2,29 +2,29 @@
 #define ASMCODE_H
 
 // Asm instructor
-#define MOV     "mov"
-#define ADD     "add"
-#define SUB     "sub"
-#define MUL     "mul"
-#define DIV     "div"
-#define PUSH    "push"
-#define POP     "pop"
-#define CALL    "call"
-#define RET     "ret"
-#define CMP     "cmp"
+#define ASM_MOV     "mov"
+#define ASM_ADD     "add"
+#define ASM_SUB     "sub"
+#define ASM_MUL     "mul"
+#define ASM_DIV     "div"
+#define ASM_PUSH    "push"
+#define ASM_POP     "pop"
+#define ASM_CALL    "call"
+#define ASM_RET     "ret"
+#define ASM_CMP     "cmp"
 
 // 32-bit asm register
-#define EAX     "eax"
-#define EBX     "ebx"
-#define ECX     "ecx"
-#define EDX     "edx"
-#define EBP     "ebp"
-#define ESP     "esp"
+#define ASM_EAX     "eax"
+#define ASM_EBX     "ebx"
+#define ASM_ECX     "ecx"
+#define ASM_EDX     "edx"
+#define ASM_EBP     "ebp"
+#define ASM_ESP     "esp"
 
 // Other characters
-#define LB      "["
-#define RB      "]"
-#define COMMA   ","
-#define COLON   ":"
+#define ASM_LB      "["
+#define ASM_RB      "]"
+#define ASM_COMMA   ","
+#define ASM_COLON   ":"
 
 #endif

@@ -39,7 +39,7 @@ SymbolTable::SymbolTable(bool isFun)
     this->parentTable = NULL;
     this->baseTable = this;
     this->symbolItemCount = 0;
-    this->totalOffset = 0;
+    this->totalOffset = 4;
     this->isFunctionTable = isFun;
     if (isFun)
     {
@@ -60,7 +60,7 @@ SymbolTable::SymbolTable(SymbolTable *parent, bool isFun)
     }
     this->baseTable = p;
     this->symbolItemCount = 0;
-    this->totalOffset = 0;
+    this->totalOffset = 4;
 
     if (isFun)
     {
