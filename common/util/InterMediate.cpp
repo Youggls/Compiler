@@ -93,8 +93,14 @@ void InterMediate::Generate(AbstractASTNode *node, SymbolTable *symbolTable)
         }
         symbol *funcSymbol = new symbol(funSym->getKeyName(), symbolType::Void);
         // symbol *funcSymbol = new symbol(funSym->getFunName(), symbolType::Void);
-        symbol *tempV = new symbol("Temp" + std::to_string(tempVar.size()), symbolType::integer);
-        tempVar.push_back(tempV);
+        symbol *tempV = NULL;
+        if (node->getParent()->getNodeType() != ASTNodeType::stmt) {
+            StmtASTNode* stmt = (StmtASTNode*)node;
+            if (stmt->getStmtType() == StmtType::expStmt) {
+                tempV = new symbol("Temp" + std::to_string(tempVar.size()), symbolType::integer);
+                tempVar.push_back(tempV);
+            }
+        }
         Quad *temp = new Quad(OpCode::CALL, funcSymbol, count, tempV);
         this->quads.push_back(*temp);
     }

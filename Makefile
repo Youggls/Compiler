@@ -31,9 +31,9 @@ endif
 	$(CXX) -c $< -o $@ -std=$(CXXVER) -g
 
 clean:
-	rm -rf $(GRAMMARFOLDER) $(OBJ) $(PROGRAM)
+	rm -rf $(GRAMMARFOLDER) $(OBJ) $(PROGRAM) $(BUILDFOLDER) common/util/io/asm_io.o
 
-build: $(PROGRAM)
+build:
 ifeq ($(BUILDEXIST),notexist)
 	mkdir $(BUILDFOLDER)
 endif
@@ -45,3 +45,4 @@ endif
 	cp common/util/io/asm_io.o $(BUILDIO)
 	cp common/util/io/asm_io.inc $(BUILDIO)
 	cp -r test/ $(BUILDFOLDER)
+	cp example/Makefile $(BUILDFOLDER)

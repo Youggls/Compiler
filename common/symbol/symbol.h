@@ -71,6 +71,7 @@ public:
     inline SymbolTable *getParent() { return this->parentTable; };
     inline SymbolTable *getChild() { return this->childTable; };
     inline SymbolTable *getPeer() { return this->peerTable; }
+    inline int getTotalOffset() { return this->totalOffset; }
 };
 
 #endif // !SYMBOL_H

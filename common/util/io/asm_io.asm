@@ -89,12 +89,12 @@ segment text public align=1 class=code use32
 %else
 segment .text
 %endif
-	global	read_int, print_int, print_string, read_char
+	global	read_int_i, print_int_i, print_string, read_char
 	global  print_char, print_nl, sub_dump_regs, sub_dump_mem
         global  sub_dump_math, sub_dump_stack
         extern  _scanf, _printf, _getchar, _putchar
 
-read_int:
+read_int_i:
 	enter	4,0
 	pusha
 	pushf
@@ -112,7 +112,7 @@ read_int:
 	leave
 	ret
 
-print_int:
+print_int_i:
 	enter	0,0
 	pusha
 	pushf

@@ -29,6 +29,11 @@ void AsmCode::generateBinaryInstructor(std::string instructor, std::string var, 
                         + "," + this->transRegister(reg) + "\n";
 }
 
+void AsmCode::generateBinaryInstructor(std::string instructor, std::string var1, std::string var2) {
+    this->codeBuffer += instructor + " " + var1 +
+                        + ASM_COMMA + var2 + "\n";
+}
+
 void AsmCode::generateUnaryInstructor(std::string instructor, asmRegister reg) {
     this->codeBuffer += instructor + " " + this->transRegister(reg) + "\n";
 }
@@ -68,6 +73,10 @@ void AsmCode::mov(asmRegister reg, std::string var) {
 
 void AsmCode::mov(std::string var, asmRegister reg) {
     this->generateBinaryInstructor(ASM_MOV, var, reg);
+}
+
+void AsmCode::mov(std::string var1, std::string var2) {
+    this->generateBinaryInstructor(ASM_MOV, var1, var2);
 }
 
 void AsmCode::mul(asmRegister reg1, asmRegister reg2) {
@@ -151,20 +160,32 @@ asmRegister AsmGenerator::findRegister(std::string var) {
 void AsmGenerator::generateArithmetic(Quad& q) {
     std::string instructor;
     OpCode opcode = q.getOpCode();
+    int flag = q.getFlag();
     // Special case, assign operate is unary operator.
     if (opcode == OpCode::ASSIGN) {
         symbol* result = q.getArg(3).var;
         int offset = result->getOffset();
-        std::string tempVar = q.getArg(1).var->getIdName();
-        asmRegister tempVarReg = this->findRegister(tempVar);
-        this->asmcode.mov("[ebp - " + std::to_string(offset) + "]", tempVarReg);
+        if (flag == 5) {
+            std::string tempVar = q.getArg(1).var->getIdName();
+            asmRegister tempVarReg = this->findRegister(tempVar);
+            this->asmcode.mov("[ebp - " + std::to_string(offset) + "]", tempVarReg);
+        }
+        else {
+            int tempVar = (int)q.getArg(1).target;
+            this->asmcode.mov("[ebp - " + std::to_string(offset) + "]", DOUBLE_WORD + std::string(" ") +std::to_string(tempVar));
+        }
         return;
     }
     if (opcode == OpCode::PLUS) instructor = ASM_ADD;
     else if (opcode == OpCode::MINUS) instructor = ASM_SUB;
-    else if (opcode == OpCode::TIMES) instructor = ASM_MUL;
-    else instructor = ASM_DIV;
-
+    else if (opcode == OpCode::TIMES) {
+        instructor = ASM_MUL;
+        this->asmcode.addCode(ASM_XOR + std::string(" ") + ASM_EDX + ASM_COMMA + ASM_EDX);
+    }
+    else {
+        instructor = ASM_DIV;
+        this->asmcode.addCode(ASM_XOR + std::string(" ") + ASM_EDX + ASM_COMMA + ASM_EDX);
+    }
     asmRegister tempVar1Reg = asmRegister::unset;
     asmRegister tempVar2Reg = asmRegister::unset;
     asmRegister resultReg = asmRegister::unset;
@@ -173,7 +194,7 @@ void AsmGenerator::generateArithmetic(Quad& q) {
     std::string arg2IdName = "";
     // Result must be temp var or var, cannot be instance number
     std::string resultIdName = q.getArg(3).var->getIdName();
-    int flag = q.getFlag();
+    
     // All args and reslut is var or temp var.
     if (flag == 7) {
         arg1IdName = q.getArg(1).var->getIdName();
@@ -211,27 +232,85 @@ void AsmGenerator::generateArithmetic(Quad& q) {
         value2 = q.getArg(2).target;
         resultReg = this->getRegister(resultIdName);
         this->asmcode.mov(resultReg, std::to_string(value1));
-        this->asmcode.add(resultReg, std::to_string(value2));
+        this->asmcode.generateBinaryInstructor(instructor, resultReg, std::to_string(value2));
+    }
+}
+
+void AsmGenerator::generateDefFunction(Quad& q) {
+    std::string funcName = q.getArg(1).var->getIdName();
+    this->asmcode.label(funcName);
+}
+
+void AsmGenerator::generateCallBuildInFunction(Quad& q, Quad& arg) {
+    std::string funcName = q.getArg(1).var->getIdName();
+    int tempVar = 0;
+    int varOffSet = 0;
+    std::string argNam = arg.getArg(1).var->getIdName();
+    asmRegister tempVarReg = asmRegister::unset;
+    if (argNam[0] == 'T') {
+        tempVarReg = this->findRegister(argNam);
+    } else {
+        symbol* s = arg.getArg(1).var;
+        varOffSet = s->getOffset();
+    }
+    if (funcName == "print_int_i") {
+        if (tempVarReg != asmRegister::unset) {
+            this->asmcode.mov(asmRegister::eax, tempVarReg);
+        } else {
+            this->asmcode.mov(asmRegister::eax, "[ebp - " + std::to_string(varOffSet) + "]");
+        }
+        this->generateCallFunction(q);
+    } else if (funcName == "read_int_i") {
+        this->generateCallFunction(q);
+        this->asmcode.mov("[ebp - " + std::to_string(varOffSet) + "]", asmRegister::eax);
+    }
+}
+
+void AsmGenerator::generateCallFunction(Quad& q) {
+    std::string funcName = q.getArg(1).var->getIdName();
+    this->asmcode.generateUnaryInstructor(ASM_CALL, funcName);
+    if (q.getArg(3).var != NULL) {
+        std::string tempVar = q.getArg(3).var->getIdName();
+        asmRegister tempReg = this->getRegister(tempVar);
+        this->asmcode.mov(tempReg, asmRegister::eax);
     }
 }
 
 void AsmGenerator::generate() {
     currentTable = rootTable;
+    // Set header info
+    this->asmcode.addCode("\%include \"io/asm_io.inc\"\nsection .text\nglobal main\n");
     for (size_t i = 0; i < this->quads.size(); i++) {
         Quad& q = quads[i];
         OpCode opcode = q.getOpCode();
         if (opcode == OpCode::FUNC_DEF) {
-            std::string funcName = q.getArg(1).var->getIdName();
-            this->asmcode.label(funcName);
+            this->generateDefFunction(q);
             if (currentTable == rootTable) {
                 currentTable = currentTable->getChild();
             } else {
                 currentTable = currentTable->getPeer();
             }
+            this->asmcode.addCode(ASM_ENTER + std::string(" ") + std::to_string(currentTable->getTotalOffset()) + ASM_COMMA + "0");
         }
-        if (opcode == OpCode::PLUS || opcode == OpCode::MINUS || opcode == OpCode::DIV || opcode == OpCode::TIMES || opcode == OpCode::ASSIGN) {
+        else if (opcode == OpCode::PLUS || opcode == OpCode::MINUS || opcode == OpCode::DIV || opcode == OpCode::TIMES || opcode == OpCode::ASSIGN) {
             this->generateArithmetic(q);
         }
+        else if (opcode == OpCode::PARAM) {
+            Quad& next = quads[i + 1];
+            if (next.getOpCode() == OpCode::CALL) {
+                if (next.getArg(1).var->getIdName() == "print_int_i" || 
+                    next.getArg(1).var->getIdName() == "read_int_i") {
+                        this->generateCallBuildInFunction(next, q);
+                        i = i + 1;
+                        continue;
+                    }
+            }
+            // Push the args to stack
+        }
+        else if (opcode == OpCode::CALL) {
+            this->generateCallFunction(q);
+        }
     }
+    this->asmcode.addCode(ASM_LEAVE);
     this->asmcode.addCode("ret");
 }

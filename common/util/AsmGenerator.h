@@ -22,13 +22,14 @@ class AsmCode {
 private:
     std::string codeBuffer;
     std::string transRegister(asmRegister reg);
+public:
+    AsmCode();
     void generateBinaryInstructor(std::string instructor, asmRegister reg1, asmRegister reg2);
     void generateBinaryInstructor(std::string instructor, asmRegister reg, std::string var);
     void generateBinaryInstructor(std::string instructor, std::string var, asmRegister reg);
+    void generateBinaryInstructor(std::string instructor, std::string var1, std::string var2);
     void generateUnaryInstructor(std::string instructor, std::string var);
     void generateUnaryInstructor(std::string instructor, asmRegister reg);
-public:
-    AsmCode();
     // ADD instructor, add reg1, reg2
     void add(asmRegister reg1, asmRegister reg2);
     // ADD instructor, add reg, var
@@ -38,6 +39,7 @@ public:
     void mov(asmRegister reg1, asmRegister reg2);
     void mov(asmRegister reg, std::string var);
     void mov(std::string var, asmRegister reg);
+    void mov(std::string var1, std::string var2);
     void mul(asmRegister reg1, asmRegister reg2);
     void mul(asmRegister reg, std::string var);
     void div(asmRegister reg1, asmRegister reg2);
@@ -66,11 +68,12 @@ private:
     void releaseRegister(asmRegister reg);
     asmRegister getRegister(std::string var);
     asmRegister findRegister(std::string var);
-    void generateDefFunction();
-    void generateCallFunction();
-    void generateSetArg();
+    void generateDefFunction(Quad& q);
+    void generateCallFunction(Quad& q);
+    void generateCallBuildInFunction(Quad& q, Quad& arg);
+    void generateSetArg(Quad& q);
     void generateArithmetic(Quad& q);
-    void generateJmp();
+    void generateJmp(Quad& q);
 public:
     inline AsmCode& getAsmCode() { return this->asmcode; }
     AsmGenerator(std::vector<Quad>& quads, std::vector<symbol*>& tempVar, SymbolTable* rootTable, FuncTable& funcTable);
