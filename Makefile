@@ -1,6 +1,11 @@
 PROGRAM = parser
 GRAMMARFOLDER = ./Linux/
-EXIST = $(shell if [ -d $(GRAMMARFOLDER) ]; then echo "exist"; else echo "notexist"; fi;)
+BUILDFOLDER = build/
+BUILDIO = build/io
+NASM = nasm
+BUILDIOEXIST = $(shell if [ -d $(BUILDIO) ]; then echo "exist"; else echo "notexist"; fi;)
+GRAMMAREXIST = $(shell if [ -d $(GRAMMARFOLDER) ]; then echo "exist"; else echo "notexist"; fi;)
+BUILDEXIST = $(shell if [ -d $(BUILDFOLDER) ]; then echo "exist"; else echo "notexist"; fi;)
 DEPS = $(shell find ./ -name "*.h")
 SRC = $(shell find ./ -name "*.cpp")
 OBJ = $(SRC:%.cpp=%.o)
@@ -13,7 +18,7 @@ $(PROGRAM): grammar $(OBJ)
 	$(CXX) -o $(PROGRAM) $(OBJ) -std=$(CXXVER) -g
 
 grammar: lexer.l grammar.y
-ifeq ($(EXIST),notexist)
+ifeq ($(GRAMMAREXIST),notexist)
 	mkdir $(GRAMMARFOLDER)
 endif
 	$(BISON) --output="./Linux/grammar.tab.cpp" --defines="./Linux/grammar.tab.h" grammar.y
@@ -27,3 +32,16 @@ endif
 
 clean:
 	rm -rf $(GRAMMARFOLDER) $(OBJ) $(PROGRAM)
+
+build: $(PROGRAM)
+ifeq ($(BUILDEXIST),notexist)
+	mkdir $(BUILDFOLDER)
+endif
+ifeq ($(BUILDIOEXIST),notexist)
+	mkdir $(BUILDIO)
+endif
+	$(NASM) -f elf -d ELF_TYPE common/util/io/asm_io.asm -o common/util/io/asm_io.o
+	cp $(PROGRAM) $(BUILDFOLDER)
+	cp common/util/io/asm_io.o $(BUILDIO)
+	cp common/util/io/asm_io.inc $(BUILDIO)
+	cp -r test/ $(BUILDFOLDER)
