@@ -50,12 +50,6 @@ void InterMediate::Generate(AbstractASTNode *node, SymbolTable *symbolTable)
             if (var->getNodeType() == ASTNodeType::assignVar)
             {
                 symbol *arg1 = symbolTable->findSymbol(var->getContent());
-                if (arg1 == NULL)
-                {
-                    std::cout << "\033[31mError: \033[0m"
-                              << "value not defined" << std::endl;
-                    exit(1);
-                }
                 temp = new Quad(OpCode::PARAM, arg1, (symbol *)NULL);
                 switch (arg1->getIdType())
                 {
@@ -96,7 +90,7 @@ void InterMediate::Generate(AbstractASTNode *node, SymbolTable *symbolTable)
             exit(1);
         }
         symbol *funcSymbol = new symbol(funSym->getKeyName(), symbolType::Void);
-        // symbol *funcSymbol = new symbol(funSym->getFunName(), symbolType::Void); 
+        // symbol *funcSymbol = new symbol(funSym->getFunName(), symbolType::Void);
         symbol *tempV = NULL;
 
         if (node->getParent()->getNodeType() == ASTNodeType::stmt)
@@ -194,12 +188,6 @@ void InterMediate::Generate(AbstractASTNode *node, SymbolTable *symbolTable)
             else if (p->getNodeType() == ASTNodeType::assignVar)
             {
                 symbol *arg1 = symbolTable->findSymbol(p->getContent());
-                if (arg1 == NULL)
-                {
-                    std::cout << "\033[31mError: \033[0m"
-                              << "value not defined" << std::endl;
-                    exit(1);
-                }
                 temp = new Quad(OpCode::ASSIGN, arg1, varSymbol);
             }
             else if (p->getNodeType() == ASTNodeType::op)
@@ -402,10 +390,10 @@ SymbolTable *InterMediate::GenerateReturn(StmtASTNode *node, SymbolTable *symbol
     {
         Generate(p, symbolTable);
         symbol *arg1 = tempVar.back();
-        temp = new Quad(OpCode::RETURN, arg1, (symbol*)NULL);
+        temp = new Quad(OpCode::RETURN, arg1, (symbol *)NULL);
     }
     else
-    { // Error
+    {
         std::cout << "\033[31mError: \033[0m"
                   << "Type error" << std::endl;
         exit(1);
@@ -422,15 +410,12 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
     case opType::Assignop:
     {
         symbol *result;
-        // Quad *temp;
-        try
+        if (node->getChild()->getNodeType() != ASTNodeType::assignVar)
         {
-            result = symbolTable->findSymbol(node->getChild()->getContent());
+            std::cout << "\033[31mError: \033[0m"
+                      << node->getContent() << " is not a variable. What are u doing?" << std::endl;
         }
-        catch (...)
-        {
-            std::cout << "Exception occured!" << std::endl;
-        }
+        result = symbolTable->findSymbol(node->getChild()->getContent());
         AbstractASTNode *arg1Node = node->getChild()->getPeer();
         if (arg1Node->getNodeType() == ASTNodeType::assignVar)
         {
@@ -729,7 +714,7 @@ Quad *InterMediate::CaculateOp(OpCode op, AbstractASTNode *arg1Node, AbstractAST
     else
     {
         std::cout << "\033[31mError: \033[0m"
-                  << "No match type of" << (int)arg1Node->getNodeType() << "  Content:" << arg1Node->getContent() << std::endl;
+                  << "No match type for" << (int)arg1Node->getNodeType() << "  Content:" << arg1Node->getContent() << std::endl;
         exit(1);
     }
     return temp;
