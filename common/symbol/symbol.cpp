@@ -46,7 +46,7 @@ SymbolTable::SymbolTable(bool isFun)
     if (isFun)
     {
         this->symbolArray = new std::vector<symbol *>();
-        this->argArray = new std::vector<symbol*>();
+        this->argArray = new std::vector<symbol *>();
     }
 }
 
@@ -66,8 +66,8 @@ SymbolTable::SymbolTable(SymbolTable *parent, bool isFun)
 
     if (isFun)
     {
-        this->symbolArray = new std::vector<symbol*>();
-        this->argArray = new std::vector<symbol*>();
+        this->symbolArray = new std::vector<symbol *>();
+        this->argArray = new std::vector<symbol *>();
     }
 }
 
@@ -87,6 +87,9 @@ symbol *SymbolTable::findSymbol(std::string name)
             return target;
         }
     }
+    std::cout << "\033[31mError: \033[0m"
+              << "value " << name << " is not defined" << std::endl;
+    exit(1);
     return NULL;
 }
 
@@ -140,24 +143,29 @@ int SymbolTable::addSymbol(std::string idName, symbolType idType)
     return this->addSymbol(s);
 }
 
-void SymbolTable::visitFuncArgs(AbstractASTNode* funArg, int& offset, int& index) {
-    if (funArg == NULL) return;
-    else {
+void SymbolTable::visitFuncArgs(AbstractASTNode *funArg, int &offset, int &index)
+{
+    if (funArg == NULL)
+        return;
+    else
+    {
         this->visitFuncArgs(funArg->getPeer(), offset, index);
-        DefVarASTNode* arg = (DefVarASTNode*) funArg;
-        if (arg->getSymbolType() == symbolType::integer || arg->getSymbolType() == symbolType::integer) {
+        DefVarASTNode *arg = (DefVarASTNode *)funArg;
+        if (arg->getSymbolType() == symbolType::integer || arg->getSymbolType() == symbolType::integer)
+        {
             offset -= 4;
-            symbol* s = new symbol(arg->getContent(), arg->getSymbolType());
+            symbol *s = new symbol(arg->getContent(), arg->getSymbolType());
             s->setIndex(index--);
             s->setOffset(offset);
             symbolHashTable[s->getIdName()] = s;
-            arg = (DefVarASTNode*)arg->getPeer();
+            arg = (DefVarASTNode *)arg->getPeer();
         }
     }
 }
 
-void SymbolTable::addFromFunctionArgs(AbstractASTNode* func) {
-    DefFunASTNode* defFunc = (DefFunASTNode*)func;
+void SymbolTable::addFromFunctionArgs(AbstractASTNode *func)
+{
+    DefFunASTNode *defFunc = (DefFunASTNode *)func;
     int offset = -4;
     int index = -1;
     this->visitFuncArgs(defFunc->getArgList(), offset, index);
