@@ -195,6 +195,19 @@ void InterMediate::Generate(AbstractASTNode *node, SymbolTable *symbolTable)
                 symbol *arg1 = this->GenerateOp((OperatorASTNode *)p, symbolTable);
                 temp = new Quad(OpCode::ASSIGN, arg1, varSymbol);
             }
+            else if (p->getNodeType() == ASTNodeType::callFunc)
+            {
+                Generate(p, symbolTable);
+                symbol *arg1 = tempVar.back();
+                temp = new Quad(OpCode::RETURN, arg1, varSymbol);
+            }
+            else
+            {
+                std::cout << "\033[31mError: \033[0m"
+                          << "Type error" << std::endl;
+                exit(1);
+            }
+
             this->quads.push_back(*temp);
         }
         break;
