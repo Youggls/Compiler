@@ -95,7 +95,7 @@ void InterMediate::Generate(AbstractASTNode *node, SymbolTable *symbolTable)
 
         if (node->getParent()->getNodeType() == ASTNodeType::stmt)
         {
-            StmtASTNode *stmt = (StmtASTNode *)node;
+            StmtASTNode *stmt = (StmtASTNode *)node->getParent();
             if (stmt->getStmtType() == StmtType::expStmt)
             {
                 tempV = NULL;

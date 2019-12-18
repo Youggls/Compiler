@@ -830,6 +830,20 @@ void AsmGenerator::generatePower(Quad& q) {
     this->asmcode.add(asmRegister::esp, "8");
 }
 
+void AsmGenerator::generateGetAddress(Quad& q) {
+    int offset = q.getArg(1).var->getOffset();
+    std::string resultName = q.getArg(3).var->getIdName();
+    if (resultName[0] == 'T') {
+        asmRegister resultReg = this->getRegister(resultName);
+        this->asmcode.mov(resultReg, asmRegister::ebp);
+        this->asmcode.add(resultReg, std::to_string(offset));
+    } else {
+        std::string resultEbpOffset = this->asmcode.generateVar(q.getArg(3).var->getOffset());
+        this->asmcode.mov(resultEbpOffset, asmRegister::ebp);
+        this->asmcode.generateBinaryInstructor(ASM_ADD, resultEbpOffset, std::to_string(offset));
+    }
+}
+
 void AsmGenerator::preSetLabel() {
     std::vector<Quad> quad;
     int labelNumber = 0;
@@ -908,6 +922,8 @@ void AsmGenerator::generate() {
             this->generatePower(q);
         } else if (opcode == OpCode::NEGATIVE) {
             this->generateNeg(q);
+        } else if (opcode == OpCode::GET_ADDRESS) {
+            this->generateGetAddress(q);
         }
     }
 }
