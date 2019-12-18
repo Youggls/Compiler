@@ -638,6 +638,84 @@ void AsmGenerator::generateSetArg(Quad& q) {
     }
 }
 
+void AsmGenerator::generateJump(Quad& q) {
+    OpCode opcode = q.getOpCode();
+    std::string label = "label" + std::to_string(labelMap[q.getArg(3).target]);
+    if (opcode == OpCode::JUMP) {
+        this->asmcode.generateUnaryInstructor(ASM_JUMP, label);
+    } else {
+        int flag = q.getFlag();
+        if (flag == 0) {
+            std::string value1 = std::to_string(q.getArg(1).target);
+            std::string value2 = std::to_string(q.getArg(2).target);
+            this->asmcode.mov(asmRegister::edx, value1);
+            this->asmcode.generateBinaryInstructor(ASM_CMP, asmRegister::edx, value2);
+        } else if (flag == 1) {
+            std::string value2 = this->asmcode.generateInstanceNumber(q.getArg(2).target);
+            std::string var1Name = q.getArg(1).var->getIdName();
+            if (var1Name[0] == 'T') {
+                asmRegister var1Reg = this->findRegister(var1Name);
+                this->releaseRegister(var1Reg);
+                this->asmcode.generateBinaryInstructor(ASM_CMP, var1Reg, value2);
+            } else {
+                int offset = q.getArg(1).var->getOffset();
+                std::string var1EbpOffset = this->asmcode.generateVar(offset);
+                this->asmcode.generateBinaryInstructor(ASM_CMP, var1EbpOffset, value2);
+            }
+        } else if (flag == 2) {
+            std::string value1 = this->asmcode.generateInstanceNumber(q.getArg(1).target);
+            std::string var2Name = q.getArg(2).var->getIdName();
+            if (var2Name[0] == 'T') {
+                asmRegister var2Reg = this->findRegister(var2Name);
+                this->asmcode.mov(asmRegister::edx, value1);
+                this->releaseRegister(var2Reg);
+                this->asmcode.generateBinaryInstructor(ASM_CMP, asmRegister::edx, var2Reg);
+            } else {
+                int offset = q.getArg(2).var->getOffset();
+                std::string var2EbpOffset = this->asmcode.generateVar(offset);
+                this->asmcode.generateBinaryInstructor(ASM_CMP, var2EbpOffset, value1);
+            }
+        } else if (flag == 3) {
+            std::string value1 = std::to_string(q.getArg(1).target);
+            std::string value2 = std::to_string(q.getArg(2).target);
+            if (value1[0] == 'T' && value1[0] == 'T') {
+                asmRegister v1 = this->findRegister(value1);
+                asmRegister v2 = this->findRegister(value2);
+                this->asmcode.generateBinaryInstructor(ASM_CMP, v1, v2);
+            } else if (value1[0] == 'T') {
+                asmRegister v1 = this->findRegister(value1);
+                int offset = q.getArg(2).var->getOffset();
+                std::string v2EbpOffset = this->asmcode.generateVar(offset);
+                this->asmcode.generateBinaryInstructor(ASM_CMP, v1, v2EbpOffset);
+            } else if (value2[0] == 'T') {
+                asmRegister v2 = this->findRegister(value2);
+                int offset = q.getArg(1).var->getOffset();
+                std::string v1EbpOffset = this->asmcode.generateVar(offset);
+                this->asmcode.mov(asmRegister::edx, v1EbpOffset);
+                this->asmcode.generateBinaryInstructor(ASM_CMP, asmRegister::edx, v2);
+            } else {
+                std::string v1EbpOffset = this->asmcode.generateVar(q.getArg(1).var->getOffset());
+                std::string v2EbpOffset = this->asmcode.generateVar(q.getArg(2).var->getOffset());
+                this->asmcode.mov(asmRegister::edx, v1EbpOffset);
+                this->asmcode.generateBinaryInstructor(ASM_CMP, asmRegister::edx, v2EbpOffset);
+            }
+        }
+        if (opcode == OpCode::JUMP_EQ_GREAT) {
+            this->asmcode.generateUnaryInstructor(ASM_JGE, label);
+        } else if (opcode == OpCode::JUMP_GREAT) {
+            this->asmcode.generateUnaryInstructor(ASM_JG, label);
+        } else if (opcode == OpCode::JUMP_EQ_SMALL) {
+            this->asmcode.generateUnaryInstructor(ASM_JLE, label);
+        } else if (opcode == OpCode::JUMP_SMALL) {
+            this->asmcode.generateUnaryInstructor(ASM_JL, label);
+        } else if (opcode == OpCode::JUMP_EQUAL) {
+            this->asmcode.generateUnaryInstructor(ASM_JE, label);
+        } else if (opcode == OpCode::JUMP_NOT_EQUAL) {
+            this->asmcode.generateUnaryInstructor(ASM_JNE, label);
+        }
+    }
+}
+
 void AsmGenerator::preSetLabel() {
     std::vector<Quad> quad;
     int labelNumber = 0;
@@ -710,6 +788,8 @@ void AsmGenerator::generate() {
         } else if (opcode == OpCode::LABEL) {
             int labelIndex = q.getArg(1).target;
             this->asmcode.label("label" + std::to_string(labelIndex));
+        } else if (this->isJumpQuad(opcode)) {
+            this->generateJump(q);
         }
     }
 }

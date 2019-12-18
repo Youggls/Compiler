@@ -46,18 +46,10 @@ public:
     void mul(asmRegister reg1, asmRegister reg2);
     void mul(asmRegister reg, std::string var);
     void mul(std::string var1, std::string var2);
-    void mul(asmRegister reg, int instance);
-    void mul(std::string var, int intsance);
-    void mul(int instance1, int instance2);
     void div(asmRegister reg1, asmRegister reg2);
     void div(asmRegister reg, std::string var);
     void div(std::string var, asmRegister reg);
     void div(std::string var1, std::string var2);
-    void div(asmRegister reg, int instance);
-    void div(int instance, asmRegister reg);
-    void div(std::string var, int instance);
-    void div(int instance, std::string var);
-    void div(int instance1, int instance2);
     void asmXor(asmRegister reg1, asmRegister reg2);
     void push(asmRegister reg);
     void push(std::string var);
@@ -92,7 +84,7 @@ private:
     void generateCallBuildInFunction(Quad& q, Quad& arg);
     void generateSetArg(Quad& q);
     void generateArithmetic(Quad& q);
-    void generateJmp(Quad& q);
+    void generateJump(Quad& q);
     void preSetLabel();
     bool isJumpQuad(OpCode code);
 public:

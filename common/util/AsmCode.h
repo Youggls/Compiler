@@ -17,6 +17,15 @@
 #define ASM_ENTER   "enter"
 #define ASM_LEAVE   "leave"
 
+// Jump instructor
+#define ASM_JUMP    "jmp"
+#define ASM_JE      "je"
+#define ASM_JG      "jg"
+#define ASM_JGE     "jge"
+#define ASM_JL      "jl"
+#define ASM_JLE     "jle"
+#define ASM_JNE     "jne"
+
 // 32-bit asm register
 #define ASM_EAX     "eax"
 #define ASM_EBX     "ebx"
