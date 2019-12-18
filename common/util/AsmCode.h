@@ -5,6 +5,7 @@
 #define ASM_MOV     "mov"
 #define ASM_ADD     "add"
 #define ASM_XOR     "xor"
+#define ASM_NEG     "neg"
 #define ASM_SUB     "sub"
 #define ASM_MUL     "mul"
 #define ASM_DIV     "div"
