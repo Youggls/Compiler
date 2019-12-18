@@ -653,7 +653,7 @@ Quad *InterMediate::CaculateOp(OpCode op, AbstractASTNode *arg1Node, AbstractAST
 {
     Quad *temp;
     // symbol *result = new symbol(std::to_string(tempVar.size()), symbolType::integer);
-    // tempVar.push_back(result);  
+    // tempVar.push_back(result);
     // result = tempVar.back();
 
     if (arg1Node->getNodeType() == ASTNodeType::assignVar && arg2Node->getNodeType() == ASTNodeType::assignVar)
