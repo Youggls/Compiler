@@ -89,10 +89,30 @@ segment text public align=1 class=code use32
 %else
 segment .text
 %endif
-	global	read_int_i, print_int_i, print_string, read_char
+	global pow_i_i,	read_int_i, print_int_i, print_string, read_char
 	global  print_char, print_nl, sub_dump_regs, sub_dump_mem
         global  sub_dump_math, sub_dump_stack
         extern  _scanf, _printf, _getchar, _putchar
+
+pow_i_i:
+    enter   0, 0
+    push    ecx
+    push    ebx
+    mov 	ebx, 1
+	mov     eax, [ebp + 12]
+start_label:
+    mov     ecx, [ebp + 12]
+    cmp     ebx, [ebp + 8]
+    jge     out_label
+	xor     edx, edx
+    mul     ecx
+    add     ebx, 1
+	jmp 	start_label
+out_label:
+    pop     ebx
+    pop     ebx
+    leave
+    ret
 
 read_int_i:
 	enter	4,0
