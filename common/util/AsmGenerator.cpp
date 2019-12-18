@@ -768,8 +768,66 @@ void AsmGenerator::generatePower(Quad& q) {
     if (flag == 7) {
         std::string var1Name = q.getArg(1).var->getIdName();
         std::string var2Name = q.getArg(2).var->getIdName();
-        
+        if (var1Name[0] == 'T') {
+            asmRegister reg = this->findRegister(var1Name);
+            this->releaseRegister(reg);
+            this->asmcode.push(reg);
+        } else {
+            int offset = q.getArg(1).var->getOffset();
+            std::string varEbpOffset = DOUBLE_WORD + this->asmcode.generateVar(offset);
+            this->asmcode.push(varEbpOffset);
+        }
+        if (var1Name[1] == 'T') {
+            asmRegister reg = this->findRegister(var1Name);
+            this->releaseRegister(reg);
+            this->asmcode.push(reg);
+        } else {
+            int offset = q.getArg(2).var->getOffset();
+            std::string varEbpOffset = DOUBLE_WORD + this->asmcode.generateVar(offset);
+            this->asmcode.push(varEbpOffset);
+        }
+    } else if (flag == 6) {
+        std::string arg2Value = this->asmcode.generateInstanceNumber(q.getArg(2).target);
+        std::string arg1Name = q.getArg(1).var->getIdName();
+        if (arg1Name[0] == 'T') {
+            asmRegister reg = this->findRegister(arg1Name);
+            this->releaseRegister(reg);
+            this->asmcode.push(reg);
+        } else {
+            int offset = q.getArg(1).var->getOffset();
+            std::string varEbpOffset = DOUBLE_WORD + this->asmcode.generateVar(offset);
+            this->asmcode.push(varEbpOffset);
+        }
+        this->asmcode.push(arg2Value);
+    } else if (flag == 5) {
+        std::string arg1Value = this->asmcode.generateInstanceNumber(q.getArg(1).target);
+        std::string arg2Name = q.getArg(2).var->getIdName();
+        if (arg2Name[0] == 'T') {
+            asmRegister reg = this->findRegister(arg2Name);
+            this->releaseRegister(reg);
+            this->asmcode.push(reg);
+        } else {
+            int offset = q.getArg(1).var->getOffset();
+            std::string varEbpOffset = DOUBLE_WORD + this->asmcode.generateVar(offset);
+            this->asmcode.push(varEbpOffset);
+        }
+        this->asmcode.push(arg1Value);
+    } else {
+        std::string arg1Value = this->asmcode.generateInstanceNumber(q.getArg(1).target);
+        std::string arg2Value = this->asmcode.generateInstanceNumber(q.getArg(2).target);
+        this->asmcode.push(arg1Value);
+        this->asmcode.push(arg2Value);
     }
+    this->asmcode.generateUnaryInstructor(ASM_CALL, "pow_i_i");
+    std::string result = q.getArg(3).var->getIdName();
+    if (result[0] == 'T') {
+        asmRegister resultReg = this->getRegister(result);
+        this->asmcode.mov(resultReg, asmRegister::eax);
+    } else {
+        std::string resultEbpOffset = this->asmcode.generateVar(q.getArg(3).var->getOffset());
+        this->asmcode.mov(resultEbpOffset, asmRegister::eax);
+    }
+    this->asmcode.add(asmRegister::esp, "8");
 }
 
 void AsmGenerator::preSetLabel() {
@@ -846,6 +904,10 @@ void AsmGenerator::generate() {
             this->asmcode.label("label" + std::to_string(labelIndex));
         } else if (this->isJumpQuad(opcode)) {
             this->generateJump(q);
+        } else if (opcode == OpCode::POWER) {
+            this->generatePower(q);
+        } else if (opcode == OpCode::NEGATIVE) {
+            this->generateNeg(q);
         }
     }
 }
