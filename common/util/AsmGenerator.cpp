@@ -172,6 +172,7 @@ AsmGenerator::AsmGenerator(std::vector<Quad>& quads, std::vector<symbol*>& tempV
     this->tempVar = tempVar;
     this->rootTable = rootTable;
     this->funcTable = funcTable;
+    this->preSetLabel();
     eax = 0;
     ebx = 0;
     ecx = 0;
@@ -637,6 +638,36 @@ void AsmGenerator::generateSetArg(Quad& q) {
     }
 }
 
+void AsmGenerator::preSetLabel() {
+    std::vector<Quad> quad;
+    int labelNumber = 0;
+    for (size_t i = 0; i < quads.size(); i++) {
+        OpCode opcode = quads[i].getOpCode();
+        if (this->isJumpQuad(opcode)) {
+            int lineNum = quads[i].getArg(3).target;
+            if (labelMap.count(lineNum) == 0) {
+                labelMap[lineNum] = labelNumber;
+                labelNumber++;
+            }
+        }
+    }
+    for (size_t i = 0; i < quads.size(); i++) {
+        if (labelMap.count(i) > 0) {
+            Quad q(OpCode::LABEL, labelMap[i], (symbol*)NULL, (symbol*)NULL);
+            quad.push_back(q);
+        }
+        quad.push_back(quads[i]);
+    }
+    quads=quad;
+    for (size_t i = 0; i < quads.size(); i++) quads[i].printQuad();
+}
+
+bool AsmGenerator::isJumpQuad(OpCode opcode) {
+    return opcode == OpCode::JUMP || opcode == OpCode::JUMP_SMALL || opcode == OpCode::JUMP_EQ_SMALL ||
+        opcode == OpCode::JUMP_GREAT || opcode == OpCode::JUMP_EQ_GREAT || opcode == OpCode::JUMP_EQUAL ||
+        opcode == OpCode::JUMP_NOT_EQUAL;
+}
+
 void AsmGenerator::generate() {
     currentTable = rootTable;
     // Set header info
@@ -676,6 +707,9 @@ void AsmGenerator::generate() {
             this->generateEndFunction(q);
         } else if (opcode == OpCode::RETURN) {
             this->generateReturn(q);
+        } else if (opcode == OpCode::LABEL) {
+            int labelIndex = q.getArg(1).target;
+            this->asmcode.label("label" + std::to_string(labelIndex));
         }
     }
 }

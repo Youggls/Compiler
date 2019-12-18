@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include <map>
 #include "./AsmCode.h"
 #include "../symbol/symbol.h"
 #include "./Quad.h"
@@ -77,6 +78,7 @@ private:
     std::string registerUsedVar[6];
     std::vector<symbol*> tempVar;
     std::vector<Quad> quads;
+    std::map<int, int> labelMap;
     SymbolTable* rootTable;
     SymbolTable* currentTable;
     FuncTable funcTable;
@@ -91,6 +93,8 @@ private:
     void generateSetArg(Quad& q);
     void generateArithmetic(Quad& q);
     void generateJmp(Quad& q);
+    void preSetLabel();
+    bool isJumpQuad(OpCode code);
 public:
     inline AsmCode& getAsmCode() { return this->asmcode; }
     AsmGenerator(std::vector<Quad>& quads, std::vector<symbol*>& tempVar, SymbolTable* rootTable, FuncTable& funcTable);

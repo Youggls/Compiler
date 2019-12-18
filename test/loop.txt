@@ -12,7 +12,4 @@ int main()
     else {
         i = i + 1;
     }
-    {
-        main(a, 2 + 2, 2);
-    }
 }

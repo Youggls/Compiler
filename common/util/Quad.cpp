@@ -133,6 +133,8 @@ std::string Quad::printOp()
         return "   FUNC_DEF   ";
     case OpCode::END_FUNCTION:
         return " END_FUNCTION ";
+    case OpCode::LABEL:
+        return "     LABEL    ";
     default:
         break;
     }
