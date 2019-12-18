@@ -2,29 +2,45 @@
 #define ASMCODE_H
 
 // Asm instructor
-#define MOV     "mov"
-#define ADD     "add"
-#define SUB     "sub"
-#define MUL     "mul"
-#define DIV     "div"
-#define PUSH    "push"
-#define POP     "pop"
-#define CALL    "call"
-#define RET     "ret"
-#define CMP     "cmp"
+#define ASM_MOV     "mov"
+#define ASM_ADD     "add"
+#define ASM_XOR     "xor"
+#define ASM_NEG     "neg"
+#define ASM_SUB     "sub"
+#define ASM_MUL     "mul"
+#define ASM_DIV     "div"
+#define ASM_PUSH    "push"
+#define ASM_POP     "pop"
+#define ASM_CALL    "call"
+#define ASM_RET     "ret"
+#define ASM_CMP     "cmp"
+#define ASM_ENTER   "enter"
+#define ASM_LEAVE   "leave"
+
+// Jump instructor
+#define ASM_JUMP    "jmp"
+#define ASM_JE      "je"
+#define ASM_JG      "jg"
+#define ASM_JGE     "jge"
+#define ASM_JL      "jl"
+#define ASM_JLE     "jle"
+#define ASM_JNE     "jne"
 
 // 32-bit asm register
-#define EAX     "eax"
-#define EBX     "ebx"
-#define ECX     "ecx"
-#define EDX     "edx"
-#define EBP     "ebp"
-#define ESP     "esp"
+#define ASM_EAX     "eax"
+#define ASM_EBX     "ebx"
+#define ASM_ECX     "ecx"
+#define ASM_EDX     "edx"
+#define ASM_EBP     "ebp"
+#define ASM_ESP     "esp"
+
+// Date type
+#define DOUBLE_WORD "dword"
 
 // Other characters
-#define LB      "["
-#define RB      "]"
-#define COMMA   ","
-#define COLON   ":"
+#define ASM_LB      "["
+#define ASM_RB      "]"
+#define ASM_COMMA   ","
+#define ASM_COLON   ":"
 
 #endif

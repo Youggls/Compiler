@@ -50,7 +50,9 @@ enum class OpCode
     PARAM,
     CALL,
     RETURN,
-    FUNC_DEF
+    FUNC_DEF,
+    END_FUNCTION,
+    LABEL
 };
 
 union Arg {
@@ -66,11 +68,11 @@ private:
     Arg arg1;
     Arg arg2;
     Arg result;
-    /*********************
+/********************************
  * |      | arg1 | arg2 | result|
  * | int  |  0   |   0  |   0   |
  * |symbol|  1   |   2  |   4   |
- *********************
+ * *******************************
 */
     int flag;
     std::string printOp();
@@ -91,6 +93,13 @@ public:
 
     inline void backpatch(int target) { this->result.target = target; };
     inline int getResult() { return this->result.target == 0 ? 1 : 0; }
+    inline int getFlag() { return this->flag; }
+    inline OpCode getOpCode() { return this->op; }
+    inline Arg getArg(int index) {
+        if (index == 1) return this->arg1;
+        else if (index == 2) return this->arg2;
+        else if (index == 3) return this->result;
+    }
     void printQuad();
     // Quad(OpCode op, symbol *arg1, symbol *arg2, symbol *result);
     // Quad(OpCode op, symbol *arg1, symbol *arg2, int result)

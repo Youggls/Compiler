@@ -3,7 +3,9 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
+#include "../trees/ASTNode.h"
 #define INT_OFFSET 4
+
 enum class symbolType
 {
     unset = -1,
@@ -38,7 +40,8 @@ class SymbolTable
 private:
     std::unordered_map<std::string, symbol *> symbolHashTable;
     // 只在根作用域下被初始化，用于按照索引值搜索符号
-    std::vector<symbol *> *symbolArray;
+    std::vector<symbol*>* symbolArray;
+    std::vector<symbol*>* argArray;
     SymbolTable *parentTable;
     SymbolTable *childTable;
     SymbolTable *peerTable;
@@ -46,12 +49,15 @@ private:
     int symbolItemCount;
     // 当前作用域的总偏移量
     int totalOffset;
+    // 参数偏移量
+    int argTotalOffset;
     // 如果当前作用域是函数，则为true，否则为false
     bool isFunctionTable;
     // 根作用域指针
     SymbolTable *baseTable;
     symbol *findInThisTable(const std::string name);
     SymbolTable(SymbolTable *parent, bool isFun);
+    void visitFuncArgs(AbstractASTNode* arg, int& offset, int& index);
     int addSymbol(symbol *symbol);
 
 public:
@@ -62,6 +68,7 @@ public:
     SymbolTable(bool isFun);
     // If success, return SUCCESS = 0, else return FAILED = -1.
     int addSymbol(std::string idName, symbolType idType);
+    void addFromFunctionArgs(AbstractASTNode* func);
     // Create child symbol table, set peer table automatically
     SymbolTable *createChildTable(bool isFun);
     // If not found, return NULL marco.
@@ -70,6 +77,9 @@ public:
     inline void setParent(SymbolTable *parent) { this->parentTable = parent; };
     inline SymbolTable *getParent() { return this->parentTable; };
     inline SymbolTable *getChild() { return this->childTable; };
+    inline SymbolTable *getPeer() { return this->peerTable; }
+    inline int getTotalOffset() { return this->totalOffset; }
+    inline int getArgTotalOffset() { return this->argTotalOffset; }
 };
 
 #endif // !SYMBOL_H

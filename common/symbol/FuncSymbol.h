@@ -14,12 +14,15 @@ private:
     // The keyName of it is test
     std::string keyName;
     std::vector<symbolType> typeList;
+    int totalArgOffset;
     symbolType revType;
 public:
     FuncSymbol(AbstractASTNode* fun);
+    FuncSymbol(std::string funcName, std::vector<symbolType> typeList, symbolType rev);
     bool operator== (const FuncSymbol& another);
     inline std::string getKeyName() { return this->keyName; }
     inline std::string getFunName() { return this->funcName; }
+    inline int getTotalArgOffset() { return this->totalArgOffset; }
 };
 
 class FuncTable {

@@ -2,8 +2,10 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <fstream>
 #include "../common/trees.h"
 #include "../common/util/InterMediate.h"
+#include "../common/util/AsmGenerator.h"
 class AbstractASTNode;
 extern char *yytext;
 extern int yylex();
@@ -392,6 +394,11 @@ int main(int argc,char* argv[])
         im = new InterMediate((RootASTNode *)root);
         im->Generate(im->getRoot(), im->getTable());
         im->printQuads();
+        AsmGenerator* asmgenerator = new AsmGenerator(im->getQuads(), im->getTempVars(), im->getTable(), im->getFuncTable());
+        asmgenerator->generate();
+        std::cout << asmgenerator->getAsmCode();
+        std::ofstream outasm("out.asm");
+        outasm << asmgenerator->getAsmCode();
     }
     return 0;
 }

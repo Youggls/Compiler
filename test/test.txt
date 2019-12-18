@@ -1,8 +1,15 @@
-int test(int i) {
-    return i;
+int fibo(int n) {
+    int c;
+    if (n == 1) return 1;
+    if (n == 2) {
+        return 2;
+    }
+    int a = fibo(n - 1);
+    int b = fibo(n - 2);
+    return a + b;
 }
 int main()
 {
-    int b = 1;
-    b = test(1 + 2 / 3);
+    int d = fibo(5);
+    print_int(-1);
 }

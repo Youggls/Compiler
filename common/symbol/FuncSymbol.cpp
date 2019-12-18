@@ -19,15 +19,35 @@ FuncSymbol::FuncSymbol(AbstractASTNode* func) {
         } else if (var->getSymbolType() == symbolType::pointer) {
             this->keyName += "_p";
         }
+        totalArgOffset += 4;
         t = t->getPeer();
     }   
+}
+
+FuncSymbol::FuncSymbol(std::string funcName, std::vector<symbolType> typeList, symbolType rev) {
+    this->funcName = funcName;
+    this->keyName = funcName;
+    this->revType = rev;
+    this->typeList = typeList;
+    for (size_t i = 0; i < typeList.size(); i++) {
+        if (typeList[i] == symbolType::integer) this->keyName += "_i";
+        else if (typeList[i] == symbolType::pointer) this->keyName += "_p";
+    }
 }
 
 bool FuncSymbol::operator== (const FuncSymbol& another) {
     return this->keyName == another.keyName; 
 }
 
-FuncTable::FuncTable() { }
+FuncTable::FuncTable() { 
+    // Add build-in function
+    std::vector<symbolType> type;
+    type.push_back(symbolType::integer);
+    FuncSymbol* func = new FuncSymbol("print_int", type, symbolType::Void);
+    funcHashTable[func->getKeyName()] = func;
+    func = new FuncSymbol("read_int", type, symbolType::Void);
+    funcHashTable[func->getKeyName()] = func;
+}
 
 bool FuncTable::addFunction(FuncSymbol* func) {
     if (this->findFunction(func->getKeyName())) {
