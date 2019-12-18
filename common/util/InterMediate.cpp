@@ -199,7 +199,7 @@ void InterMediate::Generate(AbstractASTNode *node, SymbolTable *symbolTable)
             {
                 Generate(p, symbolTable);
                 symbol *arg1 = tempVar.back();
-                temp = new Quad(OpCode::RETURN, arg1, (symbol *)NULL);
+                temp = new Quad(OpCode::RETURN, arg1, varSymbol);
             }
             else
             {
