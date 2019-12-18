@@ -567,6 +567,8 @@ void AsmGenerator::generateReturn(Quad& q) {
         int value = q.getArg(1).target;
         this->asmcode.mov(asmRegister::eax, std::to_string(value));
     }
+    this->asmcode.addCode(ASM_LEAVE);
+    this->asmcode.addCode(ASM_RET);
 }
 
 void AsmGenerator::generateEndFunction(Quad& q) {
@@ -580,26 +582,36 @@ void AsmGenerator::generateCallBuildInFunction(Quad& q, Quad& arg) {
     std::string funcName = q.getArg(1).var->getIdName();
     int tempVar = 0;
     int varOffSet = 0;
-    std::string argNam = arg.getArg(1).var->getIdName();
-    asmRegister tempVarReg = asmRegister::unset;
-    if (argNam[0] == 'T') {
-        tempVarReg = this->findRegister(argNam);
-    } else {
-        symbol* s = arg.getArg(1).var;
-        varOffSet = s->getOffset();
-    }
-    if (funcName == "print_int_i") {
-        if (tempVarReg != asmRegister::unset) {
-            this->asmcode.mov(asmRegister::eax, tempVarReg);
-        } else {
-            std::string varEbpOffset = this->asmcode.generateVar(varOffSet);
-            this->asmcode.mov(asmRegister::eax, varEbpOffset);
+    if (arg.getFlag() == 6) {
+        int argValue = arg.getArg(1).target;
+        std::string value = std::to_string(argValue);
+        if (funcName == "print_int_i") {
+            this->asmcode.mov(asmRegister::eax, value);
+            this->generateCallFunction(q);
         }
-        this->generateCallFunction(q);
-    } else if (funcName == "read_int_i") {
-        this->generateCallFunction(q);
-        std::string varEbpOffset = this->asmcode.generateVar(varOffSet);
-        this->asmcode.mov(varEbpOffset, asmRegister::eax);
+    }
+    else {
+        std::string argNam = arg.getArg(1).var->getIdName();
+        asmRegister tempVarReg = asmRegister::unset;
+        if (argNam[0] == 'T') {
+            tempVarReg = this->findRegister(argNam);
+        } else {
+            symbol* s = arg.getArg(1).var;
+            varOffSet = s->getOffset();
+        }
+        if (funcName == "print_int_i") {
+            if (tempVarReg != asmRegister::unset) {
+                this->asmcode.mov(asmRegister::eax, tempVarReg);
+            } else {
+                std::string varEbpOffset = this->asmcode.generateVar(varOffSet);
+                this->asmcode.mov(asmRegister::eax, varEbpOffset);
+            }
+            this->generateCallFunction(q);
+        } else if (funcName == "read_int_i") {
+            this->generateCallFunction(q);
+            std::string varEbpOffset = this->asmcode.generateVar(varOffSet);
+            this->asmcode.mov(varEbpOffset, asmRegister::eax);
+        }
     }
 }
 
@@ -713,6 +725,50 @@ void AsmGenerator::generateJump(Quad& q) {
         } else if (opcode == OpCode::JUMP_NOT_EQUAL) {
             this->asmcode.generateUnaryInstructor(ASM_JNE, label);
         }
+    }
+}
+
+void AsmGenerator::generateNeg(Quad& q) {
+    std::string varName = q.getArg(1).var->getIdName();
+    std::string result = q.getArg(3).var->getIdName();
+    if (varName[0] == 'T' && result[0] == 'T') {
+        asmRegister varReg = this->findRegister(varName);
+        this->releaseRegister(varReg);
+        asmRegister resultReg = this->getRegister(result);
+        if (resultReg != varReg) {
+            this->asmcode.mov(resultReg, varReg);
+        }
+        this->asmcode.generateUnaryInstructor(ASM_NEG, resultReg);
+    } else if (varName[0] == 'T') {
+        asmRegister varReg = this->findRegister(varName);
+        this->releaseRegister(varReg);
+        int offset = q.getArg(3).var->getOffset();
+        std::string ebpOffset = this->asmcode.generateVar(offset);
+        this->asmcode.generateUnaryInstructor(ASM_NEG, varReg);
+        this->asmcode.mov(ebpOffset, varReg);
+    } else if (result[0] == 'T') {
+        int offset = q.getArg(1).var->getOffset();
+        std::string ebpOffset = this->asmcode.generateVar(offset);
+        asmRegister resultReg = this->getRegister(result);
+        this->asmcode.mov(resultReg, ebpOffset);
+        this->asmcode.generateUnaryInstructor(ASM_NEG, resultReg);
+    } else {
+        int varOff = q.getArg(1).var->getOffset();
+        int resultOff = q.getArg(3).var->getOffset();
+        std::string varEbpOff = this->asmcode.generateVar(varOff);
+        std::string resultEBPOff = this->asmcode.generateVar(resultOff);
+        this->asmcode.mov(asmRegister::edx, varEbpOff);
+        this->asmcode.generateUnaryInstructor(ASM_NEG, asmRegister::edx);
+        this->asmcode.mov(resultEBPOff, asmRegister::edx);
+    }
+}
+
+void AsmGenerator::generatePower(Quad& q) {
+    int flag = q.getFlag();
+    if (flag == 7) {
+        std::string var1Name = q.getArg(1).var->getIdName();
+        std::string var2Name = q.getArg(2).var->getIdName();
+        
     }
 }
 

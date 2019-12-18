@@ -85,6 +85,9 @@ private:
     void generateSetArg(Quad& q);
     void generateArithmetic(Quad& q);
     void generateJump(Quad& q);
+    void generateNeg(Quad& q);
+    void generatePower(Quad& q);
+    void generateGetAddress(Quad& q);
     void preSetLabel();
     bool isJumpQuad(OpCode code);
 public:

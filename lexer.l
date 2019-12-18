@@ -59,7 +59,7 @@ ws    {delim}+
 {L}({D}|{L})*                     { yylval.str=strdup(yytext); return(ID); }
 {D}{L}({D}|{L})*                  { return (ERRID); }
 [ \t\v\f\r\n]                     { }
-([1-9]{D}*)|0                     { yylval.str=strdup(yytext); return(INT);}
+(([1-9]|-){D}*)|0                     { yylval.str=strdup(yytext); return(INT);}
 %%
 int yywrap()
 {return 1;}
