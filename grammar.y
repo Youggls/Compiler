@@ -51,7 +51,7 @@ void yyerror(const char *str);
 %type <ast> Exp CompSt
 %type <ast> StmtList Stmt Dec DecList Def
 %type <ast> Args ParamDec VarList FunDec DecFor
-%type <ast> StructSpecifier StructDecList StructDec ArraySpecifier
+%type <ast> StructSpecifier StructDecList StructDec
 %%
 
 Program: ExtDefList {
@@ -92,8 +92,6 @@ ExtDef: Specifier ExtDecList SEMI {
     | StructSpecifier SEMI {
         $$ = $1;
     }
-    // | ArraySpecifier SEMI { 
-    // }
     | error SEMI { yyerrok; $$ = NULL;}
     ;
 ExtDecList: VarDec {
