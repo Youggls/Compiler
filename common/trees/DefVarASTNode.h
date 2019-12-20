@@ -1,7 +1,6 @@
 #ifndef DEFVARASTNODE_H
 #define DEFVARASTNODE_H
 #include "ASTNode.h"
-#include "IdentifierASTNode.h"
 #include "../symbol/symbol.h"
 
 class DefVarASTNode : public AbstractASTNode
