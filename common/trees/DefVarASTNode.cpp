@@ -6,6 +6,12 @@ DefVarASTNode::DefVarASTNode(char *content, AbstractASTNode *value)
     this->type = symbolType::unset;
     this->addChildNode(value);
 }
+DefVarASTNode::DefVarASTNode(char* structTypeName, char* structIdName)
+    : AbstractASTNode(structIdName, ASTNodeType::defVar)
+{
+    this->type = symbolType::Struct;
+    this->structType = structTypeName;
+}
 
 void DefVarASTNode::printInfo(int depth)
 {
@@ -16,6 +22,8 @@ void DefVarASTNode::printInfo(int depth)
         std::cout << "pointer ";
     else if (type == symbolType::Array)
         std::cout << "array ";
+    else if (type == symbolType::Struct)
+        std::cout << "struct " << this->structType << " ";
     std::cout << this->content << std::endl;
 }
 

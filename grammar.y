@@ -3,7 +3,6 @@
 #include <cstdlib>
 #include <cstring>
 #include <fstream>
-#include "../common/symbol/StructSymbol.h"
 #include "../common/trees.h"
 #include "../common/util/InterMediate.h"
 #include "../common/util/AsmGenerator.h"
@@ -132,7 +131,7 @@ StructDecList: StructDec {
     ;
 
 StructDec: Specifier ID SEMI {
-        DefVarASTNode* var = new DefVarASTNode($2, NULL);
+        DefVarASTNode* var = new DefVarASTNode($2);
         var->setAllType($1);
         $$ = var;
     }
@@ -140,10 +139,10 @@ StructDec: Specifier ID SEMI {
 
 /* Declarators */
 VarDec: ID {
-        $$ = new DefVarASTNode($1, NULL);
+        $$ = new DefVarASTNode($1);
     }
     | ID LB INT RB {
-        DefVarASTNode* var = new DefVarASTNode($1, NULL);
+        DefVarASTNode* var = new DefVarASTNode($1);
         var->setAllType((char*)("array"));
         var->setArrayLength($3);
         $$ = var;
@@ -166,7 +165,7 @@ VarList: VarList COMMA ParamDec {
     }
     ;
 ParamDec: Specifier ID {
-        DefVarASTNode* var = new DefVarASTNode($2, NULL);
+        DefVarASTNode* var = new DefVarASTNode($2);
         var->setAllType($1);
         $$ = var;
     }
@@ -213,6 +212,12 @@ Stmt: Exp SEMI {
     | Def SEMI {
         AbstractASTNode* temp = new StmtASTNode(StmtType::defStmt);
         temp->addChildNode($1);
+        $$ = temp;
+    }
+    | STRUCT ID ID SEMI {
+        AbstractASTNode* temp = new StmtASTNode(StmtType::defStmt);
+        AbstractASTNode* structDec = new DefVarASTNode($2, $3);
+        temp->addChildNode(structDec);
         $$ = temp;
     }
     | CompSt {
@@ -295,6 +300,14 @@ Dec: VarDec {
 Exp:
     Exp ASSIGNOP Exp {
         AbstractASTNode* temp = new OperatorASTNode((char*)"=", opType::Assignop);
+        if ($1->getNodeType() == ASTNodeType::op) {
+            OperatorASTNode* left = (OperatorASTNode*)$1;
+            if (left->getType() == opType::GetArrayValue) {
+                temp = new OperatorASTNode((char*)"=", opType::AssignArray);
+            } else if (left->getType() == opType::GetMember) {
+                temp = new OperatorASTNode((char*)"=", opType::AssignMember);
+            }
+        }
         temp->addChildNode($1);
         $1->addPeerNode($3);
         $$ = temp;
@@ -385,16 +398,19 @@ Exp:
         $$ = new VarASTNode($1);
     }
     | ID LB Exp RB {
-        AbstractASTNode* op = new OperatorASTNode((char*)"[", opType::GetArrayValue);
+        AbstractASTNode* op = new OperatorASTNode((char*)"[]", opType::GetArrayValue);
         AbstractASTNode* var = new VarASTNode((char*)$1);
         op->addChildNode(var);
-        op->addChildNode($3);
+        var->addPeerNode($3);
         $$ = op;
     }
     | ID GETMEMBER ID {
-        VarASTNode *var = new VarASTNode($1);
-        var->setStructMember($3);
-        $$ = var;
+        AbstractASTNode* op = new OperatorASTNode((char*)".", opType::GetMember);
+        VarASTNode* var1 = new VarASTNode($1);
+        VarASTNode* var2 = new VarASTNode($3);
+        op->addChildNode(var1);
+        var1->addPeerNode(var2);
+        $$ = op;
     }
     | INT {
         $$ = new LiteralASTNode($1);
@@ -452,7 +468,7 @@ int main(int argc,char* argv[])
 	} while(!feof(yyin));
     if (flag_print_ast) {
         root->printTree();
-        im = new InterMediate((RootASTNode *)root);
+        im = new InterMediate((RootASTNode *)root, structTable);
         im->Generate(im->getRoot(), im->getTable());
         im->printQuads();
         AsmGenerator* asmgenerator = new AsmGenerator(im->getQuads(), im->getTempVars(), im->getTable(), im->getFuncTable());

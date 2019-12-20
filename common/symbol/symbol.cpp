@@ -35,8 +35,9 @@ symbol *SymbolTable::findInThisTable(const std::string name)
         return NULL;
 }
 
-SymbolTable::SymbolTable(bool isFun)
+SymbolTable::SymbolTable(bool isFun, StructTable* structTable)
 {
+    this->structTable = structTable;
     this->childTable = NULL;
     this->parentTable = NULL;
     this->baseTable = this;
@@ -55,6 +56,7 @@ SymbolTable::SymbolTable(SymbolTable *parent, bool isFun)
     this->childTable = NULL;
     this->parentTable = parent;
     this->isFunctionTable = isFun;
+    this->structTable = parent->structTable;
     SymbolTable *p = this;
     while (!p->isFunctionTable)
     {
@@ -90,6 +92,60 @@ symbol *SymbolTable::findSymbol(std::string name)
     std::cout << "\033[31mError: \033[0m"
               << "value " << name << " is not defined" << std::endl;
     exit(1);
+    return NULL;
+}
+
+structDecSymbol::structDecSymbol(std::string structType, std::string structIdName)
+    :symbol(structIdName, symbolType::Struct)
+{
+    this->structTypeName = structType;
+}
+
+int StructTable::num = 0;
+
+// int structSymbol::insert(std::string name, int offset) {
+//     this->offsetTable[name] = offset;
+//     this->totalOffsets += offset;
+// }
+
+structSymbol::structSymbol() {
+}
+
+structSymbol::structSymbol(std::string name, AbstractASTNode * node) {
+    this->totalOffsets = 0;
+    int offset = 0;
+    this->idName = name;
+    AbstractASTNode* currentNode = node;
+    while(currentNode) {
+        DefVarASTNode *var = (DefVarASTNode*)node;
+        offsetTable[var->getContent()] = offset;
+        this->totalOffsets += offset;
+        offset += 4;
+        currentNode = currentNode->getPeer();
+    }
+}
+
+int structSymbol::getMemberOffset(std::string key) {
+    if (this->offsetTable.count(key) == 0) {
+        return -1;
+    } else {
+        return this->offsetTable[key];
+    }
+}
+
+StructTable::StructTable() {
+}
+
+bool StructTable::addStruct(structSymbol* sSymble) {
+    if (this->findStruct(sSymble->getStructName())) {
+        return false;
+    } else {
+        this->structHashTable[sSymble->getStructName()] = sSymble;
+        return true;
+    }
+}
+
+structSymbol* StructTable::findStruct(std::string keyName) {
     return NULL;
 }
 
@@ -141,6 +197,24 @@ int SymbolTable::addSymbol(std::string idName, symbolType idType)
         this->baseTable->totalOffset += INT_OFFSET;
     }
     return this->addSymbol(s);
+}
+
+int SymbolTable::addStructSymbol(std::string structTypeName, std::string structIdName) {
+    structDecSymbol* s = new structDecSymbol(structTypeName, structIdName);
+    if (this->findInThisTable(structIdName) == NULL) return FAIL;
+    else {
+        structSymbol* target = this->structTable->findStruct(structIdName);
+        if (target == NULL) {
+            return FAIL;
+        } else {
+            this->baseTable->symbolArray->push_back(s);
+            s->setIndex(this->baseTable->symbolItemCount++);
+            s->setOffset(this->baseTable->totalOffset);
+            this->baseTable->totalOffset += target->getTotalOffsets();
+            this->symbolHashTable[structIdName] = s;
+            return SUCCESS;
+        }
+    }
 }
 
 void SymbolTable::visitFuncArgs(AbstractASTNode *funArg, int &offset, int &index)

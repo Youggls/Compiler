@@ -11,6 +11,10 @@ struct tdest_s {
 };
 int main()
 {
-
-    int a = 1;
+    int a[10];
+    a[0] = 3;
+    test_s.a = 3;
+    struct tdest_s a;
+    int b = a[2];
+    int c =test_s.b;
 }

@@ -1,11 +1,11 @@
 #include "InterMediate.h"
 #include <typeinfo>
 #include <cstdio>
-InterMediate::InterMediate(RootASTNode *rootNode)
+InterMediate::InterMediate(RootASTNode *rootNode, StructTable* structTable)
 {
     tempVar.reserve(100);
     this->root = rootNode;
-    this->rootTable = new SymbolTable(false);
+    this->rootTable = new SymbolTable(false, structTable);
 }
 
 void InterMediate::Generate(AbstractASTNode *node, SymbolTable *symbolTable)

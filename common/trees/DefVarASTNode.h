@@ -8,9 +8,11 @@ class DefVarASTNode : public AbstractASTNode
 private:
     symbolType type;
     int arrayLength;
+    std::string structType;
 
 public:
     DefVarASTNode(char *content, AbstractASTNode *value = NULL);
+    DefVarASTNode(char* structTypeName, char* structIdName);
     inline symbolType getSymbolType() { return this->type; }
     inline void setArrayType() { this->type = symbolType::Array; }
     void setAllType(char *type);

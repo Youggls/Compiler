@@ -19,6 +19,9 @@ enum class opType
     SingalAnd = 13, // &
     GetValue = 14,  // *
     GetArrayValue = 15, //a[3]
+    GetMember = 16, // a.b
+    AssignArray = 17, // a[1] = ?
+    AssignMember = 18 // a.b = ?
 };
 
 class OperatorASTNode : public AbstractASTNode

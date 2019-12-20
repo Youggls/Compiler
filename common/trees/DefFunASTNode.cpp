@@ -13,10 +13,6 @@ void DefFunASTNode::printInfo(int depth)
     std::cout << "Function define. Name:" << this->content << std::endl;
     std::cout << " ";
     for (int i = 0; i < depth + 1; i++) std::cout << " ";
-    std::cout << "Retrun type: ";
-    if (this->revType == symbolType::integer) std::cout << "int";
-    else if (this->revType == symbolType::Void) std::cout << "void";
-    std::cout << std::endl;
     AbstractASTNode* var = (AbstractASTNode*)this->argList;
     while (var != NULL) {
         AbstractASTNode::__printTree(var, depth + 1);

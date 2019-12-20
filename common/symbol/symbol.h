@@ -4,8 +4,8 @@
 #include <unordered_map>
 #include <vector>
 #include "../trees/ASTNode.h"
+// #include "./StructSymbol.h"
 #define INT_OFFSET 4
-
 enum class symbolType
 {
     unset = -1,
@@ -37,6 +37,36 @@ public:
     symbolType &getIdType();
 };
 
+class structDecSymbol : public symbol {
+private:
+    std::string structTypeName;
+public:
+    structDecSymbol(std::string structTypeName, std::string idName);
+};
+
+class structSymbol : public symbol {
+    std::unordered_map<std::string, int> offsetTable;
+    int totalOffsets;
+public:
+    structSymbol();
+    structSymbol(std::string name, AbstractASTNode * node);
+    inline std::string getStructName() { return this->idName; }
+    inline int getTotalOffsets() { return this->totalOffsets; }
+    int getMemberOffset(std::string key);
+    // int insert(std::string name, int offset);
+};
+
+
+class StructTable {
+private:
+    std::unordered_map<std::string, structSymbol*> structHashTable;
+    static int num;
+public:
+    StructTable();
+    bool addStruct(structSymbol* func);
+    structSymbol* findStruct(std::string keyName);
+};
+
 class SymbolTable
 {
 private:
@@ -47,6 +77,8 @@ private:
     SymbolTable *parentTable;
     SymbolTable *childTable;
     SymbolTable *peerTable;
+    // The struct info of struct table
+    StructTable* structTable;
     // 根作用域保存该作用域下总符号数目
     int symbolItemCount;
     // 当前作用域的总偏移量
@@ -67,9 +99,14 @@ public:
     static const int SUCCESS = 0;
     static const int FAIL = -1;
     // 如果当前作用域是函数，isFun则为true，否则为false
-    SymbolTable(bool isFun);
+    SymbolTable(bool isFun, StructTable* structTable);
     // If success, return SUCCESS = 0, else return FAILED = -1.
     int addSymbol(std::string idName, symbolType idType);
+    // Two args
+    // Arg1: The struct type name
+    // Arg2: The struct id name
+    // eg. struct test_s s; test_s is struct type name, s is struct id name.
+    int addStructSymbol(std::string structTypeName, std::string structIdName);
     void addFromFunctionArgs(AbstractASTNode* func);
     // Create child symbol table, set peer table automatically
     SymbolTable *createChildTable(bool isFun);
