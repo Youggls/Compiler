@@ -17,6 +17,8 @@ enum class opType
     Negative = 11,  // -
     Not = 12,       // !
     SingalAnd = 13, // &
+    GetValue = 14,  // *
+    GetArrayValue = 15, //a[3]
 };
 
 class OperatorASTNode : public AbstractASTNode

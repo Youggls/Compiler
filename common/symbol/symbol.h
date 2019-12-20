@@ -13,12 +13,14 @@ enum class symbolType
     function = 1,
     pointer = 2,
     boolean = 3,
-    Void = 4
+    Void = 4,
+    Struct = 5,
+    Array = 6,
 };
 
 class symbol
 {
-private:
+protected:
     std::string idName;
     symbolType idType;
     int offset;

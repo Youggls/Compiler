@@ -36,6 +36,7 @@ ws    {delim}+
 "while"                           { return(WHILE);}
 "if"                              { return(IF); }
 "else"                            { return(ELSE);}
+"struct"                          { return(STRUCT);}
 ";"                               { return(SEMI); }
 ","                               { return(COMMA); }
 "="                               { return(ASSIGNOP); }
@@ -56,6 +57,7 @@ ws    {delim}+
 "]"                               { return(RB); }
 "{"                               { return(LC); }
 "}"                               { return(RC); }
+"."                               { return(GETMEMBER); }
 {L}({D}|{L})*                     { yylval.str=strdup(yytext); return(ID); }
 {D}{L}({D}|{L})*                  { return (ERRID); }
 [ \t\v\f\r\n]                     { }

@@ -1,15 +1,17 @@
-int fibo(int n) {
-    int c;
-    if (n == 1) return 1;
-    if (n == 2) {
-        return 2;
-    }
-    int a = fibo(n - 1);
-    int b = fibo(n - 2);
-    return a + b;
+int test () {
+
 }
+struct test_s {
+    int a;
+    int b;
+};
+struct tdest_s {
+    int a;
+    int b;
+};
+int a[3];
 int main()
 {
-    int d = fibo(5);
-    print_int(-1);
+
+    int a = 1;
 }

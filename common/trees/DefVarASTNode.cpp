@@ -14,6 +14,8 @@ void DefVarASTNode::printInfo(int depth)
         std::cout << "integer ";
     else if (type == symbolType::pointer)
         std::cout << "pointer ";
+    else if (type == symbolType::Array)
+        std::cout << "array ";
     std::cout << this->content << std::endl;
 }
 
@@ -32,11 +34,26 @@ void DefVarASTNode::setAllType(char *type)
     {
         varType = symbolType::pointer;
     }
-    this->type = varType;
+    else if (strcmp(type, "struct") == 0)
+    {
+        varType = symbolType::Struct;
+    }
+    else if (strcmp(type, "array") == 0) {
+        varType = symbolType::Array;
+    }
+    if (this->type == symbolType::unset) {
+        this->type = varType;
+    }
     DefVarASTNode *peer = (DefVarASTNode *)this->getPeer();
     while (peer != NULL)
     {
-        peer->type = varType;
+        if (peer->type == symbolType::unset) {
+            peer->type = varType;
+        }
         peer = (DefVarASTNode *)peer->getPeer();
     }
+}
+
+void DefVarASTNode::setArrayLength(char *length) {
+    this->arrayLength = atoi(length);
 }
