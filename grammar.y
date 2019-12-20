@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <fstream>
+#include "../common/symbol/StructSymbol.h"
 #include "../common/trees.h"
 #include "../common/util/InterMediate.h"
 #include "../common/util/AsmGenerator.h"
@@ -13,6 +14,7 @@ extern int column;
 extern FILE * yyin;
 extern int yylineno;
 AbstractASTNode* root;
+StructTable *structTable;
 void yyerror(const char *str);
 %}
 
@@ -41,13 +43,15 @@ void yyerror(const char *str);
 %token <str> ID
 %token FOR
 %nonassoc SEMI COMMA
-%nonassoc RETURN IF ELSE WHILE
+%nonassoc RETURN IF ELSE WHILE STRUCT GETMEMBER
 %token LC RC
-%type <str> VarDec Specifier
+%type <ast> VarDec 
+%type <str> Specifier
 %type <ast> ExtDefList ExtDef ExtDecList
 %type <ast> Exp CompSt
 %type <ast> StmtList Stmt Dec DecList Def
 %type <ast> Args ParamDec VarList FunDec DecFor
+%type <ast> StructSpecifier StructDecList StructDec ArraySpecifier
 %%
 
 Program: ExtDefList {
@@ -60,8 +64,14 @@ ExtDefList:
         $$ = $1;
     }
     | ExtDefList ExtDef {
-        $1->getLastPeerNode()->addPeerNode($2);
-        $$ = $1;
+        if ($1 == NULL) {
+            $$ = $2;
+        } else {
+            if ($2 != NULL) {
+                $1->getLastPeerNode()->addPeerNode($2);
+            }
+            $$ = $1;
+        }
     }
     ;
 ExtDef: Specifier ExtDecList SEMI {
@@ -79,14 +89,18 @@ ExtDef: Specifier ExtDecList SEMI {
     }
     | Specifier FunDec SEMI {
     }
+    | StructSpecifier SEMI {
+        $$ = $1;
+    }
+    // | ArraySpecifier SEMI { 
+    // }
     | error SEMI { yyerrok; $$ = NULL;}
     ;
 ExtDecList: VarDec {
-        $$ = new DefVarASTNode($1);
+        $$ = $1;
     }
     | ExtDecList COMMA VarDec {
-        DefVarASTNode* temp = new DefVarASTNode($3);
-        $1->getLastPeerNode()->addPeerNode(temp);
+        $1->getLastPeerNode()->addPeerNode($3);
         $$ = $1;
     }
     ;
@@ -98,14 +112,43 @@ Specifier: TYPE {
     | TYPE STAR {
         $$ = (char*)("integer pointer");
     }
-;
+    ;
+
+StructSpecifier: STRUCT ID LC StructDecList RC {
+        if (structTable == NULL) {
+            structTable = new StructTable();
+        }
+        structSymbol* sSymble = new structSymbol($2, $4);
+        structTable->addStruct(sSymble);
+        $$ = NULL;
+    }
+    ;
+
+StructDecList: StructDec {
+        $$ = $1;
+    }
+    | StructDecList StructDec {
+        $1->getLastPeerNode()->addPeerNode($2);
+        $$ = $1;
+    }
+    ;
+
+StructDec: Specifier ID SEMI {
+        DefVarASTNode* var = new DefVarASTNode($2, NULL);
+        var->setAllType($1);
+        $$ = var;
+    }
+    ;
 
 /* Declarators */
 VarDec: ID {
-        $$ = strdup($1);
+        $$ = new DefVarASTNode($1, NULL);
     }
-    | VarDec LB INT RB {
-        $$ = NULL;
+    | ID LB INT RB {
+        DefVarASTNode* var = new DefVarASTNode($1, NULL);
+        var->setAllType((char*)("array"));
+        var->setArrayLength($3);
+        $$ = var;
     }
     ;
 FunDec: ID LP VarList RP {
@@ -115,6 +158,7 @@ FunDec: ID LP VarList RP {
         $$ = new DefFunASTNode($1, NULL, NULL);
     }
     ;
+
 VarList: VarList COMMA ParamDec {
         $1->getLastPeerNode()->addPeerNode($3);
         $$ = $1;
@@ -123,7 +167,7 @@ VarList: VarList COMMA ParamDec {
         $$ = $1;
     }
     ;
-ParamDec: Specifier VarDec {
+ParamDec: Specifier ID {
         DefVarASTNode* var = new DefVarASTNode($2, NULL);
         var->setAllType($1);
         $$ = var;
@@ -230,6 +274,7 @@ Def: Specifier DecList {
     }
     | error SEMI { yyerrok; }
     ;
+
 DecList: Dec {
         $$ = $1;
     }
@@ -238,15 +283,15 @@ DecList: Dec {
         $$ = $1;
     }
     ;
+
 Dec: VarDec {
-        AbstractASTNode* temp = new DefVarASTNode($1);
-        $$ = temp;
+        $$ = $1;
     }
     | VarDec ASSIGNOP Exp {
-        AbstractASTNode* temp = new DefVarASTNode($1, $3);
-        $$ = temp;
+        $1->addChildNode($3);
+        $$ = $1;
     }
-;
+    ;
 
 /* Expressions */
 Exp:
@@ -341,8 +386,26 @@ Exp:
     | ID {
         $$ = new VarASTNode($1);
     }
+    | ID LB Exp RB {
+        AbstractASTNode* op = new OperatorASTNode((char*)"[", opType::GetArrayValue);
+        AbstractASTNode* var = new VarASTNode((char*)$1);
+        op->addChildNode(var);
+        op->addChildNode($3);
+        $$ = op;
+    }
+    | ID GETMEMBER ID {
+        VarASTNode *var = new VarASTNode($1);
+        var->setStructMember($3);
+        $$ = var;
+    }
     | INT {
         $$ = new LiteralASTNode($1);
+    }
+    | STAR ID {
+        AbstractASTNode* op = new OperatorASTNode((char*)"*", opType::GetValue);
+        AbstractASTNode* var = new VarASTNode((char*)$2);
+        op->addChildNode(var);
+        $$ = op;
     }
     | error RP { yyerrok; }
     ;
