@@ -35,7 +35,7 @@ symbol *SymbolTable::findInThisTable(const std::string name)
         return NULL;
 }
 
-SymbolTable::SymbolTable(bool isFun, StructTable* structTable)
+SymbolTable::SymbolTable(bool isFun, StructTable *structTable)
 {
     this->structTable = structTable;
     this->childTable = NULL;
@@ -96,7 +96,7 @@ symbol *SymbolTable::findSymbol(std::string name)
 }
 
 structDecSymbol::structDecSymbol(std::string structType, std::string structIdName)
-    :symbol(structIdName, symbolType::Struct)
+    : symbol(structIdName, symbolType::Struct)
 {
     this->structTypeName = structType;
 }
@@ -108,16 +108,19 @@ int StructTable::num = 0;
 //     this->totalOffsets += offset;
 // }
 
-structSymbol::structSymbol() {
+structSymbol::structSymbol()
+{
 }
 
-structSymbol::structSymbol(std::string name, AbstractASTNode * node) {
+structSymbol::structSymbol(std::string name, AbstractASTNode *node)
+{
     this->totalOffsets = 0;
     int offset = 0;
     this->idName = name;
-    AbstractASTNode* currentNode = node;
-    while(currentNode) {
-        DefVarASTNode *var = (DefVarASTNode*)node;
+    AbstractASTNode *currentNode = node;
+    while (currentNode)
+    {
+        DefVarASTNode *var = (DefVarASTNode *)node;
         offsetTable[var->getContent()] = offset;
         this->totalOffsets += offset;
         offset += 4;
@@ -125,27 +128,37 @@ structSymbol::structSymbol(std::string name, AbstractASTNode * node) {
     }
 }
 
-int structSymbol::getMemberOffset(std::string key) {
-    if (this->offsetTable.count(key) == 0) {
+int structSymbol::getMemberOffset(std::string key)
+{
+    if (this->offsetTable.count(key) == 0)
+    {
         return -1;
-    } else {
+    }
+    else
+    {
         return this->offsetTable[key];
     }
 }
 
-StructTable::StructTable() {
+StructTable::StructTable()
+{
 }
 
-bool StructTable::addStruct(structSymbol* sSymbol) {
-    if (this->findStruct(sSymbol->getStructName())) {
+bool StructTable::addStruct(structSymbol *sSymbol)
+{
+    if (this->findStruct(sSymbol->getStructName()))
+    {
         return false;
-    } else {
+    }
+    else
+    {
         this->structHashTable[sSymbol->getStructName()] = sSymbol;
         return true;
     }
 }
 
-structSymbol* StructTable::findStruct(std::string keyName) {
+structSymbol *StructTable::findStruct(std::string keyName)
+{
     std::unordered_map<std::string, structSymbol *>::iterator iter;
     iter = this->structHashTable.find(keyName);
     if (iter != this->structHashTable.end())
@@ -204,14 +217,20 @@ int SymbolTable::addSymbol(std::string idName, symbolType idType)
     return this->addSymbol(s);
 }
 
-int SymbolTable::addStructSymbol(std::string structTypeName, std::string structIdName) {
-    structDecSymbol* s = new structDecSymbol(structTypeName, structIdName);
-    if (this->findInThisTable(structIdName) != NULL) return FAIL;
-    else {
-        structSymbol* target = this->structTable->findStruct(structTypeName);
-        if (target == NULL) {
+int SymbolTable::addStructSymbol(std::string structTypeName, std::string structIdName)
+{
+    structDecSymbol *s = new structDecSymbol(structTypeName, structIdName);
+    if (this->findInThisTable(structIdName) != NULL)
+        return FAIL;
+    else
+    {
+        structSymbol *target = this->structTable->findStruct(structTypeName);
+        if (target == NULL)
+        {
             return FAIL;
-        } else {
+        }
+        else
+        {
             this->baseTable->symbolArray->push_back(s);
             s->setIndex(this->baseTable->symbolItemCount++);
             s->setOffset(this->baseTable->totalOffset);
@@ -222,12 +241,15 @@ int SymbolTable::addStructSymbol(std::string structTypeName, std::string structI
     }
 }
 
-int SymbolTable::addArraySymbol(AbstractASTNode* decArray) {
-    DefVarASTNode* array = (DefVarASTNode*)decArray;
+int SymbolTable::addArraySymbol(AbstractASTNode *decArray)
+{
+    DefVarASTNode *array = (DefVarASTNode *)decArray;
     std::string name = decArray->getContent();
-    if (this->findInThisTable(name) != NULL) return FAIL;
-    else {
-        symbol* s = new symbol(name, symbolType::Array);
+    if (this->findInThisTable(name) != NULL)
+        return FAIL;
+    else
+    {
+        symbol *s = new symbol(name, symbolType::Array);
         this->baseTable->symbolArray->push_back(s);
         s->setIndex(this->baseTable->symbolItemCount++);
         s->setOffset(this->baseTable->totalOffset);

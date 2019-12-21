@@ -688,7 +688,7 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
     }
     case opType::SingalAnd:
     {
-        symbol *result = new symbol("Temp" + std::to_string(tempVar.size()), symbolType::integer);
+        symbol *result = new symbol("Temp" + std::to_string(tempVar.size()), symbolType::pointer);
         arg1Node = node->getChild();
         tempVar.push_back(result);
         if (arg1Node->getNodeType() == ASTNodeType::assignVar)
@@ -755,6 +755,35 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
     }
     case opType::GetValue:
     {
+        Quad *temp;
+        symbol *result = new symbol("Temp" + std::to_string(tempVar.size()), symbolType::integer);
+        arg1Node = node->getChild();
+        tempVar.push_back(result);
+        if (arg1Node->getNodeType() == ASTNodeType::assignVar)
+        {
+            symbol *arg1 = symbolTable->findSymbol(arg1Node->getContent());
+            temp = new Quad(OpCode::GET_VALUE, arg1, result);
+        }
+        else if (arg1Node->getNodeType() == ASTNodeType::callFunc)
+        {
+            Generate(arg1Node, symbolTable);
+            symbol *arg1 = tempVar.back();
+            temp = new Quad(OpCode::GET_VALUE, arg1, result);
+        }
+        else if (arg1Node->getNodeType() == ASTNodeType::op)
+        {
+            symbol *arg1 = GenerateOp((OperatorASTNode *)arg1Node, symbolTable);
+            temp = new Quad(OpCode::GET_VALUE, arg1, result);
+        }
+        else
+        {
+            std::cout << "\033[31mError: \033[0m"
+                      << " lvalue required as unary ‘&’ operand" << std::endl;
+            exit(-1);
+        }
+        this->quads.push_back(*temp);
+        return result;
+        break;
     }
     case opType::GetArrayValue:
     {
