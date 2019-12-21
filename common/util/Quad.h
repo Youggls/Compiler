@@ -23,10 +23,13 @@
  * @enum POWER: arg1 ^ arg2 to result
  * @enum NEGATIVE:   - arg1 to result
  * @enum ASSIGN:       arg1 to result
+ * @enum ASSIGN_ARRAY: result[arg2] = arg1
+ * @enum ASSIGN_STRUCT: result.arg2 = arg1
  * @enum GET_ADDRESS: &arg1 to reuslt
  * @enum PARAM: Param of the function will be called
  * @enum CALL: CALL function
  * @enum RETURN: Exit from a function
+ * @enum GET_VALUE: Get the value of a array or struct
  ************************
 */
 enum class OpCode
@@ -46,13 +49,16 @@ enum class OpCode
     POWER,
     NEGATIVE,
     ASSIGN,
+    ASSIGN_ARRAY,
+    ASSIGN_STRUCT,
     GET_ADDRESS,
     PARAM,
     CALL,
     RETURN,
     FUNC_DEF,
     END_FUNCTION,
-    LABEL
+    LABEL,
+    GET_VALUE
 };
 
 union Arg {

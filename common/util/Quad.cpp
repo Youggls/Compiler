@@ -121,6 +121,10 @@ std::string Quad::printOp()
         return "   NEGATIVE   ";
     case OpCode::ASSIGN:
         return "    ASSIGN    ";
+    case OpCode::ASSIGN_ARRAY:
+        return " ASSIGN_ARRAY ";
+    case OpCode::ASSIGN_STRUCT:
+        return "ASSIGN_STRUCT ";
     case OpCode::GET_ADDRESS:
         return " GET_ADDRESS  ";
     case OpCode::PARAM:
@@ -135,6 +139,8 @@ std::string Quad::printOp()
         return " END_FUNCTION ";
     case OpCode::LABEL:
         return "     LABEL    ";
+    case OpCode::GET_VALUE:
+        return "  GET_VALUE   ";
     default:
         break;
     }

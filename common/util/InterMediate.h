@@ -21,7 +21,7 @@ private:
     std::stack<std::list<int>> trueList;
     std::stack<std::list<int>> falseList;
     std::stack<int> signal;
-
+    std::stack<symbol *> childValue;
     // Function for backpatch.
     std::list<int> *makelist(int index);
     std::list<int> *merge(std::list<int> *list1, std::list<int> *list2);

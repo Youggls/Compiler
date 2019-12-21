@@ -12,8 +12,9 @@ private:
 
 public:
     DefVarASTNode(char *content, AbstractASTNode *value = NULL);
-    DefVarASTNode(char* structTypeName, char* structIdName);
+    DefVarASTNode(char *structTypeName, char *structIdName);
     inline symbolType getSymbolType() { return this->type; }
+    inline std::string getStructType() { return this->structType; }
     inline void setArrayType() { this->type = symbolType::Array; }
     inline int getArrayLength() { return this->arrayLength; }
     void setAllType(char *type);

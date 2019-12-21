@@ -1,7 +1,7 @@
 #include "InterMediate.h"
 #include <typeinfo>
 #include <cstdio>
-InterMediate::InterMediate(RootASTNode *rootNode, StructTable* structTable)
+InterMediate::InterMediate(RootASTNode *rootNode, StructTable *structTable)
 {
     tempVar.reserve(100);
     this->root = rootNode;
@@ -460,7 +460,66 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
         return result;
         break;
     }
-    case opType::Relop: // 需要回填：把index加入trueList和falseList，等别的操作回填它。 < <= > >= != == 子节点 只可能是assignVar、literal
+    case opType::AssignArray:
+    {
+        symbol *result;
+        if (node->getChild()->getNodeType() != ASTNodeType::op)
+        {
+            std::cout << "\033[31mError: \033[0m"
+                      << node->getContent() << " syntax error. What are u doing?" << std::endl;
+        }
+        result = GenerateOp((OperatorASTNode *)node->getChild(), symbolTable);
+        AbstractASTNode *arg1Node = node->getChild()->getPeer();
+        symbol *arg2 = this->childValue.top();
+        this->childValue.pop();
+        if (arg1Node->getNodeType() == ASTNodeType::assignVar)
+        {
+            symbol *arg1 = symbolTable->findSymbol(arg1Node->getContent());
+            temp = new Quad(OpCode::ASSIGN_ARRAY, arg1, arg2, result);
+        }
+        else if (arg1Node->getNodeType() == ASTNodeType::op)
+        {
+            symbol *arg1 = GenerateOp((OperatorASTNode *)arg1Node, symbolTable);
+            temp = new Quad(OpCode::ASSIGN_ARRAY, arg1, arg2, result);
+        }
+        else if (arg1Node->getNodeType() == ASTNodeType::literal)
+        {
+            int arg1 = std::stoi(arg1Node->getContent());
+            temp = new Quad(OpCode::ASSIGN_ARRAY, arg1, arg2, result);
+        }
+        else if (arg1Node->getNodeType() == ASTNodeType::callFunc)
+        {
+            Generate(arg1Node, symbolTable);
+            symbol *arg1 = tempVar.back();
+            temp = new Quad(OpCode::ASSIGN_ARRAY, arg1, arg2, result);
+        }
+        else
+        {
+            std::cout << "\033[31mError: \033[0m"
+                      << "No match type of" << (int)arg1Node->getNodeType() << "  Content:" << arg1Node->getContent() << std::endl;
+            exit(1);
+        }
+        this->quads.push_back(*temp);
+
+        return result;
+        break;
+    }
+    case opType::AssignMember:
+    {
+        symbol *result;
+        if (node->getChild()->getNodeType() != ASTNodeType::op)
+        {
+            std::cout << "\033[31mError: \033[0m"
+                      << node->getContent() << " syntax error. What are u doing?" << std::endl;
+        }
+        result = GenerateOp((OperatorASTNode *)node->getChild(), symbolTable);
+        AbstractASTNode *arg1Node = node->getChild()->getPeer();
+        symbol *arg2 = this->childValue.top();
+        this->childValue.pop();
+
+        break;
+    }
+    case opType::Relop:
     {
         Quad *tempTrue, *tempFalse;
         arg1Node = node->getChild();
