@@ -61,6 +61,10 @@ void AsmCode::generateUnaryInstructor(std::string instructor, std::string var) {
     this->codeBuffer += instructor + " " + var + "\n";
 }
 
+std::string AsmCode::findValueByAddress(asmRegister reg) {
+    return ASM_LB + this->transRegister(reg) + ASM_RB;
+}
+
 void AsmCode::addCode(std::string code) {
     this->codeBuffer += code;
     this->codeBuffer += "\n";
@@ -540,7 +544,8 @@ void AsmGenerator::generateArithmetic(Quad& q) {
 void AsmGenerator::generateDefFunction(Quad& q) {
     std::string funcName = q.getArg(1).var->getIdName();
     this->asmcode.label(funcName);
-    this->asmcode.addCode(ASM_ENTER + std::string(" ") + std::to_string(currentTable->getTotalOffset()) + ASM_COMMA + "0");
+    int totalOffset = currentTable->getTotalOffset();
+    this->asmcode.addCode(ASM_ENTER + std::string(" ") + std::to_string(totalOffset) + ASM_COMMA + "0");
     this->asmcode.push(asmRegister::ebx);
     this->asmcode.push(asmRegister::ecx);
 }
@@ -844,6 +849,44 @@ void AsmGenerator::generateGetAddress(Quad& q) {
     }
 }
 
+void AsmGenerator::generateAssignMember(Quad& q) {
+    int offsetOfMember = std::atoi(q.getArg(2).var->getIdName().c_str());
+    std::string structIdName = q.getArg(3).var->getIdName();
+    int offsetOfStruct = currentTable->findSymbol(structIdName)->getOffset();
+    int totalOffset = offsetOfMember + offsetOfStruct;
+    this->asmcode.mov(asmRegister::edx, asmRegister::ebp);
+    this->asmcode.sub(asmRegister::edx, std::to_string(totalOffset));
+    int flag = q.getFlag();
+    if (flag == 7) {
+        std::string tempValue = q.getArg(1).var->getIdName();
+        asmRegister reg;
+        if (tempValue[0] == 'T') {
+            reg = this->findRegister(tempValue);
+            this->releaseRegister(reg);
+        } else {
+            int offsetOfValue = q.getArg(1).var->getOffset();
+            reg = this->getRegister("!MOV");
+            this->releaseRegister(reg);
+            this->asmcode.mov(reg, this->asmcode.generateVar(offsetOfValue));
+        }
+        this->asmcode.mov(this->asmcode.findValueByAddress(asmRegister::edx), reg);
+    } else if (flag == 6) {
+        int tempValue = q.getArg(1).target;
+        this->asmcode.mov(this->asmcode.findValueByAddress(asmRegister::edx), this->asmcode.generateInstanceNumber(tempValue));
+    }
+}
+
+void AsmGenerator::generateGetMember(Quad& q) {
+    std::string tempResult = q.getArg(3).var->getIdName();
+    std::string structIdName = q.getArg(1).var->getIdName();
+    int offsetOfMember = std::atoi(q.getArg(2).var->getIdName().c_str());
+    int offsetOfStruct = currentTable->findSymbol(structIdName)->getOffset();
+    asmRegister tempReg = this->getRegister(tempResult);
+    int totalOffset = offsetOfMember + offsetOfStruct;
+    std::string memberEbpOffset = this->asmcode.generateVar(totalOffset);
+    this->asmcode.mov(tempReg, memberEbpOffset);
+}
+
 void AsmGenerator::preSetLabel() {
     std::vector<Quad> quad;
     int labelNumber = 0;
@@ -882,12 +925,12 @@ void AsmGenerator::generate() {
         Quad& q = quads[i];
         OpCode opcode = q.getOpCode();
         if (opcode == OpCode::FUNC_DEF) {
-            this->generateDefFunction(q);
             if (currentTable == rootTable) {
                 currentTable = currentTable->getChild();
             } else {
                 currentTable = currentTable->getPeer();
             }
+            this->generateDefFunction(q);
         }
         else if (opcode == OpCode::PLUS || opcode == OpCode::MINUS ||
                  opcode == OpCode::DIV || opcode == OpCode::TIMES ||
@@ -924,6 +967,10 @@ void AsmGenerator::generate() {
             this->generateNeg(q);
         } else if (opcode == OpCode::GET_ADDRESS) {
             this->generateGetAddress(q);
+        } else if (opcode == OpCode::ASSIGN_STRUCT) {
+            this->generateAssignMember(q);
+        } else if (opcode == OpCode::GET_STRUCT) {
+            this->generateGetMember(q);
         }
     }
 }

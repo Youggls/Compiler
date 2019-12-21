@@ -33,6 +33,7 @@ public:
     void generateBinaryInstructor(std::string instructor, std::string var1, std::string var2);
     void generateUnaryInstructor(std::string instructor, std::string var);
     void generateUnaryInstructor(std::string instructor, asmRegister reg);
+    std::string findValueByAddress(asmRegister reg);
     // ADD instructor, add reg1, reg2
     void add(asmRegister reg1, asmRegister reg2);
     // ADD instructor, add reg, var
@@ -88,6 +89,10 @@ private:
     void generateNeg(Quad& q);
     void generatePower(Quad& q);
     void generateGetAddress(Quad& q);
+    void generateGetMember(Quad& q);
+    void generateGetValue(Quad& q);
+    void generateAssignMember(Quad& q);
+    void generateAssignArray(Quad& q);
     void preSetLabel();
     bool isJumpQuad(OpCode code);
 public:
