@@ -141,6 +141,10 @@ std::string Quad::printOp()
         return "     LABEL    ";
     case OpCode::GET_VALUE:
         return "  GET_VALUE   ";
+    case OpCode::GET_ARRAY:
+        return "  GET_ARRAY   ";
+    case OpCode::GET_STRUCT:
+        return "  GET_STRUCT  ";
     default:
         break;
     }

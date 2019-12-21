@@ -136,11 +136,11 @@ int structSymbol::getMemberOffset(std::string key) {
 StructTable::StructTable() {
 }
 
-bool StructTable::addStruct(structSymbol* sSymble) {
-    if (this->findStruct(sSymble->getStructName())) {
+bool StructTable::addStruct(structSymbol* sSymbol) {
+    if (this->findStruct(sSymbol->getStructName())) {
         return false;
     } else {
-        this->structHashTable[sSymble->getStructName()] = sSymble;
+        this->structHashTable[sSymbol->getStructName()] = sSymbol;
         return true;
     }
 }
@@ -201,9 +201,9 @@ int SymbolTable::addSymbol(std::string idName, symbolType idType)
 
 int SymbolTable::addStructSymbol(std::string structTypeName, std::string structIdName) {
     structDecSymbol* s = new structDecSymbol(structTypeName, structIdName);
-    if (this->findInThisTable(structIdName) == NULL) return FAIL;
+    if (this->findInThisTable(structIdName) != NULL) return FAIL;
     else {
-        structSymbol* target = this->structTable->findStruct(structIdName);
+        structSymbol* target = this->structTable->findStruct(structTypeName);
         if (target == NULL) {
             return FAIL;
         } else {
