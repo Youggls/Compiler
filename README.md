@@ -50,6 +50,12 @@
 
     4. 支持结构体+1
 
+## 环境准备
+
+* 操作系统：**Ubuntu LTS 18.04**，或者其他的**GNU LINUX**发行版
+
+* 依赖包：`nasm`，`flex`，`bison`，`gcc-multilib`，`build-essential`
+
 ## 如何运行
 
 * 在代码根目录执行`make`
@@ -58,7 +64,7 @@
 
 * `cd build`，然后执行`make`
 
-* `./out`运行文件
+* 运行文件生成的二进制文件
 
 ## 文件目录说明
 
