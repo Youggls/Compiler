@@ -120,12 +120,12 @@ structSymbol::structSymbol(std::string name, AbstractASTNode *node)
     AbstractASTNode *currentNode = node;
     while (currentNode)
     {
-        DefVarASTNode *var = (DefVarASTNode *)node;
+        DefVarASTNode *var = (DefVarASTNode *)currentNode;
         offsetTable[var->getContent()] = offset;
-        this->totalOffsets += offset;
         offset += 4;
         currentNode = currentNode->getPeer();
     }
+    this->totalOffsets = offset;
 }
 
 int structSymbol::getMemberOffset(std::string key)
