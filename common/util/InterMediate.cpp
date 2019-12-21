@@ -841,7 +841,9 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
         {
             if (arg2Node->getNodeType() == ASTNodeType::assignVar)
             {
-                symbol *arg2 = new symbol(std::to_string(((structSymbol *)arg1)->getMemberOffset(arg2Node->getContent())), symbolType::literal);
+                std::string typeName = ((structDecSymbol *)arg1)->getTypeName();
+                int offset = this->rootTable->getStructTable()->findStruct(typeName)->getMemberOffset(arg2Node->getContent());
+                symbol *arg2 = new symbol(std::to_string(offset), symbolType::literal);
                 childValue.push(arg2);
             }
             else
@@ -856,7 +858,9 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
         {
             if (arg2Node->getNodeType() == ASTNodeType::assignVar)
             {
-                symbol *arg2 = new symbol(std::to_string(((structSymbol *)arg1)->getMemberOffset(arg2Node->getContent())), symbolType::literal);
+                std::string typeName = ((structDecSymbol *)arg1)->getTypeName();
+                int offset = this->rootTable->getStructTable()->findStruct(typeName)->getMemberOffset(arg2Node->getContent());
+                symbol *arg2 = new symbol(std::to_string(offset), symbolType::literal);
                 temp = new Quad(OpCode::GET_STRUCT, arg1, arg2, result);
             }
             else

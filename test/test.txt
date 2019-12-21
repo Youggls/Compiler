@@ -12,10 +12,10 @@ struct tdest_s {
 int main()
 {
     struct test_s stest;
-    int a[10];
-    a[0] = 3;
+    int array[10];
+    array[0] = 3;
     stest.a = 3;
     struct tdest_s a;
-    int b = a[2];
-    int c =test_s.b;
+    int b = array[2];
+    int c =stest.a;
 }

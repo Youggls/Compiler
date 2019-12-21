@@ -45,6 +45,7 @@ private:
 
 public:
     structDecSymbol(std::string structTypeName, std::string idName);
+    inline std::string getTypeName() { return this->structTypeName; }
 };
 
 class structSymbol : public symbol
@@ -126,6 +127,7 @@ public:
     inline SymbolTable *getPeer() { return this->peerTable; }
     inline int getTotalOffset() { return this->totalOffset; }
     inline int getArgTotalOffset() { return this->argTotalOffset; }
+    inline StructTable *getStructTable() { return this->structTable; }
 };
 
 #endif // !SYMBOL_H
