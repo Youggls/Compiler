@@ -433,12 +433,24 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
     case opType::Assignop:
     {
         symbol *result;
-        if (node->getChild()->getNodeType() != ASTNodeType::assignVar)
+        OpCode op;
+        if (node->getChild()->getNodeType() == ASTNodeType::op && ((OperatorASTNode *)node->getChild())->getType() == opType::GetValue)
         {
-            std::cout << "\033[31mError: \033[0m"
-                      << node->getContent() << " is not a variable. What are u doing?" << std::endl;
+            op == OpCode::ASSIGN_POINTER;
+            result = symbolTable->findSymbol(node->getChild()->getChild()->getContent());
         }
-        result = symbolTable->findSymbol(node->getChild()->getContent());
+        else
+        {
+            op == OpCode::ASSIGN;
+            if (node->getChild()->getNodeType() != ASTNodeType::assignVar)
+            {
+                std::cout << "\033[31mError: \033[0m"
+                          << node->getChild()->getContent() << " is not a variable. What are u doing?" << std::endl;
+                // exit(1);
+            }
+            result = symbolTable->findSymbol(node->getChild()->getContent());
+        }
+
         AbstractASTNode *arg1Node = node->getChild()->getPeer();
         if (arg1Node->getNodeType() == ASTNodeType::assignVar)
         {

@@ -12,7 +12,7 @@ struct tdest_s {
 int main()
 {
     struct test_s stest;
-    int *point;
+    int *point = 2;
     int array[10];
     array[0] = 3;
     stest.a = 3;

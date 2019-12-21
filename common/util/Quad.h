@@ -53,6 +53,7 @@ enum class OpCode
     ASSIGN,
     ASSIGN_ARRAY,
     ASSIGN_STRUCT,
+    ASSIGN_POINTER,
     GET_ADDRESS,
     PARAM,
     CALL,

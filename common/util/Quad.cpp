@@ -127,6 +127,8 @@ std::string Quad::printOp()
         return "ASSIGN_STRUCT ";
     case OpCode::GET_ADDRESS:
         return " GET_ADDRESS  ";
+    case OpCode::ASSIGN_POINTER:
+        return "ASSIGN_POINTER";
     case OpCode::PARAM:
         return "    PARAM     ";
     case OpCode::CALL:
