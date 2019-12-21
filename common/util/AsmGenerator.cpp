@@ -642,7 +642,7 @@ void AsmGenerator::generateSetArg(Quad& q) {
         if (varName[0] != 'T') {
             int offset = q.getArg(1).var->getOffset();
             std::string varEbpOffset = this->asmcode.generateVar(offset);
-            this->asmcode.push(varEbpOffset);
+            this->asmcode.push(DOUBLE_WORD + varEbpOffset);
         } else {
             asmRegister reg = this->findRegister(varName);
             this->releaseRegister(reg);
@@ -791,7 +791,7 @@ void AsmGenerator::generatePower(Quad& q) {
             std::string varEbpOffset = DOUBLE_WORD + this->asmcode.generateVar(offset);
             this->asmcode.push(varEbpOffset);
         }
-    } else if (flag == 6) {
+    } else if (flag == 5) {
         std::string arg2Value = this->asmcode.generateInstanceNumber(q.getArg(2).target);
         std::string arg1Name = q.getArg(1).var->getIdName();
         if (arg1Name[0] == 'T') {
@@ -804,7 +804,7 @@ void AsmGenerator::generatePower(Quad& q) {
             this->asmcode.push(varEbpOffset);
         }
         this->asmcode.push(arg2Value);
-    } else if (flag == 5) {
+    } else if (flag == 6) {
         std::string arg1Value = this->asmcode.generateInstanceNumber(q.getArg(1).target);
         std::string arg2Name = q.getArg(2).var->getIdName();
         if (arg2Name[0] == 'T') {
@@ -941,7 +941,15 @@ void AsmGenerator::generateAssignArray(Quad& q) {
         this->asmcode.mov(this->asmcode.findValueByAddress(asmRegister::edx), varReg);
     } else {
         std::string instanceNum = this->asmcode.generateInstanceNumber(q.getArg(1).target);
-        this->asmcode.mov(asmRegister::edx, this->asmcode.generateVar(totalOffset));
+        // this->asmcode.mov(asmRegister::edx, this->asmcode.generateVar(totalOffset));
+        // this->asmcode.mov(this->asmcode.findValueByAddress(asmRegister::edx), instanceNum);
+        if (q.getOpCode() == OpCode::ASSIGN_POINTER) {
+            this->asmcode.mov(asmRegister::edx, this->asmcode.generateVar(totalOffset));
+        } else {
+            this->asmcode.mov(asmRegister::edx, asmRegister::ebp);
+            this->asmcode.sub(asmRegister::edx, std::to_string(totalOffset));
+        }
+        // Find the address
         this->asmcode.mov(this->asmcode.findValueByAddress(asmRegister::edx), instanceNum);
     }
 }

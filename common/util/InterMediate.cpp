@@ -56,6 +56,9 @@ void InterMediate::Generate(AbstractASTNode *node, SymbolTable *symbolTable)
                 case symbolType::integer:
                     addOn = addOn + "_i";
                     break;
+                case symbolType::pointer:
+                    addOn = addOn + "_p";
+                    break;
                 default:
                     break;
                 }
@@ -74,6 +77,9 @@ void InterMediate::Generate(AbstractASTNode *node, SymbolTable *symbolTable)
                 {
                 case symbolType::integer:
                     addOn = addOn + "_i";
+                    break;
+                case symbolType::pointer:
+                    addOn = addOn + "_p";
                     break;
                 default:
                     break;

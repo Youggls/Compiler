@@ -445,6 +445,22 @@ void yyerror(const char* s) {
 	exit(1);
 }
 
+std::string replaceExtName(char* fileName) {
+    int dotIndex = 0;
+    int nameLength = strlen(fileName);
+    for (int i = nameLength - 1; i >= 0; i--) {
+        if (fileName[i] == '.') {
+            dotIndex = i;
+            break;
+        }
+    }
+    char* buf = new char[dotIndex];
+    strncpy(buf, fileName, dotIndex);
+    std::string rev(buf);
+    rev += ".asm";
+    return rev;
+}
+
 int main(int argc,char* argv[])
 {
     InterMediate* im;
@@ -480,7 +496,8 @@ int main(int argc,char* argv[])
         AsmGenerator* asmgenerator = new AsmGenerator(im->getQuads(), im->getTempVars(), im->getTable(), im->getFuncTable());
         asmgenerator->generate();
         std::cout << asmgenerator->getAsmCode();
-        std::ofstream outasm("out.asm");
+        std::string outFileName = replaceExtName(filename);
+        std::ofstream outasm(outFileName);
         outasm << asmgenerator->getAsmCode();
     }
     return 0;

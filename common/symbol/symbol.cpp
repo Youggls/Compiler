@@ -267,7 +267,7 @@ void SymbolTable::visitFuncArgs(AbstractASTNode *funArg, int &offset, int &index
     {
         this->visitFuncArgs(funArg->getPeer(), offset, index);
         DefVarASTNode *arg = (DefVarASTNode *)funArg;
-        if (arg->getSymbolType() == symbolType::integer || arg->getSymbolType() == symbolType::integer)
+        if (arg->getSymbolType() == symbolType::integer || arg->getSymbolType() == symbolType::pointer)
         {
             offset -= 4;
             symbol *s = new symbol(arg->getContent(), arg->getSymbolType());
