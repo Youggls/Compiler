@@ -15,6 +15,7 @@ public:
     DefVarASTNode(char* structTypeName, char* structIdName);
     inline symbolType getSymbolType() { return this->type; }
     inline void setArrayType() { this->type = symbolType::Array; }
+    inline int getArrayLength() { return this->arrayLength; }
     void setAllType(char *type);
     void setArrayLength(char *length);
     void printInfo(int depth);

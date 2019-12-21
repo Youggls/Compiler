@@ -217,6 +217,21 @@ int SymbolTable::addStructSymbol(std::string structTypeName, std::string structI
     }
 }
 
+int SymbolTable::addArraySymbol(AbstractASTNode* decArray) {
+    DefVarASTNode* array = (DefVarASTNode*)decArray;
+    std::string name = decArray->getContent();
+    if (this->findInThisTable(name) == NULL) return FAIL;
+    else {
+        symbol* s = new symbol(name, symbolType::Array);
+        this->baseTable->symbolArray->push_back(s);
+        s->setIndex(this->baseTable->symbolItemCount++);
+        s->setOffset(this->baseTable->totalOffset);
+        this->baseTable->totalOffset += array->getArrayLength() * 4;
+        this->symbolHashTable[name] = s;
+        return SUCCESS;
+    }
+}
+
 void SymbolTable::visitFuncArgs(AbstractASTNode *funArg, int &offset, int &index)
 {
     if (funArg == NULL)

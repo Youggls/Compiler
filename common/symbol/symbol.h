@@ -16,6 +16,7 @@ enum class symbolType
     Void = 4,
     Struct = 5,
     Array = 6,
+    literal = 7
 };
 
 class symbol
@@ -107,6 +108,7 @@ public:
     // Arg2: The struct id name
     // eg. struct test_s s; test_s is struct type name, s is struct id name.
     int addStructSymbol(std::string structTypeName, std::string structIdName);
+    int addArraySymbol(AbstractASTNode* decArray);
     void addFromFunctionArgs(AbstractASTNode* func);
     // Create child symbol table, set peer table automatically
     SymbolTable *createChildTable(bool isFun);
