@@ -836,7 +836,7 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
         AbstractASTNode *arg1Node = node->getChild();
         AbstractASTNode *arg2Node = arg1Node->getPeer();
         symbol *arg1 = symbolTable->findSymbol(arg1Node->getContent());
-        // 断路写法，应该没啥问题，不行再改
+        // 短路写法，应该没啥问题，不行再改
         if (node->getParent()->getNodeType() == ASTNodeType::op && ((OperatorASTNode *)node->getParent())->getType() == opType::AssignMember)
         {
             if (arg2Node->getNodeType() == ASTNodeType::assignVar)
