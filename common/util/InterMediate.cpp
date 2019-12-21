@@ -436,12 +436,12 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
         OpCode op;
         if (node->getChild()->getNodeType() == ASTNodeType::op && ((OperatorASTNode *)node->getChild())->getType() == opType::GetValue)
         {
-            op == OpCode::ASSIGN_POINTER;
+            op = OpCode::ASSIGN_POINTER;
             result = symbolTable->findSymbol(node->getChild()->getChild()->getContent());
         }
         else
         {
-            op == OpCode::ASSIGN;
+            op = OpCode::ASSIGN;
             if (node->getChild()->getNodeType() != ASTNodeType::assignVar)
             {
                 std::cout << "\033[31mError: \033[0m"
@@ -455,23 +455,23 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
         if (arg1Node->getNodeType() == ASTNodeType::assignVar)
         {
             symbol *arg1 = symbolTable->findSymbol(arg1Node->getContent());
-            temp = new Quad(OpCode::ASSIGN, arg1, result);
+            temp = new Quad(op, arg1, result);
         }
         else if (arg1Node->getNodeType() == ASTNodeType::op)
         {
             symbol *arg1 = GenerateOp((OperatorASTNode *)arg1Node, symbolTable);
-            temp = new Quad(OpCode::ASSIGN, arg1, result);
+            temp = new Quad(op, arg1, result);
         }
         else if (arg1Node->getNodeType() == ASTNodeType::literal)
         {
             int arg1 = std::stoi(arg1Node->getContent());
-            temp = new Quad(OpCode::ASSIGN, arg1, result);
+            temp = new Quad(op, arg1, result);
         }
         else if (arg1Node->getNodeType() == ASTNodeType::callFunc)
         {
             Generate(arg1Node, symbolTable);
             symbol *arg1 = tempVar.back();
-            temp = new Quad(OpCode::ASSIGN, arg1, result);
+            temp = new Quad(op, arg1, result);
         }
         else
         {

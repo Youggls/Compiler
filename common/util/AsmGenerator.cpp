@@ -841,7 +841,7 @@ void AsmGenerator::generateGetAddress(Quad& q) {
     if (resultName[0] == 'T') {
         asmRegister resultReg = this->getRegister(resultName);
         this->asmcode.mov(resultReg, asmRegister::ebp);
-        this->asmcode.add(resultReg, std::to_string(offset));
+        this->asmcode.sub(resultReg, std::to_string(offset));
     } else {
         std::string resultEbpOffset = this->asmcode.generateVar(q.getArg(3).var->getOffset());
         this->asmcode.mov(resultEbpOffset, asmRegister::ebp);
@@ -885,6 +885,65 @@ void AsmGenerator::generateGetMember(Quad& q) {
     int totalOffset = offsetOfMember + offsetOfStruct;
     std::string memberEbpOffset = this->asmcode.generateVar(totalOffset);
     this->asmcode.mov(tempReg, memberEbpOffset);
+}
+
+void AsmGenerator::generateGetArrayValue(Quad& q) {
+    std::string resultName = q.getArg(3).var->getIdName();
+    asmRegister reg = this->getRegister(resultName);
+    int baseOffset = q.getArg(1).var->getOffset();
+    int totalOffset = baseOffset;
+    if (q.getOpCode() == OpCode::GET_ARRAY) {
+        int offset = q.getArg(2).target * 4;
+        totalOffset += offset;
+        this->asmcode.mov(reg, this->asmcode.generateVar(totalOffset));
+    } else {
+        this->asmcode.mov(reg, this->asmcode.generateVar(totalOffset));
+        this->asmcode.mov(reg, this->asmcode.findValueByAddress(reg));
+    }
+}
+
+void AsmGenerator::generateAssignArray(Quad& q) {
+    int baseOffset = q.getArg(3).var->getOffset();
+    int flag = q.getFlag();
+    int totalOffset = baseOffset;
+    if (q.getOpCode() == OpCode::ASSIGN_ARRAY) {
+        int offset2 = std::atoi(q.getArg(2).var->getIdName().c_str()) * 4;
+        baseOffset += offset2;
+    }
+    if (flag == 7) {
+        std::string varName = q.getArg(1).var->getIdName();
+        asmRegister varReg = asmRegister::unset;
+        if (varName[0] == 'T') {
+            varReg = this->findRegister(varName);
+            this->releaseRegister(varReg);
+            // // Get the point to var's address
+            // if (q.getOpCode() == OpCode::ASSIGN_POINTER) {
+            //     this->asmcode.mov(asmRegister::edx, this->asmcode.generateVar(totalOffset));
+            // } else {
+            //     this->asmcode.mov(asmRegister::edx, asmRegister::ebp);
+            //     this->asmcode.sub(asmRegister::edx, std::to_string(totalOffset));
+            // }
+            // // Find the address
+            // this->asmcode.mov(this->asmcode.findValueByAddress(asmRegister::edx), varReg);
+        } else {
+            std::string valueEbpOffset = this->asmcode.generateVar(q.getArg(1).var->getOffset());
+            varReg = this->getRegister("!MOV");
+            this->releaseRegister(varReg);
+            this->asmcode.mov(varReg, valueEbpOffset);
+        }
+        if (q.getOpCode() == OpCode::ASSIGN_POINTER) {
+            this->asmcode.mov(asmRegister::edx, this->asmcode.generateVar(totalOffset));
+        } else {
+            this->asmcode.mov(asmRegister::edx, asmRegister::ebp);
+            this->asmcode.sub(asmRegister::edx, std::to_string(totalOffset));
+        }
+        // Find the address
+        this->asmcode.mov(this->asmcode.findValueByAddress(asmRegister::edx), varReg);
+    } else {
+        std::string instanceNum = this->asmcode.generateInstanceNumber(q.getArg(1).target);
+        this->asmcode.mov(asmRegister::edx, this->asmcode.generateVar(totalOffset));
+        this->asmcode.mov(this->asmcode.findValueByAddress(asmRegister::edx), instanceNum);
+    }
 }
 
 void AsmGenerator::preSetLabel() {
@@ -971,6 +1030,10 @@ void AsmGenerator::generate() {
             this->generateAssignMember(q);
         } else if (opcode == OpCode::GET_STRUCT) {
             this->generateGetMember(q);
+        } else if (opcode == OpCode::ASSIGN_ARRAY || opcode == OpCode::ASSIGN_POINTER) {
+            this->generateAssignArray(q);
+        } else if (opcode == OpCode::GET_ARRAY || opcode == OpCode::GET_VALUE) {
+            this->generateGetArrayValue(q);
         }
     }
 }

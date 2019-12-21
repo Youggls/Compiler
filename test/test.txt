@@ -1,22 +1,11 @@
-int test () {
-
-}
-struct test_s {
-    int a;
-    int b;
-};
-struct tdest_s {
-    int a;
-    int b;
-};
 int main()
 {
-    struct test_s stest;
-    int *point = 2;
+    int a = 2;
     int array[10];
-    array[0] = 3;
-    stest.a = 3;
-    struct tdest_s a;
-    int b = array[2] ;
-    int c =stest.a + *point;
+    array[0] = a;
+    a = array[0];
+    int* p = &a;
+    *p = a;
+    a = *p;
+    print_int(a);
 }

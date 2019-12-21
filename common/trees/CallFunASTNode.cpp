@@ -4,6 +4,9 @@ CallFunASTNode::CallFunASTNode(char *content, AbstractASTNode *varList)
     : AbstractASTNode(content, ASTNodeType::callFunc)
 {
     this->varList = varList;
+    if (varList != NULL) {
+        varList->setParent(this);
+    }
 }
 
 void CallFunASTNode::printInfo(int depth) {

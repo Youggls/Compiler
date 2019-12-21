@@ -299,13 +299,15 @@ Dec: VarDec {
 /* Expressions */
 Exp:
     Exp ASSIGNOP Exp {
-        AbstractASTNode* temp;
+        AbstractASTNode* temp = NULL;
         if ($1->getNodeType() == ASTNodeType::op) {
             OperatorASTNode* left = (OperatorASTNode*)$1;
             if (left->getType() == opType::GetArrayValue) {
                 temp = new OperatorASTNode((char*)"=", opType::AssignArray);
             } else if (left->getType() == opType::GetMember) {
                 temp = new OperatorASTNode((char*)"=", opType::AssignMember);
+            } else {
+                temp = new OperatorASTNode((char*)"=", opType::Assignop);
             }
         }
         else {

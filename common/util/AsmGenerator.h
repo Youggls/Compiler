@@ -90,7 +90,7 @@ private:
     void generatePower(Quad& q);
     void generateGetAddress(Quad& q);
     void generateGetMember(Quad& q);
-    void generateGetValue(Quad& q);
+    void generateGetArrayValue(Quad& q);
     void generateAssignMember(Quad& q);
     void generateAssignArray(Quad& q);
     void preSetLabel();
