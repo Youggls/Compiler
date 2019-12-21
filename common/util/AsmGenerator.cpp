@@ -916,15 +916,6 @@ void AsmGenerator::generateAssignArray(Quad& q) {
         if (varName[0] == 'T') {
             varReg = this->findRegister(varName);
             this->releaseRegister(varReg);
-            // // Get the point to var's address
-            // if (q.getOpCode() == OpCode::ASSIGN_POINTER) {
-            //     this->asmcode.mov(asmRegister::edx, this->asmcode.generateVar(totalOffset));
-            // } else {
-            //     this->asmcode.mov(asmRegister::edx, asmRegister::ebp);
-            //     this->asmcode.sub(asmRegister::edx, std::to_string(totalOffset));
-            // }
-            // // Find the address
-            // this->asmcode.mov(this->asmcode.findValueByAddress(asmRegister::edx), varReg);
         } else {
             std::string valueEbpOffset = this->asmcode.generateVar(q.getArg(1).var->getOffset());
             varReg = this->getRegister("!MOV");
@@ -941,8 +932,6 @@ void AsmGenerator::generateAssignArray(Quad& q) {
         this->asmcode.mov(this->asmcode.findValueByAddress(asmRegister::edx), varReg);
     } else {
         std::string instanceNum = this->asmcode.generateInstanceNumber(q.getArg(1).target);
-        // this->asmcode.mov(asmRegister::edx, this->asmcode.generateVar(totalOffset));
-        // this->asmcode.mov(this->asmcode.findValueByAddress(asmRegister::edx), instanceNum);
         if (q.getOpCode() == OpCode::ASSIGN_POINTER) {
             this->asmcode.mov(asmRegister::edx, this->asmcode.generateVar(totalOffset));
         } else {
@@ -975,7 +964,6 @@ void AsmGenerator::preSetLabel() {
         quad.push_back(quads[i]);
     }
     quads=quad;
-    for (size_t i = 0; i < quads.size(); i++) quads[i].printQuad();
 }
 
 bool AsmGenerator::isJumpQuad(OpCode opcode) {

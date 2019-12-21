@@ -465,14 +465,16 @@ int main(int argc,char* argv[])
 {
     InterMediate* im;
     bool flag_print_ast = false;
+    bool flag_print_ir = false;
+    bool flag_print_asm = false;
     char* filename = NULL;
     if (argc == 1) {
         printf("Error! Please input file name!\n");
-        printf("Usage: parser [-t] [-v] [-B] [-i] source [out]\n");
+        printf("Usage: parser [-t] [-i] [-a] [-d]\n");
         printf("  -t  print the abstract syntax tree (AST)\n");
-        printf("  -v  verbose mode\n");
-        printf("  -B  disable basic block optimizing\n");
-        printf("  -i  generate IR code instead of assemble code\n");
+        printf("  -i  print IR code\n");
+        printf("  -a  print asm code\n");
+        printf("  -d  debug mode print all\n");
         return -1;
     } else if (argc >= 2) {
         for (int i=1; i<argc; i++) {
@@ -480,6 +482,13 @@ int main(int argc,char* argv[])
                 if (filename == NULL) filename = argv[i];
             }
             else if (strcmp(argv[i], "-t") == 0) flag_print_ast = true;
+            else if (strcmp(argv[i], "-i") == 0) flag_print_ir = true;
+            else if (strcmp(argv[i], "-a") == 0) flag_print_asm = true;
+            else if (strcmp(argv[i], "-d") == 0) {
+                flag_print_ast = true;
+                flag_print_ir = true;
+                flag_print_asm = true;
+            }
             else printf("Invalid parameter \"%s\"\n", argv[i]);
         }
     }
@@ -490,15 +499,20 @@ int main(int argc,char* argv[])
 	} while(!feof(yyin));
     if (flag_print_ast) {
         root->printTree();
-        im = new InterMediate((RootASTNode *)root, structTable);
-        im->Generate(im->getRoot(), im->getTable());
-        im->printQuads();
-        AsmGenerator* asmgenerator = new AsmGenerator(im->getQuads(), im->getTempVars(), im->getTable(), im->getFuncTable());
-        asmgenerator->generate();
-        std::cout << asmgenerator->getAsmCode();
-        std::string outFileName = replaceExtName(filename);
-        std::ofstream outasm(outFileName);
-        outasm << asmgenerator->getAsmCode();
     }
+    im = new InterMediate((RootASTNode *)root, structTable);
+    im->Generate(im->getRoot(), im->getTable());
+    if (flag_print_ir) {
+        im->printQuads();
+    }
+    AsmGenerator* asmgenerator = new AsmGenerator(im->getQuads(), im->getTempVars(), im->getTable(), im->getFuncTable());
+    asmgenerator->generate();
+    if (flag_print_asm) {
+        std::cout << asmgenerator->getAsmCode();
+    }
+
+    std::string outFileName = replaceExtName(filename);
+    std::ofstream outasm(outFileName);
+    outasm << asmgenerator->getAsmCode();
     return 0;
 }
