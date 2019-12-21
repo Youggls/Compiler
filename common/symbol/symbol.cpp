@@ -146,7 +146,12 @@ bool StructTable::addStruct(structSymbol* sSymbol) {
 }
 
 structSymbol* StructTable::findStruct(std::string keyName) {
-    return NULL;
+    std::unordered_map<std::string, structSymbol *>::iterator iter;
+    iter = this->structHashTable.find(keyName);
+    if (iter != this->structHashTable.end())
+        return iter->second;
+    else
+        return NULL;
 }
 
 SymbolTable *SymbolTable::createChildTable(bool isFun)
