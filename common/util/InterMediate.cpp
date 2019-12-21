@@ -87,7 +87,7 @@ void InterMediate::Generate(AbstractASTNode *node, SymbolTable *symbolTable)
         {
             std::cout << "\033[31mError: \033[0m"
                       << " function is not decleared." << std::endl;
-            exit(1);
+            // exit(1);
         }
         symbol *funcSymbol = new symbol(funSym->getKeyName(), symbolType::Void);
         // symbol *funcSymbol = new symbol(funSym->getFunName(), symbolType::Void);
@@ -216,7 +216,7 @@ void InterMediate::Generate(AbstractASTNode *node, SymbolTable *symbolTable)
             {
                 std::cout << "\033[31mError: \033[0m"
                           << "Type error" << std::endl;
-                exit(1);
+                // exit(1);
             }
             this->quads.push_back(*temp);
         }
@@ -419,7 +419,7 @@ SymbolTable *InterMediate::GenerateReturn(StmtASTNode *node, SymbolTable *symbol
     {
         std::cout << "\033[31mError: \033[0m"
                   << "Type error" << std::endl;
-        exit(1);
+        // exit(1);
     }
     quads.push_back(*temp);
 }
@@ -465,7 +465,7 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
         {
             std::cout << "\033[31mError: \033[0m"
                       << "No match type of" << (int)arg1Node->getNodeType() << "  Content:" << arg1Node->getContent() << std::endl;
-            exit(1);
+            // exit(1);
         }
         this->quads.push_back(*temp);
         return result;
@@ -508,7 +508,7 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
         {
             std::cout << "\033[31mError: \033[0m"
                       << "No match type of" << (int)arg1Node->getNodeType() << "  Content:" << arg1Node->getContent() << std::endl;
-            exit(1);
+            // exit(1);
         }
         this->quads.push_back(*temp);
 
@@ -552,7 +552,7 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
         {
             std::cout << "\033[31mError: \033[0m"
                       << "No match type of" << (int)arg1Node->getNodeType() << "  Content:" << arg1Node->getContent() << std::endl;
-            exit(1);
+            // exit(1);
         }
         this->quads.push_back(*temp);
 
@@ -791,7 +791,7 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
             {
                 std::cout << "\033[31mError: \033[0m"
                           << "Type error" << std::endl;
-                exit(1);
+                // exit(1);
             }
             return arg1;
         }
@@ -822,7 +822,7 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
             {
                 std::cout << "\033[31mError: \033[0m"
                           << "Type error" << std::endl;
-                exit(1);
+                // exit(1);
             }
             tempVar.push_back(result);
             this->quads.push_back(*temp);
@@ -847,7 +847,7 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
             {
                 std::cout << "\033[31mError: \033[0m"
                           << "Type error" << std::endl;
-                exit(1);
+                // exit(1);
             }
             return arg1;
         }
@@ -862,7 +862,7 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
             {
                 std::cout << "\033[31mError: \033[0m"
                           << "Type error" << std::endl;
-                exit(1);
+                // exit(1);
             }
             tempVar.push_back(result);
             this->quads.push_back(*temp);
@@ -941,7 +941,7 @@ Quad *InterMediate::CaculateOp(OpCode op, AbstractASTNode *arg1Node, AbstractAST
     {
         std::cout << "\033[31mError: \033[0m"
                   << "No match type for" << (int)arg1Node->getNodeType() << "  Content:" << arg1Node->getContent() << std::endl;
-        exit(1);
+        // exit(1);
     }
     return temp;
 }

@@ -91,7 +91,7 @@ symbol *SymbolTable::findSymbol(std::string name)
     }
     std::cout << "\033[31mError: \033[0m"
               << "value " << name << " is not defined" << std::endl;
-    exit(1);
+    // exit(1);
     return NULL;
 }
 
