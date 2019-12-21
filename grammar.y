@@ -299,7 +299,7 @@ Dec: VarDec {
 /* Expressions */
 Exp:
     Exp ASSIGNOP Exp {
-        AbstractASTNode* temp = new OperatorASTNode((char*)"=", opType::Assignop);
+        AbstractASTNode* temp;
         if ($1->getNodeType() == ASTNodeType::op) {
             OperatorASTNode* left = (OperatorASTNode*)$1;
             if (left->getType() == opType::GetArrayValue) {
@@ -308,8 +308,12 @@ Exp:
                 temp = new OperatorASTNode((char*)"=", opType::AssignMember);
             }
         }
+        else {
+            temp = new OperatorASTNode((char*)"=", opType::Assignop);
+        }
         temp->addChildNode($1);
         $1->addPeerNode($3);
+        $3->setParent(temp);
         $$ = temp;
     }
     | Exp AND Exp {
