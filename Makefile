@@ -14,7 +14,7 @@ FLEX = flex
 BISON = bison
 CXXVER = c++11
 
-$(PROGRAM): grammar $(OBJ)
+$(PROGRAM): $(OBJ)
 	$(CXX) -o $(PROGRAM) $(OBJ) -std=$(CXXVER) -g
 
 grammar: lexer.l grammar.y
@@ -24,8 +24,6 @@ endif
 	$(BISON) --output="./Linux/grammar.tab.cpp" --defines="./Linux/grammar.tab.h" grammar.y
 	$(FLEX) --outfile="./Linux/lexer.flex.cpp" lexer.l
 	sed -i "1i\#include \"../common/trees.h\"" ./Linux/grammar.tab.h
-	$(CXX) -c ./Linux/grammar.tab.cpp -o ./Linux/grammar.tab.o -std=$(CXXVER) -g
-	$(CXX) -c ./Linux/lexer.flex.cpp -o ./Linux/lexer.flex.o -std=$(CXXVER) -g
 
 %.o: %.cpp $(DEPS)
 	$(CXX) -c $< -o $@ -std=$(CXXVER) -g
