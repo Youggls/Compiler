@@ -28,3 +28,8 @@ array:
 	$(PROGRAM) test/array.c
 	$(NASM) -f elf test/array.asm -o array.o
 	$(CC) -o struct array.o io/asm_io.o -m32
+
+larra:
+	$(PROGRAM) test/larra.c
+	$(NASM) -f elf test/larra.asm -o larra.o
+	$(CC) -o larra larra.o io/asm_io.o -m32

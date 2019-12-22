@@ -893,9 +893,34 @@ void AsmGenerator::generateGetArrayValue(Quad& q) {
     int baseOffset = q.getArg(1).var->getOffset();
     int totalOffset = baseOffset;
     if (q.getOpCode() == OpCode::GET_ARRAY) {
-        int offset = q.getArg(2).target * 4;
-        totalOffset += offset;
-        this->asmcode.mov(reg, this->asmcode.generateVar(totalOffset));
+        asmRegister offsetReg = asmRegister::unset;
+        std::string offsetEbpStr = "";
+        int flag = q.getFlag();
+        if (flag == 7) {
+            std::string offsetName = q.getArg(2).var->getIdName();
+            if (offsetName[0] == 'T') {
+                offsetReg = this->findRegister(offsetName);
+                this->releaseRegister(offsetReg);
+                this->asmcode.mov(asmRegister::edx, asmRegister::ebp);
+                this->asmcode.sub(asmRegister::edx, offsetReg);
+                this->asmcode.sub(asmRegister::edx, offsetReg);
+                this->asmcode.sub(asmRegister::edx, offsetReg);
+                this->asmcode.sub(asmRegister::edx, offsetReg);
+            } else {
+                int offset = q.getArg(2).var->getOffset();
+                offsetEbpStr = this->asmcode.generateVar(offset);
+                this->asmcode.mov(asmRegister::edx, asmRegister::ebp);
+                this->asmcode.sub(asmRegister::edx, offsetEbpStr);
+                this->asmcode.sub(asmRegister::edx, offsetEbpStr);
+                this->asmcode.sub(asmRegister::edx, offsetEbpStr);
+                this->asmcode.sub(asmRegister::edx, offsetEbpStr);
+            }
+            this->asmcode.mov(reg, this->asmcode.findValueByAddress(asmRegister::edx));
+        } else {
+            int offset = q.getArg(2).target * 4;
+            totalOffset += offset;
+            this->asmcode.mov(reg, this->asmcode.generateVar(totalOffset));
+        }
     } else {
         this->asmcode.mov(reg, this->asmcode.generateVar(totalOffset));
         this->asmcode.mov(reg, this->asmcode.findValueByAddress(reg));
@@ -906,9 +931,21 @@ void AsmGenerator::generateAssignArray(Quad& q) {
     int baseOffset = q.getArg(3).var->getOffset();
     int flag = q.getFlag();
     int totalOffset = baseOffset;
+    asmRegister offsetReg = asmRegister::unset;
+    std::string offsetEbpStr = "";
     if (q.getOpCode() == OpCode::ASSIGN_ARRAY) {
-        int offset2 = std::atoi(q.getArg(2).var->getIdName().c_str()) * 4;
-        baseOffset += offset2;
+        std::string offsetName = q.getArg(2).var->getIdName();
+        if (offsetName[0] == 'T') {
+            offsetReg = this->findRegister(offsetName);
+            this->releaseRegister(offsetReg);
+
+        } else if (offsetName[0] <= '9' && offsetName[0] >= '0') {
+            int offset2 = std::atoi(q.getArg(2).var->getIdName().c_str()) * 4;
+            baseOffset += offset2;
+        } else {
+            int offset = q.getArg(2).var->getOffset();
+            offsetEbpStr = this->asmcode.generateVar(offset);
+        }
     }
     if (flag == 7) {
         std::string varName = q.getArg(1).var->getIdName();
@@ -926,7 +963,19 @@ void AsmGenerator::generateAssignArray(Quad& q) {
             this->asmcode.mov(asmRegister::edx, this->asmcode.generateVar(totalOffset));
         } else {
             this->asmcode.mov(asmRegister::edx, asmRegister::ebp);
-            this->asmcode.sub(asmRegister::edx, std::to_string(totalOffset));
+            if (offsetReg != asmRegister::unset) {
+                this->asmcode.sub(asmRegister::edx, offsetReg);
+                this->asmcode.sub(asmRegister::edx, offsetReg);
+                this->asmcode.sub(asmRegister::edx, offsetReg);
+                this->asmcode.sub(asmRegister::edx, offsetReg);
+            } else if (offsetEbpStr != "") {
+                this->asmcode.sub(asmRegister::edx, offsetEbpStr);
+                this->asmcode.sub(asmRegister::edx, offsetEbpStr);
+                this->asmcode.sub(asmRegister::edx, offsetEbpStr);
+                this->asmcode.sub(asmRegister::edx, offsetEbpStr);
+            } else {
+                this->asmcode.sub(asmRegister::edx, std::to_string(totalOffset));
+            }
         }
         // Find the address
         this->asmcode.mov(this->asmcode.findValueByAddress(asmRegister::edx), varReg);
@@ -936,7 +985,21 @@ void AsmGenerator::generateAssignArray(Quad& q) {
             this->asmcode.mov(asmRegister::edx, this->asmcode.generateVar(totalOffset));
         } else {
             this->asmcode.mov(asmRegister::edx, asmRegister::ebp);
-            this->asmcode.sub(asmRegister::edx, std::to_string(totalOffset));
+            if (offsetReg != asmRegister::unset) {
+                this->asmcode.sub(asmRegister::edx, offsetReg);
+                this->asmcode.sub(asmRegister::edx, offsetReg);
+                this->asmcode.sub(asmRegister::edx, offsetReg);
+                this->asmcode.sub(asmRegister::edx, offsetReg);
+            } else if (offsetEbpStr != "") {
+                this->asmcode.sub(asmRegister::edx, offsetEbpStr);
+                this->asmcode.sub(asmRegister::edx, offsetEbpStr);
+                this->asmcode.sub(asmRegister::edx, offsetEbpStr);
+                this->asmcode.sub(asmRegister::edx, offsetEbpStr);
+            } else {
+                this->asmcode.sub(asmRegister::edx, std::to_string(totalOffset));
+            }
+            // this->asmcode.mov(asmRegister::edx, asmRegister::ebp);
+            // this->asmcode.sub(asmRegister::edx, std::to_string(totalOffset));
         }
         // Find the address
         this->asmcode.mov(this->asmcode.findValueByAddress(asmRegister::edx), instanceNum);

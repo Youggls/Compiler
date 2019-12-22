@@ -8,6 +8,7 @@ LoopASTNode::LoopASTNode(char *content,
 {
     this->loopType = type;
     this->addChildNode(body);
+    if (condition != NULL) condition->setParent(this);
     this->cond = condition;
     this->dec = NULL;
     this->action = NULL;
@@ -26,6 +27,9 @@ LoopASTNode::LoopASTNode(char *content,
     this->cond = condition;
     this->dec = dec;
     this->action = action;
+    if (condition != NULL) condition->setParent(this);
+    if (dec != NULL) dec->setParent(this);
+    if (action != NULL) action->setParent(this);
 }
 
 void LoopASTNode::printInfo(int depth)
