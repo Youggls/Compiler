@@ -277,7 +277,7 @@ void AsmGenerator::generateArithmetic(Quad& q) {
                 this->asmcode.generateBinaryInstructor(instructor, tempVar1Reg, tempVar2Reg);
             } else {
                 if (opcode == OpCode::TIMES) {
-                    this->asmcode.mul(tempVar1Reg, tempVar1Reg);
+                    this->asmcode.mul(tempVar1Reg, tempVar2Reg);
                 } else if (opcode == OpCode::DIV || opcode == OpCode::MOD) {
                     this->asmcode.div(tempVar1Reg, tempVar2Reg);
                 }
