@@ -58,6 +58,8 @@
 
 ## 如何运行
 
+* 在代码根目录执行`make grammar`
+
 * 在代码根目录执行`make`
 
 * 执行`make build`
