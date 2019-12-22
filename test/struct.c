@@ -10,6 +10,6 @@ int main() {
     t.a = 1;
     t.b = 2;
     t.c = 3;
-    t.d = t.a + t.b;
+    t.d = t.b * t.c + t.a;
     print_int(t.d);
 }
