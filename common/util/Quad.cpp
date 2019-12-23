@@ -146,7 +146,7 @@ std::string Quad::printOp()
     case OpCode::GET_ARRAY:
         return "  GET_ARRAY   ";
     case OpCode::GET_STRUCT:
-        return "  GET_STRUCT  ";    
+        return "  GET_STRUCT  ";
     default:
         break;
     }
