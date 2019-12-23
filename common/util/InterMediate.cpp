@@ -461,7 +461,7 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
         if (arg1Node->getNodeType() == ASTNodeType::assignVar)
         {
             symbol *arg1 = symbolTable->findSymbol(arg1Node->getContent());
-            if (arg1->getIdType() != result->getIdType())
+            if (arg1->getIdType() == symbolType::integer && result->getIdType() == symbolType::pointer || result->getIdType() == symbolType::integer && arg1->getIdType() == symbolType::pointer)
             {
                 std::cout << "\033[31mError: \033[0m"
                           << "Syntax error, maybe you have used the wrong type: " << (int)arg1Node->getNodeType() << "  Content:" << arg1Node->getContent() << std::endl;
