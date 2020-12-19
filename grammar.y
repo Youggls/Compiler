@@ -1,3 +1,18 @@
+/* 第一部分：说明部分 */
+/*
+  YACC源程序说明部分定义语法规则中要用的终结符号，
+  语义动作中使用的数据类型、变量、语义值的联合类型以及语法规则中运算符的优先级等。说明部分可以是空的。
+  说明部分通常包含两部分内容：
+
+  C语言代码部分
+  Yacc说明部分
+  
+  这两部分可以拆分成下面四个小部分：
+  头文件表
+  宏定义
+  数据类型定义
+  全局变量定义
+*/
 %{
 #include <cstdio>
 #include <cstdlib>
@@ -6,8 +21,8 @@
 #include "../common/trees.h"
 #include "../common/util/InterMediate.h"
 #include "../common/util/AsmGenerator.h"
-class AbstractASTNode;
-extern char *yytext;
+class AbstractASTNode; // 数据类型定义：定义语义动作使用到的数据类型
+extern char *yytext; // 外部变量和全局变量定义
 extern int yylex();
 extern int column;
 extern FILE * yyin;
@@ -17,6 +32,37 @@ StructTable *structTable;
 void yyerror(const char *str);
 %}
 
+/* 第二部分
+文法开始符号定义
+语义值类型定义
+终结符定义
+非终结符定义
+优先级和结合性定义
+*/
+
+/* 语法开始符号定义
+上下文无关文法的开始符号是一个特殊的非终结符，所有的推导都从这个非终结符开始
+在yacc中，语法开始符定义语句是
+% start 非终结符……
+如果没有上面的说明，yacc自动将语法规则部分中第一条语法规则左部的非终结符作为语法开始符
+*/
+
+/* 
+例:
+ % union{
+int ival
+double dval
+INTERVAL vval;
+}
+引用时候的方式
+%token <ival> DREG VREG
+%token <dval> CONST
+%type  <dval>dexp
+%type  <vval>vexp
+以%token开始的行定义的是终结符的类型
+以%type开始的行定义是非终结符的类型
+*/
+
 %union {
 	AbstractASTNode* ast;
     char* str;
@@ -24,8 +70,14 @@ void yyerror(const char *str);
 %locations
 %define parse.error verbose
 
+/* 
+优先级和结合性定义
+%left 左结合
+%right 右结合
+%nonassoc 无结合性
+%prec <终结符> 强制定义优先级
+ */
 %right ASSIGNOP
-
 %left <ast> OR
 %left <ast> AND
 %left <ast> SINGALAND
@@ -36,14 +88,25 @@ void yyerror(const char *str);
 %right <ast> NOT
 %left LP RP LB RB
 %nonassoc LOWER_THAN_ELSE
+%nonassoc SEMI COMMA
+%nonassoc RETURN IF ELSE WHILE STRUCT GETMEMBER
+
+
+/* 
+在yacc源程序语法规则部分出现的所有终结符（正文字符“+”，“-”等除外）等必须用%token定义，定义形式：
+单一数据类型：
+%token 终结符1 终结符2
+多数据类型：
+%token <类型> 终结符1 终结符2 …
+ */
 %token ERRID
 %token <str> INT
 %token <str> TYPE
 %token <str> ID
 %token FOR
-%nonassoc SEMI COMMA
-%nonassoc RETURN IF ELSE WHILE STRUCT GETMEMBER
 %token LC RC
+
+/* 非终结符 */
 %type <ast> VarDec 
 %type <str> Specifier
 %type <ast> ExtDefList ExtDef ExtDecList
@@ -53,12 +116,54 @@ void yyerror(const char *str);
 %type <ast> StructSpecifier StructDecList StructDec
 %%
 
+/* 
+语法规则部分是整个YACC源程序的主体，它是由一组产生式及相应的语义动作组成。
+规则部分包括修改的BNF格式的文法规则，
+以及将在识别出识别出相关的文法规则时被执行的C代码中的动作
+（即根据LALR（1）分析算法，在归约中使用）。
+文法规则中使用的元符号惯例如下：
+通常，竖线|被用作替换（也可以分别写出替换项），
+而用来分隔文法规则的左右两边的箭头符号-〉
+在YACC中用冒号表示，最后，必须用分号来结束每个文法规则。
+
+ */
+
+
+ /* 
+ 对文法中的产生式
+在YACC程序中可表示成
+A：  α1  |  {语义动作1}
+    | α2 {语义动作2}  
+    |
+    | αm {语义动作m}   
+;
+  */
+
+/* 没有默认指定%start，默认使用program为文法开始符号 */
+/* 
+  YACC中的动作是由在每个文法规则中将其写作真正的C代码（在大括号中）来实现的。
+  在书写动作时，可以使用YACC伪变量。当识别一个文法规则时，
+  规则中的每个符号都拥有一个值，除非它被参数改变了。
+  这些值由YACC保存在一个与分析栈保持平行的值栈（value stack）中，
+  每个在栈中的符号值都可以使用以$开始的伪变量来引用。
+  $$代表刚才被识别出来的非终结符的值，也就是文法规则左边的符号。
+  伪变量$1、$2、$3等代表了文法规则右边的每个连续的符号。
+*/
 Program: ExtDefList {
         root = new RootASTNode();
         root->addChildNode($1);
     }
     ;
-ExtDefList:
+/* 
+  例：文法规则和动作：
+  exp	:	exp '+' term	{ $$ = $1 + $3; }
+  含义是：当识别规则exp->exp+term时，
+  左边exp值为右边的exp的值与右边的term的值之和，
+  其中$$代表规则左部符号exp的值，
+  $1代表规则右部第一个符号exp的值
+  $3表示规则右部第三个符号term的值。
+*/
+ExtDefList: //定义列表，比如int a,b,c....
     ExtDef {
         $$ = $1;
     }
@@ -439,6 +544,17 @@ Args: Args COMMA Exp {
     ;
 
 %%
+
+/* 
+YACC源程序的程序部分包括：
+主程序 main()
+错误信息执行程序 yyerror(s)
+词法分析程序yylex(),可以与LEX进行整合
+用户在语义动作中用到的子程序
+YACC约定：
+传递词法分析程序token属性值的全程变量名：yylval
+生成的语法分析程序名为：yyparse();
+ */
 
 void yyerror(const char* s) {
 	fprintf(stderr, "Parse error: At line %d. %s\n", yylineno, s);
