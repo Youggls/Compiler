@@ -2,7 +2,11 @@
 #include <typeinfo>
 #include <cstdio>
 InterMediate::InterMediate(RootASTNode *rootNode, StructTable *structTable)
+
 {
+    // 这个存放符号表的数组
+    // std::vector<symbol *> tempVar;
+    // 翻转符号变量？
     tempVar.reserve(100);
     this->root = rootNode;
     this->rootTable = new SymbolTable(false, structTable);
@@ -13,14 +17,15 @@ void InterMediate::Generate(AbstractASTNode *node, SymbolTable *symbolTable)
     if (node == NULL)
     {
         std::cout << "NULL" << std::endl;
-    }
-    if (node == NULL)
         return;
+    }
+       
     AbstractASTNode *p = node->getChild();
     switch (node->getNodeType())
     {
     case ASTNodeType::defFunc:
     {
+        // 如果是函数
         FuncSymbol *func = new FuncSymbol(node);
         this->funcTable.addFunction(func);
         Quad *temp;
@@ -40,6 +45,7 @@ void InterMediate::Generate(AbstractASTNode *node, SymbolTable *symbolTable)
     }
     case ASTNodeType::callFunc:
     {
+        // 函数调用语句
         int count = 0;
         AbstractASTNode *var = ((CallFunASTNode *)node)->getVarList();
         std::string addOn = "";
@@ -49,10 +55,12 @@ void InterMediate::Generate(AbstractASTNode *node, SymbolTable *symbolTable)
             Quad *temp;
             if (var->getNodeType() == ASTNodeType::assignVar)
             {
+                // 通过符号表找到内容
                 symbol *arg1 = symbolTable->findSymbol(var->getContent());
                 temp = new Quad(OpCode::PARAM, arg1, (symbol *)NULL);
                 switch (arg1->getIdType())
                 {
+
                 case symbolType::integer:
                     addOn = addOn + "_i";
                     break;
@@ -65,12 +73,15 @@ void InterMediate::Generate(AbstractASTNode *node, SymbolTable *symbolTable)
             }
             else if (var->getNodeType() == ASTNodeType::literal)
             {
+                // 字面量
+                // stoi：string to int函数
                 int arg1 = std::stoi(var->getContent());
                 temp = new Quad(OpCode::PARAM, arg1, (symbol *)NULL);
                 addOn = addOn + "_i";
             }
             else if (var->getNodeType() == ASTNodeType::op)
             {
+
                 symbol *arg1 = GenerateOp((OperatorASTNode *)var, symbolTable);
                 temp = new Quad(OpCode::PARAM, arg1, (symbol *)NULL);
                 switch (arg1->getIdType())
@@ -430,22 +441,26 @@ SymbolTable *InterMediate::GenerateReturn(StmtASTNode *node, SymbolTable *symbol
     quads.push_back(*temp);
 }
 
+// 生成运算符
 symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable)
 {
     Quad *temp;
     AbstractASTNode *arg1Node, *arg2Node;
     switch (node->getType())
     {
+        // 节点的类型如果是赋值
     case opType::Assignop:
     {
         symbol *result;
         OpCode op;
+        // 给指针赋值
         if (node->getChild()->getNodeType() == ASTNodeType::op && ((OperatorASTNode *)node->getChild())->getType() == opType::GetValue)
         {
             op = OpCode::ASSIGN_POINTER;
             result = symbolTable->findSymbol(node->getChild()->getChild()->getContent());
         }
         else
+        // 普通赋值
         {
             op = OpCode::ASSIGN;
             if (node->getChild()->getNodeType() != ASTNodeType::assignVar)
@@ -459,6 +474,7 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
 
         AbstractASTNode *arg1Node = node->getChild()->getPeer();
         if (arg1Node->getNodeType() == ASTNodeType::assignVar)
+        // 变量给变量赋值
         {
             symbol *arg1 = symbolTable->findSymbol(arg1Node->getContent());
             if (result->getIdType() == symbolType::integer && arg1->getIdType() == symbolType::pointer)
@@ -496,6 +512,7 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
         break;
     }
     case opType::AssignArray:
+    // 给数组赋值
     {
         symbol *result;
         if (node->getChild()->getNodeType() != ASTNodeType::op)
@@ -504,9 +521,11 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
                       << node->getContent() << " syntax error. What are u doing?" << std::endl;
         }
         result = GenerateOp((OperatorASTNode *)node->getChild(), symbolTable);
+
         AbstractASTNode *arg1Node = node->getChild()->getPeer();
         symbol *arg2 = this->childValue.top();
         this->childValue.pop();
+
         if (arg1Node->getNodeType() == ASTNodeType::assignVar)
         {
             symbol *arg1 = symbolTable->findSymbol(arg1Node->getContent());
@@ -547,10 +566,12 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
             std::cout << "\033[31mError: \033[0m"
                       << node->getContent() << " syntax error. What are u doing?" << std::endl;
         }
+
         result = GenerateOp((OperatorASTNode *)node->getChild(), symbolTable);
         AbstractASTNode *arg1Node = node->getChild()->getPeer();
         symbol *arg2 = this->childValue.top();
         this->childValue.pop();
+
         if (arg1Node->getNodeType() == ASTNodeType::assignVar)
         {
             symbol *arg1 = symbolTable->findSymbol(arg1Node->getContent());
@@ -583,6 +604,7 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
         break;
     }
     case opType::Relop:
+    // 循环
     {
         Quad *tempTrue, *tempFalse;
         arg1Node = node->getChild();
@@ -611,33 +633,42 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
         {
             RelopOp(tempTrue, tempFalse, OpCode::JUMP_EQUAL, arg1Node, arg2Node, symbolTable);
         }
+
         break;
     }
     case opType::Plus: // 可能需要重构一下，方便看
+    // 加？
     {
         symbol *result = new symbol("Temp" + std::to_string(tempVar.size()), symbolType::integer);
         arg1Node = node->getChild();
         arg2Node = arg1Node->getPeer();
         tempVar.push_back(result);
         result = tempVar.back();
+        // 计算运算符？
         temp = this->CaculateOp(OpCode::PLUS, arg1Node, arg2Node, result, symbolTable);
         this->quads.push_back(*temp);
         return result;
         break;
     }
     case opType::Minus:
+    // 减法？
     {
         symbol *result = new symbol("Temp" + std::to_string(tempVar.size()), symbolType::integer);
         arg1Node = node->getChild();
         arg2Node = arg1Node->getPeer();
+        // push到存放符号表的数组tempVar
         tempVar.push_back(result);
+        // 返回最后一个：
         result = tempVar.back();
+        // 生成四元式
         temp = this->CaculateOp(OpCode::MINUS, arg1Node, arg2Node, result, symbolTable);
+        // 推到数组里面
         this->quads.push_back(*temp);
         return result;
         break;
     }
     case opType::Times:
+    // 乘法
     {
         symbol *result = new symbol("Temp" + std::to_string(tempVar.size()), symbolType::integer);
         arg1Node = node->getChild();
@@ -650,6 +681,7 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
         break;
     }
     case opType::Div:
+    // 除法
     {
         symbol *result = new symbol("Temp" + std::to_string(tempVar.size()), symbolType::integer);
         arg1Node = node->getChild();
@@ -662,6 +694,7 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
         break;
     }
     case opType::Mod:
+    // 取模：%
     {
         symbol *result = new symbol("Temp" + std::to_string(tempVar.size()), symbolType::integer);
         arg1Node = node->getChild();
@@ -674,6 +707,7 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
         break;
     }
     case opType::Power:
+    // 乘方
     {
         symbol *result = new symbol("Temp" + std::to_string(tempVar.size()), symbolType::integer);
         arg1Node = node->getChild();
@@ -686,6 +720,7 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
         break;
     }
     case opType::Negative:
+    // 负数
     {
         symbol *result = new symbol("Temp" + std::to_string(tempVar.size()), symbolType::integer);
         arg1Node = node->getChild();
@@ -711,6 +746,7 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
         break;
     }
     case opType::SingalAnd:
+    // 单个与运算符：&
     {
         symbol *result = new symbol("Temp" + std::to_string(tempVar.size()), symbolType::pointer);
         arg1Node = node->getChild();
@@ -731,6 +767,7 @@ symbol *InterMediate::GenerateOp(OperatorASTNode *node, SymbolTable *symbolTable
         break;
     }
     case opType::And: // 保证栈顶是：node2List, node1List,所以得先遍历子节点，再到&&节点
+    // 很重要的回填操作
     {
         std::list<int> leftTrue, rightTrue, leftFalse, rightFalse;
         rightTrue = trueList.top();
