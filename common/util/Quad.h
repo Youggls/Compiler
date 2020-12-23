@@ -66,9 +66,8 @@ enum class OpCode
     GET_STRUCT
 };
 
-union Arg {
+union Arg {// arg是联合类型，可以代表一个符号或者一个变量
     symbol *var;
-    // double *tempVar; // 临时变量 也用symbol存储，只不过存储在vector中
     int target;
 };
 
@@ -102,8 +101,10 @@ public:
     Quad(OpCode op, symbol *arg1, int arg2, int result);
     Quad(OpCode op, int arg1, int arg2, int result);
 
-    inline void backpatch(int target) { this->result.target = target; };
+    inline void backpatch(int target) { this->result.target = target; }; 
+    // 上面的是回填函数，将传入参数填入到target里面，代表跳转的目标地址
     inline int getResult() { return this->result.target == 0 ? 1 : 0; }
+    // 是0就返回1,不是0就返回0
     inline int getFlag() { return this->flag; }
     inline OpCode getOpCode() { return this->op; }
     inline Arg getArg(int index)
@@ -116,7 +117,5 @@ public:
             return this->result;
     }
     void printQuad();
-    // Quad(OpCode op, symbol *arg1, symbol *arg2, symbol *result);
-    // Quad(OpCode op, symbol *arg1, symbol *arg2, int result)
 };
 #endif
