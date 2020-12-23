@@ -9,6 +9,7 @@
 #include "../symbol/symbol.h"
 #include "./Quad.h"
 #include "../symbol/FuncSymbol.h"
+// assembly language，缩写为 asm，中文译为汇编语言
 enum class asmRegister {
     unset = -1,
     eax = 1,
@@ -26,8 +27,11 @@ private:
 public:
     AsmCode();
     std::string generateVar(int offset);
+    // 生成变量    
     std::string generateInstanceNumber(int value);
+    // 生成数字？实例？
     void generateBinaryInstructor(std::string instructor, asmRegister reg1, asmRegister reg2);
+    // 生成
     void generateBinaryInstructor(std::string instructor, asmRegister reg, std::string var);
     void generateBinaryInstructor(std::string instructor, std::string var, asmRegister reg);
     void generateBinaryInstructor(std::string instructor, std::string var1, std::string var2);
@@ -68,7 +72,7 @@ private:
     int ecx;
     int edx;
     AsmCode asmcode;
-    std::string registerUsedVar[6];
+    std::string registerUsedVar[6]; // 哪个变量用了哪个寄存器，是决定从变量拿还是寄存器拿数据的关键
     std::vector<symbol*> tempVar;
     std::vector<Quad> quads;
     std::map<int, int> labelMap;
